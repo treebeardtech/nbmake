@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Publishes nbmake to pypi, remember to bump the version number
+# NOTE: Any dependencies listed in Pipfile other than this package will fail
+# to install for users who do not have pipenv installed.
+# For this reason, list all dependencies in setup.py
+
+set -euo pipefail
+set -x
+
+clean_artifacts() {
+  rm -rf build dist ./*.egg-info
+}
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+pushd "$DIR"
+pyright && black --check .
+
+clean_artifacts
+python setup.py sdist
+twine upload dist/*
+clean_artifacts
+
+echo "Done."
+popd
+

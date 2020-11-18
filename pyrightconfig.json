@@ -1,0 +1,9 @@
+{
+  "include": ["src", "tests"],
+  "strict": ["."],
+  "reportUnusedImport": true,
+  "pythonVersion": "3.7",
+  "typeshedPath": "typeshed",
+  "typingsPath": "src/nbmake/typestubs",
+  "enableTypeIgnoreComments": true
+}
