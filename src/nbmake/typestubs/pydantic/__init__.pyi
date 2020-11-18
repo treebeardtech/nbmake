@@ -1,5 +1,5 @@
 import pathlib
-from typing import Any, Dict, Generator, Optional, Set, Type, Union
+from typing import Any, Dict, Generator, Optional, Set, Tuple, Type, Union
 
 
 class Required:
@@ -59,18 +59,18 @@ class BaseModel(object):
     def to_string(self, pretty: bool) -> str:
         ...
 
-    def validate(self, value: Dict) -> "BaseModel":  # type: ignore
-        ...  # type: ignore
+    def validate(self, value: Dict[Any, Any]) -> "BaseModel":
+        ...
 
     def values(self, **kwargs: Any) -> Dict[str, Any]:
         ...
 
 
 def validator(
-    *fields, pre: bool = False, whole: bool = False, always: bool = False  # type: ignore
+    *fields: Any, pre: bool = False, whole: bool = False, always: bool = False
 ) -> Any:
     ...
 
 
-def conint(*, gt=None, lt=None) -> Type[int]:  # type: ignore
+def conint(*, gt: Any = None, lt: Any = None) -> Type[int]:
     ...
