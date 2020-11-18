@@ -1,9 +1,6 @@
 name: Pytest
 on: [push, pull_request]
 
-defaults:
-  run:
-    working-directory: ./treebeard-lib
 jobs:
   pytest:
     timeout-minutes: 20
