@@ -1,12 +1,15 @@
+import os
+import sys
 from fnmatch import fnmatch
-from .conf import NbMakeContext
-from typing import Generator, Optional, Any
+from traceback import print_tb
+from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
 from _pytest.config.argparsing import Parser  # type: ignore
 
-from .runtime.run import NotebookRun
+from .conf import NbMakeContext
 from .helper import create_github_details
+from .runtime.run import NotebookRun
 
 
 def pytest_addoption(parser: Any):
@@ -36,10 +39,11 @@ class NotebookItem(pytest.Item):  # type: ignore
         self.spec = spec
 
     def runtest(self):
+        print(f"cwd: {os.getcwd()}")
         ctx = NbMakeContext(
             **{
-                "api_url": None,
-                "api_key": None,
+                "api_url": "",
+                "api_key": "",
                 "filename": self.name,
                 "github_details": create_github_details(),
             }
@@ -50,7 +54,9 @@ class NotebookItem(pytest.Item):  # type: ignore
             raise Exception("tb failed")
 
     def repr_failure(self, excinfo: Any):
-        return "failed"
+        print_tb(excinfo.tb)
+        sys.stderr.write(str(excinfo.value))
+        return
 
     def reportinfo(self):
         return "info"

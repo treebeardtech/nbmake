@@ -3,10 +3,11 @@ import json
 import mimetypes
 import os
 import subprocess
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 import requests
 from requests import Response
+
 from .conf import GitHubDetails, NbMakeContext
 
 

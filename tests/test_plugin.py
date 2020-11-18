@@ -11,7 +11,6 @@ pytest_plugins = "pytester"
 
 
 def _build_nb(sources):
-    """Builds a notebook of only code cells, from a list of sources"""
     nb = nbformat.v4.new_notebook()
     for src in sources:
         nb.cells.append(nbformat.v4.new_code_cell(src))
@@ -45,7 +44,7 @@ failing_nb = [
 def test_collection(testdir: Testdir):
     _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "test_collection.ipynb"))
 
-    items, _ = testdir.inline_genitems("--treebeard")
+    items, _ = testdir.inline_genitems("--nbmake")
 
     assert len(items) == 1
 
@@ -53,7 +52,7 @@ def test_collection(testdir: Testdir):
 def test_when_ignored_none_collected(testdir: Testdir):
     _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "test_collection.ipynb"))
 
-    items, _ = testdir.inline_genitems("--treebeard --ignore **/*ipynb")
+    items, _ = testdir.inline_genitems("--nbmake --ignore **/*ipynb")
 
     assert len(items) == 0
 
@@ -68,7 +67,7 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
         passing_nb, os.path.join(str(testdir.tmpdir), "subdir/test_collection2.ipynb")
     )
 
-    hook_recorder = testdir.inline_run("--treebeard")
+    hook_recorder = testdir.inline_run("--nbmake")
 
     assert hook_recorder.ret == ExitCode.OK
 
@@ -76,6 +75,6 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
 def test_when_failing_nb_then_fail(testdir: Testdir):
     _write_nb(failing_nb, os.path.join(str(testdir.tmpdir), "test_collection.ipynb"))
 
-    hook_recorder = testdir.inline_run("--treebeard")
+    hook_recorder = testdir.inline_run("--nbmake")
 
     assert hook_recorder.ret == ExitCode.TESTS_FAILED

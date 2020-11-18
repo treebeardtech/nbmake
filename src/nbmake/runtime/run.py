@@ -4,9 +4,11 @@ import shutil
 import subprocess
 from pathlib import Path
 from traceback import format_exc
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 import papermill as pm  # type: ignore
+
+from .. import helper
 from ..conf import NbMakeContext
 from ..helper import shell
 from ..importchecker.imports import check_imports
@@ -18,8 +20,6 @@ from ..runtime.helper import (
     get_health_bar,
     get_summary,
 )
-
-from .. import helper
 
 bucket_name = "nbmake-notebook-outputs"
 
@@ -34,8 +34,8 @@ status_emojis = {
 
 class NotebookRun:
     _nbmake_context: NbMakeContext
-    _run_path: Optional[str]
-    _web_api_callback: Optional[helper.WebAPICallback]
+    _run_path: Optional[str] = None
+    _web_api_callback: Optional[helper.WebAPICallback] = None
 
     def __init__(self, nbmake_context: NbMakeContext) -> None:
         self._nbmake_context = nbmake_context
