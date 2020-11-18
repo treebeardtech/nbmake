@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import os
-
+from pathlib import Path
 import nbformat
 from _pytest.pytester import Testdir
 from pytest import ExitCode
@@ -61,10 +61,12 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "test_collection.ipynb"))
     testdir.mkdir("subdir")
     _write_nb(
-        passing_nb, os.path.join(str(testdir.tmpdir), "subdir/test_collection.ipynb")
+        passing_nb,
+        os.path.join(str(testdir.tmpdir), Path("subdir/test_collection.ipynb")),
     )
     _write_nb(
-        passing_nb, os.path.join(str(testdir.tmpdir), "subdir/test_collection2.ipynb")
+        passing_nb,
+        os.path.join(str(testdir.tmpdir), Path("subdir/test_collection2.ipynb")),
     )
 
     hook_recorder = testdir.inline_run("--nbmake")
