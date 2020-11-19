@@ -15,27 +15,32 @@ pip install pytest nbmake
 pytest --nbmake
 ```
 
-outputs
+the output is a Jupyter book in a build directory:
 
 ```
-_nbmake/
-  output/
-    nb.ipynb
-  report/
-    ...
-    index.html
+_build/
+  html/ # contains jupyter book static site with test results
+  jupyter_execute/ # contains built notebook ipynbs
 ```
 
 ## Directives
 
-To hide a cell containing assertions after executing:
+nbmake applies tags to notebooks based on directives in comments.
+
+e.g.
 
 ```
-# nbmake: hide
+# nbmake: hide-cell
+assert x = 42
 ```
 
-To replace a cell with cells from a boilerplate notebook
+Will result in the built notebook containing:
 
 ```
-# nbmake: insert boilerplate.ipynb
+metadata: {
+    tags: [ hide-cell ]
+}
 ```
+
+Directives will map to the following presentation options.
+https://jupyterbook.org/interactive/hiding.html

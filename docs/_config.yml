@@ -1,0 +1,3 @@
+title: "nbmake"
+execute:
+  execute_notebooks: "off"
