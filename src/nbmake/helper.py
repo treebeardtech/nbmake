@@ -4,7 +4,7 @@ import mimetypes
 import os
 import subprocess
 from typing import Any, Dict, List, Optional
-
+from sys import stderr
 import requests
 from requests import Response
 
@@ -23,7 +23,11 @@ def shell(command: str):
     shell_cmd: List[str] = (
         ["powershell", "-command"] if os.name == "nt" else ["bash", "-c",]
     )
-    subprocess.check_output(shell_cmd + [command])
+    try:
+        subprocess.check_output(shell_cmd + [command])
+    except Exception as ex:
+        stderr.write(f"Error occurred executing shell command {command}")
+        raise ex
 
 
 class WebAPICallback:

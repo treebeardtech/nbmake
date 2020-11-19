@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import sys
 import subprocess
 from pathlib import Path
 from traceback import format_exc
@@ -10,7 +11,7 @@ import papermill as pm  # type: ignore
 
 from .. import helper
 from ..conf import NbMakeContext
-from ..helper import shell
+from ..helper import shell as run_shell
 from ..importchecker.imports import check_imports
 from ..logs import log as tb_log
 from ..logs.helpers import clean_log_file
@@ -80,6 +81,8 @@ class NotebookRun:
 
             kernel_name = self._nbmake_context.kernel_name
 
+            python = sys.executable
+            print(json.dumps(dict(os.environ)))
             venv_activate_script = ""
             if kernel_name.startswith("python"):
 
@@ -94,11 +97,15 @@ class NotebookRun:
                     venv_activate_script = f". {venv_path}/bin/activate"
 
                 shutil.rmtree(venv_path, ignore_errors=True)
-                create_venv_cmd = f"virtualenv --system-site-packages {venv_path}"
-                create_kernel_cmd = f"{venv_activate_script}; python -m ipykernel install --user --name {nb_kernel_name}"
+                create_kernel_cmd = f"{venv_activate_script}; {python} -m ipykernel install --user --name {nb_kernel_name}"
 
-                shell(create_venv_cmd)
-                shell(create_kernel_cmd)
+                user_profile = os.environ["USERPROFILE"]
+                os.environ[
+                    "USERPROFILE"
+                ] = f"{os.environ['HOMEDRIVE']}{os.environ['HOMEPATH']}"
+                subprocess.check_output(f"python -m virtualenv {venv_path}")
+                os.environ["USERPROFILE"] = user_profile
+                run_shell(create_kernel_cmd)
                 kernel_name = nb_kernel_name
 
             pm_cmd = f"""
@@ -114,7 +121,7 @@ papermill \
   {notebook_path} \
   {notebook_path}
 """
-            shell(pm_cmd)
+            run_shell(pm_cmd)
 
             helper.log(f"{status_emojis['SUCCESS']} Notebook {notebook_path} passed!\n")
             nb_dict = get_nb_dict()
