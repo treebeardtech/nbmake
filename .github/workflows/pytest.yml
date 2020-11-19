@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         os: 
-          # - ubuntu-latest
+          - ubuntu-latest
           - windows-latest
         python-version:
           - "3.6"
@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -r requirements-dev.txt
-      - run: pytest --cov-report=xml --cov=src
+      - run: pytest --cov-report=xml --cov=src -n=auto
       - uses: codecov/codecov-action@v1
         with:
           file: coverage.xml

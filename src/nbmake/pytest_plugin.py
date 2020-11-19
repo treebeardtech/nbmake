@@ -15,6 +15,13 @@ from .runtime.run import NotebookRun
 def pytest_addoption(parser: Any):
     group = parser.getgroup("general")
     group.addoption("--nbmake", action="store_true", help="Test Jupyter notebooks")
+    group.addoption(
+        "--nbmake-cell-timeout",
+        action="store",
+        default=2000,
+        type=float,
+        help="Timeout for cell execution, in seconds.",
+    )
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignore
@@ -40,11 +47,13 @@ class NotebookItem(pytest.Item):  # type: ignore
 
     def runtest(self):
         print(f"cwd: {os.getcwd()}")
+        timeout: int = self.config.option.nbmake_cell_timeout
         ctx = NbMakeContext(
             **{
                 "api_url": "",
                 "api_key": "",
                 "filename": self.name,
+                "cell_execution_timeout_seconds": timeout,
                 "github_details": create_github_details(),
             }
         )

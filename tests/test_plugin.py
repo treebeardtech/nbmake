@@ -61,7 +61,7 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "test_collection.ipynb"))
     testdir.mkdir("subdir")
     _write_nb(
-        passing_nb,
+        ["import time;time.sleep(5)"],
         os.path.join(str(testdir.tmpdir), Path("subdir/test_collection.ipynb")),
     )
     _write_nb(
@@ -72,6 +72,16 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     hook_recorder = testdir.inline_run("--nbmake")
 
     assert hook_recorder.ret == ExitCode.OK
+
+
+def test_when_slow_cell_then_timeout(testdir: Testdir):
+    _write_nb(
+        ["import time;time.sleep(6)"], os.path.join(str(testdir.tmpdir), "a.ipynb")
+    )
+
+    hook_recorder = testdir.inline_run("--nbmake", "--nbmake-cell-timeout=3")
+
+    assert hook_recorder.ret == ExitCode.TESTS_FAILED
 
 
 def test_when_failing_nb_then_fail(testdir: Testdir):
