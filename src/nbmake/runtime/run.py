@@ -100,11 +100,16 @@ class NotebookRun:
                 create_kernel_cmd = f"{venv_activate_script}; {python} -m ipykernel install --user --name {nb_kernel_name}"
 
                 user_profile = os.environ["USERPROFILE"]
-                os.environ[
-                    "USERPROFILE"
-                ] = f"{os.environ['HOMEDRIVE']}{os.environ['HOMEPATH']}"
-                subprocess.check_output(f"python -m virtualenv {venv_path}")
-                os.environ["USERPROFILE"] = user_profile
+                if os.name == "nt":
+                    os.environ[
+                        "USERPROFILE"
+                    ] = f"{os.environ['HOMEDRIVE']}{os.environ['HOMEPATH']}"
+
+                    subprocess.check_output(f"python -m virtualenv {venv_path}")
+                    os.environ["USERPROFILE"] = user_profile
+                else:
+                    run_shell(f"virtualenv {venv_path}")
+
                 run_shell(create_kernel_cmd)
                 kernel_name = nb_kernel_name
 
