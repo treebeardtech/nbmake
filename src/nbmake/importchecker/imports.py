@@ -31,12 +31,12 @@ def get_imported_modules(glob_path: str) -> Set[str]:
         for line in lines:
             from_match = from_regexp.match(line)
             if from_match:
-                all_imported_modules.add(from_match.group(1))
+                all_imported_modules.add(from_match.group(1))  # type: ignore
                 continue
 
             import_match = import_regexp.match(line)
             if import_match:
-                all_imported_modules.add(import_match.group(1))
+                all_imported_modules.add(import_match.group(1))  # type: ignore
                 continue
 
     return all_imported_modules

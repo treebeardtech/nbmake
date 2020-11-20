@@ -32,7 +32,7 @@ class NbMakeContext(BaseModel):
         if self.api_key:
             unredacted_length = 4
             dict_obj["api_key"] = (
-                "x" * (len(self.api_key) - unredacted_length)
-                + self.api_key[-unredacted_length:]
+                "x" * (len(self.api_key) - unredacted_length)  # type: ignore
+                + self.api_key[-unredacted_length:]  # type: ignore
             )
         return str(dict_obj)

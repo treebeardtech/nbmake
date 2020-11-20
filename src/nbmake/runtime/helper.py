@@ -36,18 +36,18 @@ def get_failed_nb_details(
                     and "duration" in cell["metadata"]["papermill"]
                     and cell["metadata"]["papermill"]["duration"] == None
                 ):
-                    num_passing_cells -= 1
+                    num_passing_cells -= 1  # type: ignore
                     print("timeout")
                     err_line = f"Cell timed out after {nbmake_context.cell_execution_timeout_seconds}s. You can set `cell_execution_timeout_seconds` in nbmake.yaml."
                     status = "TIMEOUT"
                     break
 
-                num_passing_cells += 1
+                num_passing_cells += 1  # type: ignore
 
     except Exception as ex:
         print(ex)
 
-    return err_line, num_passing_cells, status
+    return err_line, num_passing_cells, status  # type: ignore
 
 
 def get_health_bar(

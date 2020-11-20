@@ -41,17 +41,17 @@ class NotebookRun:
     def __init__(self, nbmake_context: NbMakeContext) -> None:
         self._nbmake_context = nbmake_context
         if self._nbmake_context.github_details and self._nbmake_context.api_key:
-            self._run_path = self._nbmake_context.github_details.run_path
+            self._run_path = self._nbmake_context.github_details.run_path  # type: ignore
 
             self._web_api_callback = helper.WebAPICallback(
-                self._nbmake_context.github_details, self._nbmake_context
+                self._nbmake_context.github_details, self._nbmake_context  # type: ignore
             )
 
     def upload_nb(self, run_path: str, nb_status: str, set_as_thumbnail: bool):
         notebook_path = self._nbmake_context.filename
         notebook_upload_path = f"{run_path}/{notebook_path}"
 
-        self._web_api_callback and self._web_api_callback.upload_artifact(
+        self._web_api_callback and self._web_api_callback.upload_artifact(  # type: ignore
             notebook_path,
             notebook_upload_path,
             nb_status,
@@ -64,7 +64,7 @@ class NotebookRun:
             for name in files:
                 full_name = os.path.join(root, name)
                 upload_path = f"{run_path}/{full_name}"
-                self._web_api_callback and self._web_api_callback.upload_artifact(
+                self._web_api_callback and self._web_api_callback.upload_artifact(  # type: ignore
                     full_name, upload_path, None
                 )
 
@@ -195,7 +195,7 @@ papermill \
             notebook_results[notebook_path] = result
             if self._run_path:
                 self.upload_nb(
-                    self._run_path,
+                    self._run_path,  # type: ignore
                     result.status,
                     set_as_thumbnail,
                 )
@@ -217,13 +217,13 @@ papermill \
 
         print(results)
 
-        self._web_api_callback and self._web_api_callback.update(
+        self._web_api_callback and self._web_api_callback.update(  # type: ignore
             update_url=f"{self._nbmake_context.api_url}/{self._run_path}/log",
             status=get_status_str(),
         )
 
         if os.path.exists("nbmake.log"):
-            self._web_api_callback and self._web_api_callback.upload_artifact(
+            self._web_api_callback and self._web_api_callback.upload_artifact(  # type: ignore
                 "nbmake.log",
                 f"{self._run_path}/nbmake.log",
                 None,
@@ -232,12 +232,12 @@ papermill \
             with open("tb_results.log", "w", encoding="utf-8") as results_log:
                 results_log.write(results)
 
-            self._web_api_callback and self._web_api_callback.upload_artifact(
+            self._web_api_callback and self._web_api_callback.upload_artifact(  # type: ignore
                 "tb_results.log",
                 f"{self._run_path}/__nbmake__/tb_results.log",
                 None,
             )
-            self._web_api_callback and self._web_api_callback.update(
+            self._web_api_callback and self._web_api_callback.update(  # type: ignore
                 update_url=f"{self._nbmake_context.api_url}/{self._run_path}/update",
                 status=get_status_str(),
             )
@@ -251,7 +251,7 @@ papermill \
         notebook_results = self._run()
 
         if self._run_path:
-            self.upload_outputs(self._run_path)
+            self.upload_outputs(self._run_path)  # type: ignore
 
         helper.log("🌲 Run Finished. Results:\n")
 

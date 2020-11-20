@@ -96,8 +96,8 @@ class WebAPICallback:
         get_url_params = {"content_type": content_type}
         put_object_headers = {"Content-Type": content_type}
         if status:
-            get_url_params["status"] = status
-            put_object_headers["x-goog-meta-status"] = status
+            get_url_params["status"] = status  # type: ignore
+            put_object_headers["x-goog-meta-status"] = status  # type: ignore
 
         with open(filename, "rb") as data:
             resp: Response = requests.get(  # type: ignore
