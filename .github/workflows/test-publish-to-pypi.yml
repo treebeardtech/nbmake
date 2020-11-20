@@ -12,7 +12,7 @@ jobs:
       - run: pip install poetry
       - name: Set poetry version to dev
         run: |
-          build_version="$(poetry version -s).dev-$(git rev-parse --short HEAD).$(date +%s)"
+          build_version="$(poetry version -s)+$(git rev-parse --short HEAD)_$(date +%s)"
           poetry version $build_version
       - run: poetry build
       - name: Publish distribution to Test PyPI
