@@ -19,15 +19,15 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12"
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install poetry
+      - run: poetry config virtualenvs.create false
+      - run: poetry install
       - run: npm install --global pyright@1.1.30
       - run: git clone https://github.com/python/typeshed.git
       - run: pyright
-      # - uses: actions/setup-python@v2
-      #   with:
-      #     python-version: ${{ matrix.python-version }}
-      # - run: pip install poetry
-      # - run: poetry config virtualenvs.create false
-      # - run: poetry install
       # - run: pytest --cov-report=xml --cov=src -n=auto
       # - uses: codecov/codecov-action@v1
       #   with:
