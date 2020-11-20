@@ -1,19 +1,21 @@
-name: Publish Python 🐍 distributions 📦 to PyPI and TestPyPI
+name: Publish Python distributions to PyPI and TestPyPI
 on: push
 jobs:
   build-n-publish:
-    name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
+    name: Build and publish Python distributions to PyPI and TestPyPI
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-python@v2
-    - name: Publish distribution 📦 to Test PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        password: ${{ secrets.TEST_PYPI_PASSWORD }}
-        repository_url: https://test.pypi.org/legacy/
-    - name: Publish distribution 📦 to PyPI
-      if: startsWith(github.ref, 'refs/tags')
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        password: ${{ secrets.PYPI_PASSWORD }}
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v2
+      - run: pip install poetry
+      - run: poetry build
+      - name: Publish distribution to Test PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.TEST_PYPI_PASSWORD }}
+          repository_url: https://test.pypi.org/legacy/
+      - name: Publish distribution to PyPI
+        if: startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_PASSWORD }}

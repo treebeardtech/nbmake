@@ -1,0 +1,36 @@
+[tool.poetry]
+authors = ["alex-treebeard <alex@treebeard.io>"]
+description = "Pytest plugin for releasing notebooks"
+homepage = "https://github.com/treebeardtech/nbmake"
+include = ["src/nbmake/version.txt"]
+license = "Apache-2.0"
+name = "nbmake"
+packages = [
+  {include = "nbmake", from = "src"},
+]
+version = "0.0.1.dev1"
+
+[tool.poetry.plugins."pytest11"]
+nbmake = "nbmake.pytest_plugin"
+
+[tool.poetry.dependencies]
+click = "^7.1.2"
+ipykernel = "^5.3.4"
+jupyter-contrib-nbextensions = "^0.5.1"
+nbstripout = "^0.3.9"
+papermill = "^2.2.2"
+pathlib = "^1.0.1"
+pydantic = "^1.7.2"
+python = "^3.6"
+requests = "^2.25.0"
+virtualenv = "^20.1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.1.2"
+pytest-cov = "^2.10.1"
+pytest-xdist = "^2.1.0"
+virtualenv = "^20.1.0"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]

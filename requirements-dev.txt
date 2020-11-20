@@ -1,5 +1,0 @@
--e .
-pytest
-pytest-cov
-pytest-xdist
-virtualenv
