@@ -1,8 +1,8 @@
 import json
 import os
 import shutil
-import sys
 import subprocess
+import sys
 from pathlib import Path
 from traceback import format_exc
 from typing import Any, Dict, Optional
@@ -156,7 +156,9 @@ papermill \
                 err_line=err_line,
             )
 
-    def _run(self,) -> Dict[str, NotebookResult]:
+    def _run(
+        self,
+    ) -> Dict[str, NotebookResult]:
         helper.log(f"🌲 nbmake runtime: running repo")
 
         if self._nbmake_context.debug:
@@ -193,14 +195,19 @@ papermill \
             notebook_results[notebook_path] = result
             if self._run_path:
                 self.upload_nb(
-                    self._run_path, result.status, set_as_thumbnail,
+                    self._run_path,
+                    result.status,
+                    set_as_thumbnail,
                 )
             set_as_thumbnail = False
 
         return notebook_results
 
     def finish(
-        self, status: int, results: str, logging: bool,
+        self,
+        status: int,
+        results: str,
+        logging: bool,
     ):
         def get_status_str():
             if status == 0:
@@ -217,14 +224,18 @@ papermill \
 
         if os.path.exists("nbmake.log"):
             self._web_api_callback and self._web_api_callback.upload_artifact(
-                "nbmake.log", f"{self._run_path}/nbmake.log", None,
+                "nbmake.log",
+                f"{self._run_path}/nbmake.log",
+                None,
             )
 
             with open("tb_results.log", "w", encoding="utf-8") as results_log:
                 results_log.write(results)
 
             self._web_api_callback and self._web_api_callback.upload_artifact(
-                "tb_results.log", f"{self._run_path}/__nbmake__/tb_results.log", None,
+                "tb_results.log",
+                f"{self._run_path}/__nbmake__/tb_results.log",
+                None,
             )
             self._web_api_callback and self._web_api_callback.update(
                 update_url=f"{self._nbmake_context.api_url}/{self._run_path}/update",

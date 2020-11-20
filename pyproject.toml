@@ -22,7 +22,7 @@ nbstripout = "^0.3.9"
 papermill = "^2.2.2"
 pathlib = "^1.0.1"
 pydantic = "^1.7.2"
-python = "^3.6"
+python = "^3.6.1"
 requests = "^2.25.0"
 virtualenv = "^20.1.0"
 
@@ -31,6 +31,7 @@ pytest = "^6.1.2"
 pytest-cov = "^2.10.1"
 pytest-xdist = "^2.1.0"
 virtualenv = "^20.1.0"
+pre-commit = "^2.8.2"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"

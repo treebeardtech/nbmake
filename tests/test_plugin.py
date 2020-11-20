@@ -3,6 +3,7 @@ from __future__ import print_function
 
 import os
 from pathlib import Path
+
 import nbformat
 from _pytest.pytester import Testdir
 from pytest import ExitCode

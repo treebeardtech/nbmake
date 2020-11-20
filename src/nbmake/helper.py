@@ -3,8 +3,9 @@ import json
 import mimetypes
 import os
 import subprocess
-from typing import Any, Dict, List, Optional
 from sys import stderr
+from typing import Any, Dict, List, Optional
+
 import requests
 from requests import Response
 
@@ -21,7 +22,12 @@ def get_time():
 
 def shell(command: str):
     shell_cmd: List[str] = (
-        ["powershell", "-command"] if os.name == "nt" else ["bash", "-c",]
+        ["powershell", "-command"]
+        if os.name == "nt"
+        else [
+            "bash",
+            "-c",
+        ]
     )
     try:
         subprocess.check_output(shell_cmd + [command])
@@ -70,7 +76,9 @@ class WebAPICallback:
             data["end_time"] = get_time()
 
         resp = requests.post(  # type:ignore
-            update_url, json=data, headers={"api_key": self._nbmake_context.api_key},
+            update_url,
+            json=data,
+            headers={"api_key": self._nbmake_context.api_key},
         )
 
         if self.debug:
@@ -101,7 +109,9 @@ class WebAPICallback:
                 raise (Exception(msg))
             signed_url: str = resp.text
             put_resp = requests.put(
-                signed_url, data, headers=put_object_headers,
+                signed_url,
+                data,
+                headers=put_object_headers,
             )  # type: ignore
             if put_resp.status_code != 200:
                 msg = f"Put object failed for {filename}, {put_resp.status_code}\n{put_resp.text}"
