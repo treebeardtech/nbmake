@@ -24,7 +24,7 @@ jobs:
       - run: pip install poetry
       - run: poetry config virtualenvs.create false
       - run: poetry install
-      - run: pytest --cov-report=xml --cov=src -n=auto
+      - run: pytest --cov-report=xml --cov=src -n=auto tests
       - uses: codecov/codecov-action@v1
         with:
           file: coverage.xml
