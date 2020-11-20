@@ -10,19 +10,22 @@ jobs:
           - windows-latest
         python-version:
           - "3.6"
-          - "3.7"
-          - "3.8"
-          - "3.9"
+          # - "3.7"
+          # - "3.8"
+          # - "3.9"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - run: pip install poetry
-      - run: poetry config virtualenvs.create false
-      - run: poetry install
-      - run: pytest --cov-report=xml --cov=src -n=auto
-      - uses: codecov/codecov-action@v1
-        with:
-          file: coverage.xml
+      - uses: actions/setup-node@v1
+      - run: npm install --global pyright
+      - run: pyright
+      # - uses: actions/setup-python@v2
+      #   with:
+      #     python-version: ${{ matrix.python-version }}
+      # - run: pip install poetry
+      # - run: poetry config virtualenvs.create false
+      # - run: poetry install
+      # - run: pytest --cov-report=xml --cov=src -n=auto
+      # - uses: codecov/codecov-action@v1
+      #   with:
+      #     file: coverage.xml
