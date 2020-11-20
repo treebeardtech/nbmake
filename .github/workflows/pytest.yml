@@ -21,6 +21,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: git clone https://github.com/python/typeshed.git
       - uses: pre-commit/action@v2.0.0
+      - run: pip install poetry
+      - run: poetry config virtualenvs.create false
+      - run: poetry install
       - run: pytest --cov-report=xml --cov=src -n=auto
       - uses: codecov/codecov-action@v1
         with:
