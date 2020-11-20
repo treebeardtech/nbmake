@@ -1,3 +1,4 @@
+name: Test Publish to PYPI
 on:
   push:
     branches:
@@ -11,7 +12,7 @@ jobs:
       - run: pip install poetry
       - name: Set poetry version to dev
         run: |
-          build_version="$(poetry version -s).dev-$(git rev-parse --short HEAD)-$(date +%s)"
+          build_version="$(poetry version -s).dev-$(git rev-parse --short HEAD).$(date +%s)"
           poetry version $build_version
       - run: poetry build
       - name: Publish distribution to Test PyPI
@@ -23,7 +24,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "Bump version" -a
+          git commit -m "Bump Version" -a
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:

@@ -1,3 +1,4 @@
+name: Publish to PYPI
 on:
   create:
     tags:
