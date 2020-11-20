@@ -19,7 +19,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12"
-      - run: npm install --global pyright
+      - run: npm install --global pyright@1.1.30
+      - run: https://github.com/python/typeshed.git
       - run: pyright
       # - uses: actions/setup-python@v2
       #   with:
