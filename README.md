@@ -1,14 +1,16 @@
 # nbmake
 
-Notebook testing Python plugin with a focus on observability
+Pytest plugin for testing notebooks
 
-Features:
+## Functionality
 
-1. Test isolation: Runs each notebook as a test case inside its own virtualenv
-2. Directives: Adds/removes cells at runtime to improve readability of output
-3. Jupyter book integration: Test outputs can be built into a [Jupyter Book](https://jupyterbook.org/) for debugging
+1. Runs notebooks as pytest testcases, from top to bottom
+2. Builds outputs into a Jupyter book
+3. Allows altering of notebok runtime behaviour and cosmetics
 
 ## Usage
+
+### During Development
 
 ```
 pip install pytest nbmake
@@ -23,9 +25,42 @@ _build/
   jupyter_execute/ # contains built notebook ipynbs
 ```
 
+this can be viewed locally for debugging
+
+```
+open _build/html/index.html
+```
+
+## Example release process
+
+```
+pytest --nbmake
+netlify deploy dir=_build/html
+```
+
 ## Directives
 
+Directives automate release tasks and are removed after being processed unless:
+
+- `--dev` is passed
+- The notebook fails
+
+### Test Directives
+
+```
+# nbmake: xfail
+```
+
+Will allow the cell to fail.
+
+### Cosmetic Directives
+
 nbmake applies tags to notebooks based on directives in comments.
+
+Directives will map to the following presentation options.
+https://jupyterbook.org/interactive/hiding.html
+
+To make prod output appear different to what is run (e.g. for assertions/diagnostics):
 
 e.g.
 
@@ -41,6 +76,3 @@ metadata: {
     tags: [ hide-cell ]
 }
 ```
-
-Directives will map to the following presentation options.
-https://jupyterbook.org/interactive/hiding.html

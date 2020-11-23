@@ -3,11 +3,16 @@ import os
 import shutil
 import subprocess
 import sys
+import traceback
 from pathlib import Path
 from traceback import format_exc
 from typing import Any, Dict, Optional
 
 import papermill as pm  # type: ignore
+from papermill.exceptions import PapermillExecutionError  # type: ignore
+from pygments import highlight
+from pygments.formatters import TerminalFormatter
+from pygments.lexers import get_lexer_by_name
 
 from .. import helper
 from ..conf import NbMakeContext
@@ -21,6 +26,9 @@ from ..runtime.helper import (
     get_health_bar,
     get_summary,
 )
+
+lexer = get_lexer_by_name("py3tb")
+formatter = TerminalFormatter()
 
 bucket_name = "nbmake-notebook-outputs"
 
@@ -78,55 +86,21 @@ class NotebookRun:
             helper.log(
                 f"Executing Notebook {notebook_name} in {'.' if len(notebook_dir) == 0 else notebook_dir}"
             )
-
-            kernel_name = self._nbmake_context.kernel_name
-
-            python = sys.executable
-            print(json.dumps(dict(os.environ)))
-            venv_activate_script = ""
-            if kernel_name.startswith("python"):
-
-                nb_kernel_name = "_" + notebook_name.replace(".ipynb", "").replace(
-                    "/", "_"
+            try:
+                pm.execute_notebook(  # type: ignore
+                    notebook_path,
+                    notebook_path,
+                    kernel_name=self._nbmake_context.kernel_name,
+                    progress_bar=False,
+                    request_save_on_cell_execute=True,
+                    autosave_cell_every=10,
+                    execution_timeout=self._nbmake_context.cell_execution_timeout_seconds,
+                    log_output=True,
+                    cwd=f"{os.getcwd()}/{notebook_dir}",
                 )
-                venv_path = Path(f"venvs/{nb_kernel_name}")
-
-                if os.name == "nt":
-                    venv_activate_script = f". {venv_path}\\Scripts\\activate.ps1"
-                else:
-                    venv_activate_script = f". {venv_path}/bin/activate"
-
-                shutil.rmtree(venv_path, ignore_errors=True)
-                create_kernel_cmd = f"{venv_activate_script}; {python} -m ipykernel install --user --name {nb_kernel_name}"
-
-                user_profile = os.environ["USERPROFILE"]
-                if os.name == "nt":
-                    os.environ[
-                        "USERPROFILE"
-                    ] = f"{os.environ['HOMEDRIVE']}{os.environ['HOMEPATH']}"
-
-                    subprocess.check_output(f"python -m virtualenv {venv_path}")
-                    os.environ["USERPROFILE"] = user_profile
-                else:
-                    run_shell(f"virtualenv {venv_path}")
-
-                run_shell(create_kernel_cmd)
-                kernel_name = nb_kernel_name
-
-            pm_cmd = f"""
-{venv_activate_script}; \
-papermill \
-  --kernel {kernel_name} \
-  --no-progress-bar \
-  --request-save-on-cell-execute \
-  --autosave-cell-every 10 \
-  --execution-timeout {self._nbmake_context.cell_execution_timeout_seconds} \
-  --log-output \
-  --cwd {os.getcwd()}/{notebook_dir} \
-  {notebook_path} \
-  {notebook_path}
-"""
-            run_shell(pm_cmd)
+            except PapermillExecutionError as err:
+                print("Notebook execution failed")
+                raise err
 
             helper.log(f"{status_emojis['SUCCESS']} Notebook {notebook_path} passed!\n")
             nb_dict = get_nb_dict()
@@ -137,8 +111,8 @@ papermill \
                 num_passing_cells=num_cells,
                 err_line="",
             )
-        except Exception:
-            tb = format_exc()
+        except Exception as ex:
+            tb = highlight(format_exc(), lexer, TerminalFormatter())
             nb_dict = get_nb_dict()
             num_cells = len(nb_dict["cells"])
             err_line, num_passing_cells, status = get_failed_nb_details(

@@ -13,7 +13,7 @@ from .runtime.run import NotebookRun
 
 
 def pytest_addoption(parser: Any):
-    group = parser.getgroup("general")
+    group = parser.getgroup("nbmake", "notebook testing")
     group.addoption("--nbmake", action="store_true", help="Test Jupyter notebooks")
     group.addoption(
         "--nbmake-cell-timeout",
@@ -37,13 +37,13 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignor
 
 class NotebookFile(pytest.File):  # type: ignore
     def collect(self) -> Generator[Any, Any, Any]:
-        yield NotebookItem.from_parent(self, name=self.name, spec={})
+        yield NotebookItem.from_parent(self, filename=self.name)
 
 
 class NotebookItem(pytest.Item):  # type: ignore
-    def __init__(self, name, parent, spec):
-        super().__init__(name, parent)
-        self.spec = spec
+    def __init__(self, parent, filename):
+        super().__init__("", parent)
+        self.filename = filename
 
     def runtest(self):
         print(f"cwd: {os.getcwd()}")
@@ -52,7 +52,7 @@ class NotebookItem(pytest.Item):  # type: ignore
             **{
                 "api_url": "",
                 "api_key": "",
-                "filename": self.name,
+                "filename": self.filename,
                 "cell_execution_timeout_seconds": timeout,
                 "github_details": create_github_details(),
             }
@@ -60,12 +60,21 @@ class NotebookItem(pytest.Item):  # type: ignore
         nb_run = NotebookRun(ctx)
         status = nb_run.start()
         if status != 0:
-            raise Exception("tb failed")
+            raise Exception(f"🍋 {self.filename} failed")
 
     def repr_failure(self, excinfo: Any):
-        print_tb(excinfo.tb)
-        sys.stderr.write(str(excinfo.value))
-        return
+        # print_tb(excinfo.tb)
+        return f"🍋 repr_failure {excinfo.value}"
 
     def reportinfo(self):
-        return "info"
+        return f"reportinfo {self.filename} 🍋 info", 0, f"reportinfo {self.filename} 🍋 info"  # type: ignore
+
+
+# def pytest_runtest_makereport(item, call):
+#     if call.when == "setup":
+#         print("Called after setup for test case is executed.")
+#     if call.when == "call":
+#         print("Called after test case is executed.")
+#         print("-->{}<--".format(call.excinfo))
+#     if call.when == "teardown":
+#         print("Called after teardown for test case is executed.")
