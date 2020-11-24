@@ -1,0 +1,22 @@
+name: Test Publish to PYPI
+on:
+  push:
+    branches:
+      - "*"
+jobs:
+  build-n-publish:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v2
+      - run: pip install poetry
+      - name: Set poetry version to dev
+        run: |
+          build_version="$(poetry version -s).dev$(date +%s)"
+          poetry version $build_version
+      - run: poetry build
+      - name: Publish distribution to Test PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.TEST_PYPI_PASSWORD }}
+          repository_url: https://test.pypi.org/legacy/

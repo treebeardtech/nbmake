@@ -1,0 +1,27 @@
+name: Publish to PYPI
+on:
+  create:
+    tags:
+      - "*"
+jobs:
+  build-n-publish:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v2
+      - run: pip install poetry
+      - run: poetry version $(git describe --tags --abbrev=0)
+      - run: poetry build
+      - uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_PASSWORD }}
+      - name: Commit Version Change
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Bump version" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

@@ -1,0 +1,35 @@
+name: Pytest
+on: [pull_request]
+
+jobs:
+  pytest:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        python-version:
+          - "3.6.7"
+          - "3.7"
+          - "3.8"
+          - "3.9"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: git clone https://github.com/python/typeshed.git
+      - uses: pre-commit/action@v2.0.0
+      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
+        run: |
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install
+          pytest --cov-report=xml --cov=src -n=auto tests
+      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
+        uses: codecov/codecov-action@v1
+        with:
+          file: coverage.xml
