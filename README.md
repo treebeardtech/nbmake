@@ -1,12 +1,13 @@
 # nbmake
 
-Pytest plugin for testing notebooks
+Pytest plugin for building notebooks into a tested Jupyterbook
 
 ## Functionality
 
-1. Runs notebooks as pytest testcases, from top to bottom
-2. Builds outputs into a Jupyter book
-3. Allows altering of notebok runtime behaviour and cosmetics
+1. Implements pytest plugin API to access the Jupyterbook execution runtime
+   1. This enables parallelisation with `pytest-xdist`
+2. Automates generation of Jupyterbook config and table of contents, or lets you provide your own
+3. Does not interfere with normal jupyter-book usage.
 
 ## Usage
 
@@ -23,7 +24,6 @@ the output is a Jupyter book in a build directory:
 _build/
   html/ # contains jupyter book static site with test results
   jupyter_execute/ # contains jupyter-book ipynbs
-  nbmake_execute/ # contains nbmake ipynbs
 ```
 
 this can be viewed locally for debugging
@@ -39,41 +39,14 @@ pytest --nbmake
 netlify deploy dir=_build/html
 ```
 
-## Directives
+## Roadmap
 
-Directives automate release tasks and are removed after being processed unless:
+Just some ideas:
 
-- `--dev` is passed
-- The notebook fails
+### Test Isolation
 
-### Test Directives
+Improve virtualisation of individual tests, e.g. to prevent `!pip install` commands contaminating the test environment.
 
-```
-# nbmake: xfail
-```
+### Pytest Fixture Integration
 
-Will allow the cell to fail.
-
-### Cosmetic Directives
-
-nbmake applies tags to notebooks based on directives in comments.
-
-Directives will map to the following presentation options.
-https://jupyterbook.org/interactive/hiding.html
-
-To make prod output appear different to what is run (e.g. for assertions/diagnostics):
-
-e.g.
-
-```
-# nbmake: hide-cell
-assert x = 42
-```
-
-Will result in the built notebook containing:
-
-```
-metadata: {
-    tags: [ hide-cell ]
-}
-```
+Make notebooks a first-class pytest citizen by providing a mechanism for enabling pytest fixtures
