@@ -4,6 +4,7 @@ on: [push, pull_request]
 jobs:
   pytest:
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest

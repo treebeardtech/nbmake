@@ -7,14 +7,14 @@ from nbmake.jupyter_book_run import JupyterBookRun  # type: ignore
 class TestJupyterBookRun:
     def test_passing(self):
         filename = "tests/resources/passing.ipynb"
-        run = JupyterBookRun(filename)
-        res: JupyterBookResult = run.execute()
+        run = JupyterBookRun(filename)  # type: ignore
+        res: JupyterBookResult = run.execute()  # type: ignore
 
         assert res.failing_cell_index == None
 
     def test_failing(self):
         filename = "tests/resources/failing.ipynb"
-        run = JupyterBookRun(filename)
-        res: JupyterBookResult = run.execute()
+        run = JupyterBookRun(filename)  # type: ignore
+        res: JupyterBookResult = run.execute()  # type: ignore
 
         assert res.failing_cell_index == 0
