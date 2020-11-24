@@ -1,0 +1,4 @@
+file: passing
+sections:
+- file: failing
+- file: failing copy

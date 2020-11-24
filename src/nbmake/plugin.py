@@ -1,10 +1,10 @@
 import os
+import subprocess
 from fnmatch import fnmatch
 from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
 from _pytest.config.argparsing import Parser  # type: ignore
-from jupyter_book.commands import build
 
 
 def pytest_addoption(parser: Any):
@@ -43,7 +43,8 @@ class NotebookItem(pytest.Item):  # type: ignore
     def runtest(self):
         print(f"cwd: {os.getcwd()}")
 
-        build(self.filename)
+        a = subprocess.check_output(f"jupyter-book build {self.filename}", shell=True)
+        print(a)
 
     def repr_failure(self, excinfo: Any):
         # print_tb(excinfo.tb)
