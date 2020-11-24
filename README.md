@@ -4,10 +4,9 @@ Pytest plugin for building notebooks into a tested Jupyterbook
 
 ## Functionality
 
-1. Implements pytest plugin API to access the Jupyterbook execution runtime
-   1. This enables parallelisation with `pytest-xdist`
-2. Automates generation of Jupyterbook config and table of contents, or lets you provide your own
-3. Does not interfere with normal jupyter-book usage.
+1. Implements the pytest plugin API allowing parallel execution of notebooks via `pytest-xdist`
+2. Treats the `_toc.yml` as the test file, and each notebook as a test case.
+3. Runs each file through jupyterbook's execution layer separately, then re-combines and builds the book
 
 ## Usage
 
