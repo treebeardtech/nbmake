@@ -10,7 +10,8 @@ import jupyter_book
 from .jupyter_book_result import JupyterBookResult
 
 JB_BINARY: Path = (
-    Path(os.path.dirname(jupyter_book.__file__)) / "../../../../bin/jb"
+    Path(os.path.dirname(jupyter_book.__file__))
+    / ("/../../../Scripts/jb.exe" if os.name == "nt" else "../../../../bin/jb")
 ).resolve()
 
 
