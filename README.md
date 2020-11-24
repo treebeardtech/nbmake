@@ -22,7 +22,8 @@ the output is a Jupyter book in a build directory:
 ```
 _build/
   html/ # contains jupyter book static site with test results
-  jupyter_execute/ # contains built notebook ipynbs
+  jupyter_execute/ # contains jupyter-book ipynbs
+  nbmake_execute/ # contains nbmake ipynbs
 ```
 
 this can be viewed locally for debugging

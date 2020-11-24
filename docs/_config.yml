@@ -1,3 +1,4 @@
 title: "nbmake"
 execute:
-  execute_notebooks: "off"
+  execute_notebooks: "cache"
+  cache: "_cache"
