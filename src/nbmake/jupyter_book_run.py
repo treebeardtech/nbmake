@@ -1,6 +1,5 @@
 import json
 import os
-import shutil
 import subprocess
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -53,7 +52,6 @@ class JupyterBookRun:
 
     def execute(self) -> JupyterBookResult:
         workdir = Path(os.path.dirname(self.filename))
-        shutil.rmtree(workdir / ".nbmake", ignore_errors=True)
         out = subprocess.check_output(
             f"{JB_BINARY} build {os.path.basename(self.filename)} --path-output .nbmake",
             shell=True,
