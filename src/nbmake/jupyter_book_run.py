@@ -11,7 +11,7 @@ from .jupyter_book_result import JupyterBookResult
 
 JB_BINARY: Path = (
     Path(os.path.dirname(jupyter_book.__file__))
-    / ("/../../../Scripts/jb.exe" if os.name == "nt" else "../../../../bin/jb")
+    / ("../../../Scripts/jb.exe" if os.name == "nt" else "../../../../bin/jb")
 ).resolve()
 
 
