@@ -1,4 +1,4 @@
 title: "nbmake"
 execute:
   execute_notebooks: "cache"
-  cache: "docs/_build/cache"
+  cache: ".cache"
