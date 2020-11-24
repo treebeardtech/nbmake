@@ -12,7 +12,7 @@ readme = "README.md"
 version = "0.0.1"
 
 [tool.poetry.plugins."pytest11"]
-nbmake = "nbmake.pytest_plugin"
+nbmake = "nbmake.plugin"
 
 [tool.poetry.dependencies]
 click = "^7.1.2"
@@ -25,6 +25,7 @@ pydantic = "^1.7.2"
 python = "^3.6.1"
 requests = "^2.25.0"
 virtualenv = "^20.1.0"
+jupyter-book = "^0.8.3"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.8.2"

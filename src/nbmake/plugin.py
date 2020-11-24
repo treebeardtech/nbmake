@@ -1,15 +1,10 @@
 import os
-import sys
+import subprocess
 from fnmatch import fnmatch
-from traceback import print_tb
 from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
 from _pytest.config.argparsing import Parser  # type: ignore
-
-from .conf import NbMakeContext
-from .helper import create_github_details
-from .runtime.run import NotebookRun
 
 
 def pytest_addoption(parser: Any):
@@ -47,18 +42,7 @@ class NotebookItem(pytest.Item):  # type: ignore
 
     def runtest(self):
         print(f"cwd: {os.getcwd()}")
-        timeout: int = self.config.option.nbmake_cell_timeout
-        ctx = NbMakeContext(
-            **{
-                "api_url": "",
-                "api_key": "",
-                "filename": self.filename,
-                "cell_execution_timeout_seconds": timeout,
-                "github_details": create_github_details(),
-            }
-        )
-        nb_run = NotebookRun(ctx)
-        status = nb_run.start()
+
         if status != 0:
             raise Exception(f"🍋 {self.filename} failed")
 
