@@ -28,8 +28,15 @@ jobs:
           pip install poetry
           poetry config virtualenvs.create false
           poetry install
-          pytest --cov-report=xml --cov=src -n=auto tests
+          pytest --cov-report=xml --cov=src -n=auto --nbmake tests
+          jb build -W -n --keep-going --builder html docs/
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
         uses: codecov/codecov-action@v1
         with:
           file: coverage.xml
+      - name: GitHub Pages action
+        if: github.ref == 'refs/heads/main' && startsWith(matrix.os, 'mac') || matrix.python-version == 3.8'
+        uses: peaceiris/actions-gh-pages@v3.6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html
