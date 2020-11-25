@@ -1,5 +1,7 @@
 # nbmake [Under Construction]
 
+[![codecov](https://codecov.io/gh/treebeardtech/nbmake/branch/main/graph/badge.svg?token=9GuDM35FuO)](https://codecov.io/gh/treebeardtech/nbmake)
+
 Pytest plugin for building notebooks into a tested Jupyterbook
 
 ## Functionality
