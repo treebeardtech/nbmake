@@ -10,7 +10,19 @@ from .jupyter_book_run import JupyterBookRun
 
 def pytest_addoption(parser: Any):
     group = parser.getgroup("nbmake", "notebook testing")
-    group.addoption("--nbmake", action="store_true", help="Test Jupyter notebooks")
+    group.addoption("--nbmake", action="store_true", help="Test notebooks")
+    group.addoption(
+        "--toc",
+        action="store",
+        default="./_toc.yml",
+        help="Your jupyter-book table of contents file",
+    )
+    group.addoption(
+        "--config",
+        action="store",
+        default="./config.yml",
+        help="Your jupyter-book config file",
+    )
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignore

@@ -1,0 +1,6 @@
+exclude_patterns:
+  - .pytest_cache
+  - _build/**/*
+
+execute:
+  execute_notebooks: cache

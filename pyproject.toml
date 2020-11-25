@@ -27,6 +27,7 @@ python = "^3.6.1"
 requests = "^2.25.0"
 virtualenv = "^20.1.0"
 pytest = "^6.1.2"
+jupyter-cache = {extras = ["cli"], version = "^0.4.1"}
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.8.2"
