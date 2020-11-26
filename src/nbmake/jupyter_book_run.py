@@ -37,8 +37,8 @@ class JupyterBookRun:
         )
 
         if config_filename:
-            self.config = self.get_config(config_filename)
-            self.cache = get_cache(self.config["execute"]["cache"])
+            self.config = self.get_config(config_filename)  # type: ignore
+            self.cache = get_cache(self.config["execute"]["cache"])  # type: ignore
 
     def get_config(self, config_filename: Path) -> Dict[Any, Any]:
         with open(config_filename) as conf:
@@ -85,7 +85,7 @@ class JupyterBookRun:
         matches = [r for r in self.cache.list_cache_records() if r.uri == self.filename]  # type: ignore
 
         if matches:
-            self.cache.remove_cache(matches[0].pk)
+            self.cache.remove_cache(matches[0].pk)  # type: ignore
 
     def execute(self) -> JupyterBookResult:
         self.rm_cache()

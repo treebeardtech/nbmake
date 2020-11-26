@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - run: git clone https://github.com/python/typeshed.git
+      - run: git clone https://github.com/python/typeshed.git && cd typeshed && git checkout 9af49c0
       - uses: pre-commit/action@v2.0.0
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
         run: |
