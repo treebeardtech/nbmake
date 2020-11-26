@@ -26,13 +26,18 @@ jobs:
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
         name: Test
         run: |
-          set -x
+          echo "::group::Build environment"
           pip install poetry
           poetry config virtualenvs.create false
           poetry install
+          echo "::endgroup::"
+          echo "::group::Run Tests"
           pytest --cov-report=xml --cov=src -n=auto tests
+          echo "::endgroup::"
+          echo "::group::Make Docs"
           pytest --nbmake --jbconfig=docs/_config.yml docs
           jb build -W -n --keep-going --builder html docs/
+          echo "::endgroup::"
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
         uses: codecov/codecov-action@v1
         with:
