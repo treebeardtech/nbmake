@@ -25,18 +25,16 @@ jobs:
       - uses: pre-commit/action@v2.0.0
       - name: Build Environment
         run: |
-          pip install poetry \
-          && poetry config virtualenvs.create false \
-          && poetry install
+          pip install poetry && poetry config virtualenvs.create false && poetry install
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
         name: Test
         run: |
-          pytest --cov-report=xml --cov=src -n=auto tests \
-          && echo "::group::Make Docs" \
-          && pytest --nbmake --jbconfig=docs/_config.yml docs \
-          && jb build -W -n --keep-going --builder html docs \
-          && echo "::endgroup::"
-      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
+          pytest --cov-report=xml --cov=src -n=auto tests
+      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
+        name: Build Docs
+        run: |
+          pytest --nbmake --jbconfig=docs/_config.yml docs && jb build -W -n --keep-going --builder html docs
+      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
         uses: codecov/codecov-action@v1
         with:
           file: coverage.xml
