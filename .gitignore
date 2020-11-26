@@ -133,3 +133,4 @@ typeshed
 
 **/.nbmake
 trash
+**/_build

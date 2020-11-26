@@ -30,8 +30,7 @@ class TestJupyterBookRun:
         cache = get_cache("tests/resources/_build/.jupyter_cache")  # type: ignore
         records = cache.list_cache_records()  # type: ignore
         assert len(records) == 1  # type: ignore
-        matches = [r for r in records if r.uri == os.path.abspath(filename)]  # type: ignore
-        assert len(matches) == 1  # type: ignore
+        assert records[0].uri == os.path.abspath(filename)  # type: ignore
 
     def test_failing(self):
         filename = "tests/resources/failing.ipynb"

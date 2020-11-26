@@ -23,7 +23,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: git clone https://github.com/python/typeshed.git && cd typeshed && git checkout 9af49c0
       - uses: pre-commit/action@v2.0.0
-      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
+      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
         run: |
           pip install poetry
           poetry config virtualenvs.create false
