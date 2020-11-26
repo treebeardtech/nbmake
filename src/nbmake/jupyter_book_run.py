@@ -4,7 +4,7 @@ import subprocess
 import tempfile
 import uuid
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import jupyter_book
 import yaml  # type: ignore
@@ -94,17 +94,16 @@ class JupyterBookRun:
         with open(config_filename, "w") as yaml_file:
             yaml.dump(self.config or {}, yaml_file)
 
-        out = subprocess.check_output(
-            [
-                JB_BINARY,
-                "build",
-                "--config",
-                config_filename,
-                "--path-output",
-                self.path_output,
-                self.filename,
-            ],
-        )
+        args: List[str] = [
+            str(JB_BINARY),
+            "build",
+            "--config",
+            str(config_filename),
+            "--path-output",
+            str(self.path_output),
+            str(self.filename),
+        ]
+        out = subprocess.check_output(args)
         print(out.decode())
         doc = self._get_executed_ipynb()
         failing_cell_index = self._get_failing_cell_index(doc)
