@@ -23,21 +23,19 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: git clone https://github.com/python/typeshed.git && cd typeshed && git checkout 9af49c0
       - uses: pre-commit/action@v2.0.0
+        name: Build Environment
+        run: |
+          && pip install poetry \
+          && poetry config virtualenvs.create false \
+          && poetry install
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
         name: Test
         run: |
-          echo "::group::Build environment"
-          pip install poetry
-          poetry config virtualenvs.create false
-          poetry install
-          echo "::endgroup::"
-          echo "::group::Run Tests"
-          pytest --cov-report=xml --cov=src -n=auto tests
-          echo "::endgroup::"
-          echo "::group::Make Docs"
-          pytest --nbmake --jbconfig=docs/_config.yml docs
-          jb build -W -n --keep-going --builder html docs/
-          echo "::endgroup::"
+          pytest --cov-report=xml --cov=src -n=auto tests \
+          && echo "::group::Make Docs" \
+          && pytest --nbmake --jbconfig=docs/_config.yml docs \
+          && jb build -W -n --keep-going --builder html docs/ \
+          && echo "::endgroup::"
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
         uses: codecov/codecov-action@v1
         with:
