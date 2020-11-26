@@ -6,9 +6,6 @@ description: >- # this means to ignore newlines until "baseurl:"
 exclude_patterns:
   - .pytest_cache
   - _build
-  # - landing*
-  - page1*
 
 execute:
   execute_notebooks: cache
-  cache: "_build/cache"

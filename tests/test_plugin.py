@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 
 import nbformat
+import yaml
 from _pytest.pytester import Testdir
 from pytest import ExitCode
 
@@ -43,7 +44,7 @@ failing_nb = [
 
 
 def test_collection(testdir: Testdir):
-    _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "test_collection.ipynb"))
+    _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
 
     items, _ = testdir.inline_genitems("--nbmake")
 
@@ -51,23 +52,35 @@ def test_collection(testdir: Testdir):
 
 
 def test_when_ignored_none_collected(testdir: Testdir):
-    _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "test_collection.ipynb"))
+    _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
 
     items, _ = testdir.inline_genitems("--nbmake --ignore **/*ipynb")
 
     assert len(items) == 0
 
 
+def test_when_config_passed_then_forwarded(testdir: Testdir):
+    _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
+
+    config = "x.yml"
+    with open(config, "w") as c:
+        yaml.dump({"execute": {}}, c)
+
+    hook_recorder = testdir.inline_run("--nbmake", f"--jbconfig={config}")
+
+    assert hook_recorder.ret == ExitCode.OK
+
+
 def test_when_passing_nbs_then_ok(testdir: Testdir):
-    _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "test_collection.ipynb"))
+    _write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
     testdir.mkdir("subdir")
     _write_nb(
         ["import time;time.sleep(5)"],
-        os.path.join(str(testdir.tmpdir), Path("subdir/test_collection.ipynb")),
+        os.path.join(str(testdir.tmpdir), Path("subdir/a.ipynb")),
     )
     _write_nb(
         passing_nb,
-        os.path.join(str(testdir.tmpdir), Path("subdir/test_collection2.ipynb")),
+        os.path.join(str(testdir.tmpdir), Path("subdir/b.ipynb")),
     )
 
     hook_recorder = testdir.inline_run("--nbmake")

@@ -28,7 +28,8 @@ jobs:
           pip install poetry
           poetry config virtualenvs.create false
           poetry install
-          pytest --cov-report=xml --cov=src -n=auto --nbmake tests
+          pytest --cov-report=xml --cov=src -n=auto tests
+          pytest -n=auto --nbmake --jbconfig=docs/_config.yml docs
           jb build -W -n --keep-going --builder html docs/
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
         uses: codecov/codecov-action@v1

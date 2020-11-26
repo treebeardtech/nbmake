@@ -1,15 +1,18 @@
 import json
 import os
-import shutil
 import subprocess
 import tempfile
+import uuid
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional
 
 import jupyter_book
-from jupyter_cache import get_cache
+import yaml  # type: ignore
+from jupyter_cache import get_cache  # type: ignore
+from jupyter_cache.cache.main import JupyterCacheBase  # type: ignore
 
 from .jupyter_book_result import JupyterBookResult
+from .util import data_dir
 
 JB_BINARY: Path = (
     Path(os.path.dirname(jupyter_book.__file__))
@@ -19,37 +22,46 @@ JB_BINARY: Path = (
 
 class JupyterBookRun:
     filename: Path
-    dirname: Path
     basename: Path
-    out_loc: Path
-    book_root: Path
+    built_ipynb: Path
+    config: Optional[Dict[Any, Any]] = None
+    cache: Optional[JupyterCacheBase] = None  # type: ignore
 
-    def __init__(
-        self, book_root: str, filename: str, toc_filename: str, config_filename: str
-    ) -> None:
+    def __init__(self, filename: Path, config_filename: Optional[Path] = None) -> None:
         self.filename = Path(filename)
-        self.book_root = Path(book_root)
-        self.dirname = Path(os.path.dirname(self.filename))
         self.basename = Path(os.path.basename(self.filename))
+        self.path_output = data_dir / str(uuid.uuid4())
+        self.built_ipynb = (
+            self.path_output
+            / f"_build/_page/{str(self.basename).replace('.ipynb','')}/jupyter_execute/{self.basename}"
+        )
 
-        self.out_loc = self.book_root / f"_build/jupyter_execute/{self.basename}"
+        if config_filename:
+            self.config = self.get_config(config_filename)
+            self.cache = get_cache(self.config["execute"]["cache"])
 
-        toc, config = self.write_tmp_config(toc_filename, config_filename)
-        self.toc_filename = toc
-        self.config_filename = config
+    def get_config(self, config_filename: Path) -> Dict[Any, Any]:
+        with open(config_filename) as conf:
+            loaded: Any = yaml.load(conf, Loader=yaml.FullLoader)
+            if not loaded:
+                raise Exception("Failed to read jb config")
 
-    def write_tmp_config(
-        self, toc_filename: str, config_filename: str
-    ) -> Tuple[Path, Path]:
-        toc_tmp = Path(f"{tempfile.NamedTemporaryFile().name}.yml")
-        config_tmp = Path(f"{tempfile.NamedTemporaryFile().name}.yml")
-        shutil.copyfile(toc_filename, toc_tmp)
-        shutil.copyfile(config_filename, config_tmp)
-        return toc_tmp, config_tmp
+            default_cache_loc = (
+                Path(os.path.dirname(config_filename)) / "_build/.jupyter_cache"
+            )
 
-    def _get_executed_ipynb(self, workdir: Path) -> Dict[Any, Any]:
+            default_conf_override = {
+                "execute": {
+                    "execute_notebooks": "cache",
+                    "cache": str(default_cache_loc),
+                }
+            }
 
-        with open(workdir / self.out_loc) as j:
+            return {**loaded, **default_conf_override}
+
+    def _get_executed_ipynb(self) -> Dict[Any, Any]:
+
+        with open(self.built_ipynb) as j:
             x = json.loads(j.read())
             return x
 
@@ -68,22 +80,25 @@ class JupyterBookRun:
         return None
 
     def rm_cache(self):
-        cache = get_cache(self.book_root / "_build/.jupyter_cache")
-        matches = [r for r in cache.list_cache_records() if r.uri == self.filename]
+        if not self.cache:
+            return
+        matches = [r for r in self.cache.list_cache_records() if r.uri == self.filename]  # type: ignore
 
         if matches:
-            cache.remove_cache(matches[0].pk)
+            self.cache.remove_cache(matches[0].pk)
 
     def execute(self) -> JupyterBookResult:
         self.rm_cache()
 
-        workdir = Path(os.path.dirname(self.filename))
+        config_filename = Path(f"{tempfile.NamedTemporaryFile().name}.yml")
+        with open(config_filename, "w") as yaml_file:
+            yaml.dump(self.config or {}, yaml_file)
+
         out = subprocess.check_output(
-            f"{JB_BINARY} build {self.book_root} --toc {self.toc_filename} --config {self.config_filename}",
+            f"{JB_BINARY} build --config '{config_filename}' --path-output '{self.path_output}' '{self.filename}'",
             shell=True,
-            cwd=workdir,
         )
         print(out.decode())
-        doc = self._get_executed_ipynb(workdir)
+        doc = self._get_executed_ipynb()
         failing_cell_index = self._get_failing_cell_index(doc)
         return JupyterBookResult(document=doc, failing_cell_index=failing_cell_index)

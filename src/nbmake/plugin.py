@@ -1,4 +1,5 @@
 from fnmatch import fnmatch
+from pathlib import Path
 from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
@@ -12,15 +13,8 @@ def pytest_addoption(parser: Any):
     group = parser.getgroup("nbmake", "notebook testing")
     group.addoption("--nbmake", action="store_true", help="Test notebooks")
     group.addoption(
-        "--toc",
+        "--jbconfig",
         action="store",
-        default="./_toc.yml",
-        help="Your jupyter-book table of contents file",
-    )
-    group.addoption(
-        "--config",
-        action="store",
-        default="./config.yml",
         help="Your jupyter-book config file",
     )
 
@@ -49,9 +43,12 @@ class NotebookItem(pytest.Item):  # type: ignore
     def __init__(self, parent: Any, filename: str):
         super().__init__("", parent)
         self.filename = filename
+        # self.config = parent.config.option.jbconfig
 
     def runtest(self):
-        run = JupyterBookRun(self.filename)
+        config: Optional[str] = self.parent.config.option.jbconfig
+
+        run = JupyterBookRun(Path(self.filename), Path(config) if config else None)
         res: JupyterBookResult = run.execute()
 
         if res.failing_cell_index != None:
