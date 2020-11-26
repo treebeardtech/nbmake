@@ -95,8 +95,15 @@ class JupyterBookRun:
             yaml.dump(self.config or {}, yaml_file)
 
         out = subprocess.check_output(
-            f"{JB_BINARY} build --config '{config_filename}' --path-output '{self.path_output}' '{self.filename}'",
-            shell=True,
+            [
+                JB_BINARY,
+                "build",
+                "--config",
+                config_filename,
+                "--path-output",
+                self.path_output,
+                self.filename,
+            ],
         )
         print(out.decode())
         doc = self._get_executed_ipynb()
