@@ -17,6 +17,8 @@ def pytest_addoption(parser: Any):
         action="store",
         help="Your jupyter-book config file",
     )
+    # "--warningiserror",
+    # "--nitpick",
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignore

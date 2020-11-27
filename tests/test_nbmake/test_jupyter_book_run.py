@@ -1,19 +1,23 @@
 import os
 from pathlib import Path
 
+from _pytest.pytester import Testdir
+from helper import write_nb
 from jupyter_cache import get_cache  # type: ignore
 
 from nbmake.jupyter_book_result import JupyterBookResult  # type: ignore
 from nbmake.jupyter_book_run import JupyterBookRun  # type: ignore
 
+pytest_plugins = "pytester"
 # https://github.com/microsoft/pyright/issues/377
 
 
 class TestJupyterBookRun:
-    def test_when_passing_then_no_failing_cell(self):
-        filename = Path(os.path.abspath("tests/resources/passing.ipynb"))
+    def test_when_passing_then_no_failing_cell(self, testdir: Testdir):
+        file = "p.ipynb"
+        write_nb(["print hello"], file)
 
-        run = JupyterBookRun(filename)  # type: ignore
+        run = JupyterBookRun(file)  # type: ignore
         res: JupyterBookResult = run.execute()  # type: ignore
 
         assert res.failing_cell_index == None

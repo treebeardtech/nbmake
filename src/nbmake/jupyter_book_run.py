@@ -4,6 +4,7 @@ import subprocess
 import tempfile
 import uuid
 from pathlib import Path
+from subprocess import CalledProcessError
 from typing import Any, Dict, List, Optional
 
 import jupyter_book
@@ -28,6 +29,7 @@ class JupyterBookRun:
     cache: Optional[JupyterCacheBase] = None  # type: ignore
 
     def __init__(self, filename: Path, config_filename: Optional[Path] = None) -> None:
+        # TODO validate input paths
         self.filename = Path(filename)
         self.basename = Path(os.path.basename(self.filename))
         self.path_output = data_dir / str(uuid.uuid4())
@@ -103,8 +105,12 @@ class JupyterBookRun:
             str(self.path_output),
             str(self.filename),
         ]
-        out = subprocess.check_output(args)
-        print(out.decode())
+        try:
+            out = subprocess.check_output(args, stderr=subprocess.STDOUT)
+            print(out.decode())
+        except CalledProcessError as err:
+            print(err.output.decode())
+
         doc = self._get_executed_ipynb()
         failing_cell_index = self._get_failing_cell_index(doc)
         return JupyterBookResult(document=doc, failing_cell_index=failing_cell_index)
