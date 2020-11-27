@@ -1,9 +1,13 @@
+import traceback
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
 from _pytest.config.argparsing import Parser  # type: ignore
+from pygments import highlight  # type: ignore
+from pygments.formatters import TerminalTrueColorFormatter  # type: ignore
+from pygments.lexers import Python3TracebackLexer  # type: ignore
 
 from .jupyter_book_result import JupyterBookResult
 from .jupyter_book_run import JupyterBookRun
@@ -56,9 +60,13 @@ class NotebookItem(pytest.Item):  # type: ignore
         if res.failing_cell_index != None:
             raise NotebookFailedException(res)
 
-    def repr_failure(self, excinfo: Any):
+    def repr_failure(self, excinfo: Any) -> str:
         if type(excinfo.value) != NotebookFailedException:
-            raise excinfo.value
+            tb = "\n".join(traceback.format_tb(excinfo.tb))
+            err_str = f"nbmake internal error:\n{excinfo.value}\n{tb}"
+            return highlight(  # type: ignore
+                err_str, Python3TracebackLexer(), TerminalTrueColorFormatter()
+            )
 
         res: JupyterBookResult = excinfo.value.args[0]
         return f"🍋 repr_failure\n {res.document['cells'][res.failing_cell_index]}"
