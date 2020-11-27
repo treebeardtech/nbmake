@@ -1,3 +1,4 @@
+import os
 import traceback
 from fnmatch import fnmatch
 from pathlib import Path
@@ -62,8 +63,11 @@ class NotebookItem(pytest.Item):  # type: ignore
 
     def repr_failure(self, excinfo: Any) -> str:
         if type(excinfo.value) != NotebookFailedException:
-            tb = "\n".join(traceback.format_tb(excinfo.tb))
+            tb = "".join(traceback.format_tb(excinfo.tb))
             err_str = f"nbmake internal error:\n{excinfo.value}\n{tb}"
+            if os.name == "nt":
+                return err_str
+
             return highlight(  # type: ignore
                 err_str, Python3TracebackLexer(), TerminalTrueColorFormatter()
             )
