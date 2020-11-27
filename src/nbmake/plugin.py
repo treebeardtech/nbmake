@@ -28,6 +28,7 @@ def pytest_addoption(parser: Any):
 
     # hack to prevent race condition initialising cache
     get_cache("_build/.jupyter_cache").list_cache_records()
+    get_cache("docs/_build/.jupyter_cache").list_cache_records()
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignore
