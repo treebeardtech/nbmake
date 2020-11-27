@@ -1,11 +1,12 @@
 import os
 
 from _pytest.pytester import Testdir
-from ..helper import write_nb, passing_nb, write_config, failing_nb
 from jupyter_cache import get_cache  # type: ignore
 
 from nbmake.jupyter_book_result import JupyterBookResult  # type: ignore
 from nbmake.jupyter_book_run import JupyterBookRun  # type: ignore
+
+from ..helper import failing_nb, passing_nb, write_config, write_nb
 
 pytest_plugins = "pytester"
 

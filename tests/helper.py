@@ -1,7 +1,7 @@
-from typing import Any, Callable, Dict, List, Optional, TypeVar
+from typing import Any, Callable, Dict, List, TypeVar
 
 import yaml
-from nbformat import NotebookNode, write
+from nbformat import write
 from nbformat.v4 import new_code_cell, new_notebook
 
 T = TypeVar("T")
