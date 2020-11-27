@@ -64,7 +64,7 @@ class NotebookItem(pytest.Item):  # type: ignore
     def repr_failure(self, excinfo: Any) -> str:
         if type(excinfo.value) != NotebookFailedException:
             tb = "".join(traceback.format_tb(excinfo.tb))
-            err_str = f"nbmake internal error:\n{excinfo.value}\n{tb}"
+            err_str = f"NBMAKE INTERNAL ERROR:\n{excinfo.value}\n{tb}"
             if os.name == "nt":
                 return err_str
 
@@ -74,6 +74,3 @@ class NotebookItem(pytest.Item):  # type: ignore
 
         res: JupyterBookResult = excinfo.value.args[0]
         return f"🍋 repr_failure\n {res.document['cells'][res.failing_cell_index]}"
-
-    def reportinfo(self):
-        return f"reportinfo {self.filename} 🍋 info", 0, f"reportinfo {self.filename} 🍋 info"  # type: ignore
