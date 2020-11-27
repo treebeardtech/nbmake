@@ -27,6 +27,7 @@ def pytest_addoption(parser: Any):
     # "--nitpick",
 
     # hack to prevent race condition initialising cache
+    # TODO infer cache loc, move this to a more appropriate hook
     get_cache("_build/.jupyter_cache").list_cache_records()
     get_cache("docs/_build/.jupyter_cache").list_cache_records()
 
