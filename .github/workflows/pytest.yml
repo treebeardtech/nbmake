@@ -37,7 +37,7 @@ jobs:
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
         name: Build Docs
         run: |
-          pytest --nbmake -n=1 --jbconfig=docs/_config.yml docs && jb build -W -n --keep-going --builder html docs
+          pytest --nbmake -n=auto --jbconfig=docs/_config.yml docs && jb build -W -n --keep-going --builder html docs
       - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
         uses: codecov/codecov-action@v1
         with:

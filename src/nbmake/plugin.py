@@ -6,6 +6,7 @@ from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
 from _pytest.config.argparsing import Parser  # type: ignore
+from jupyter_cache import get_cache  # type: ignore
 from pygments import highlight  # type: ignore
 from pygments.formatters import TerminalTrueColorFormatter  # type: ignore
 from pygments.lexers import Python3TracebackLexer  # type: ignore
@@ -24,6 +25,9 @@ def pytest_addoption(parser: Any):
     )
     # "--warningiserror",
     # "--nitpick",
+
+    # hack to prevent race condition initialising cache
+    get_cache("_build/.jupyter_cache").list_cache_records()
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignore

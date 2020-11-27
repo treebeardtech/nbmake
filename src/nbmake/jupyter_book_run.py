@@ -90,7 +90,7 @@ class JupyterBookRun:
             self.cache.remove_cache(matches[0].pk)  # type: ignore
 
     def execute(self) -> JupyterBookResult:
-        # self.rm_cache()
+        self.rm_cache()
 
         config_filename = Path(f"{tempfile.NamedTemporaryFile().name}.yml")
         with open(config_filename, "w") as yaml_file:
