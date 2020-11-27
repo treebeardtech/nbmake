@@ -46,6 +46,7 @@ def write_nb(sources: List[str], path: str):
     write(nb, path)
 
 
-def write_config(conf: Dict[Any, Any], filename: str = "_config.yml"):
-    with open(filename) as c:
+def write_config(conf: Dict[Any, Any], filename: str = "_config.yml") -> str:
+    with open(filename, "w") as c:
         yaml.dump(conf, c)
+    return filename

@@ -5,7 +5,7 @@ from pathlib import Path
 
 import yaml
 from _pytest.pytester import Testdir  # type: ignore
-from helper import failing_nb, passing_nb, write_nb  # type: ignore
+from .helper import failing_nb, passing_nb, write_nb  # type: ignore
 from pytest import ExitCode  # type: ignore
 
 pytest_plugins = "pytester"
