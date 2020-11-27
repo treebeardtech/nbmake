@@ -1,3 +1,11 @@
 title: "nbmake"
+author: nbmake
+email: alex@treebeard.io
+description: >- # this means to ignore newlines until "baseurl:"
+  nbmake example
+exclude_patterns:
+  - .pytest_cache
+  - _build
+
 execute:
-  execute_notebooks: "force"
+  execute_notebooks: cache

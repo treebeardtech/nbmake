@@ -132,3 +132,5 @@ dmypy.json
 typeshed
 
 **/.nbmake
+trash
+**/_build

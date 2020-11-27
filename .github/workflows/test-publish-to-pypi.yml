@@ -1,8 +1,5 @@
 name: Test Publish to PYPI
-on:
-  push:
-    branches:
-      - "*"
+on: [pull_request]
 jobs:
   build-n-publish:
     runs-on: ubuntu-18.04

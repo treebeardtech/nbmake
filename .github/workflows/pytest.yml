@@ -25,15 +25,26 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - run: git clone https://github.com/python/typeshed.git
+      - run: git clone https://github.com/python/typeshed.git && cd typeshed && git checkout 9af49c0
       - uses: pre-commit/action@v2.0.0
-      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
+      - name: Build Environment
         run: |
-          pip install poetry
-          poetry config virtualenvs.create false
-          poetry install
+          pip install poetry && poetry config virtualenvs.create false && poetry install
+      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
+        name: Test
+        run: |
           pytest --cov-report=xml --cov=src -n=auto tests
-      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < 3.8"
+      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
+        name: Build Docs
+        run: |
+          pytest --nbmake -n=auto --jbconfig=docs/_config.yml docs && jb build -W -n --keep-going --builder html docs
+      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
         uses: codecov/codecov-action@v1
         with:
           file: coverage.xml
+      - name: GitHub Pages action
+        if: github.ref == 'refs/heads/main' && startsWith(matrix.os, 'mac') && matrix.python-version == '3.8'
+        uses: peaceiris/actions-gh-pages@v3.6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html
