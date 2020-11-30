@@ -1,5 +1,8 @@
 import os
+import subprocess
+from unittest.mock import patch
 
+import yaml
 from _pytest.pytester import Testdir
 from jupyter_cache import get_cache  # type: ignore
 
@@ -42,3 +45,26 @@ class TestJupyterBookRun:
         res: JupyterBookResult = run.execute()  # type: ignore
 
         assert res.failing_cell_index == 0
+
+    def test_when_config_supplied_then_partially_overriden(self, testdir: Testdir):
+        write_nb(passing_nb, filename)
+        conf_path = write_config({"execute": {"timeout": 20}})
+        run = JupyterBookRun(filename, conf_path)  # type: ignore
+
+        real_check_output = subprocess.check_output
+        with patch("subprocess.check_output") as check_output:
+            check_output.side_effect = real_check_output
+            run.execute()
+
+            check_output.call_args
+
+            jb_args = check_output.call_args[0][0]
+            config_path = jb_args[jb_args.index("--config") + 1]
+            with open(config_path, "r") as c:
+                config = yaml.load(c)
+
+                assert config["execute"]["timeout"] == 20
+                assert config["execute"]["execute_notebooks"] == "cache"
+                assert config["execute"]["cache"] != None
+
+            run.execute()
