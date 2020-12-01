@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
+from _pytest.config import Config  # type: ignore
 from _pytest.config.argparsing import Parser  # type: ignore
 from jupyter_cache import get_cache  # type: ignore
 from pygments import highlight  # type: ignore
@@ -26,10 +27,13 @@ def pytest_addoption(parser: Any):
     # "--warningiserror",
     # "--nitpick",
 
+
+def pytest_configure(config: Config):  # type: ignore
     # hack to prevent race condition initialising cache
     # TODO infer cache loc, move this to a more appropriate hook
-    get_cache("_build/.jupyter_cache").list_cache_records()
-    get_cache("docs/_build/.jupyter_cache").list_cache_records()
+    if config.jbconfig:
+        get_cache("_build/.jupyter_cache").list_cache_records()
+        get_cache("docs/_build/.jupyter_cache").list_cache_records()
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignore
