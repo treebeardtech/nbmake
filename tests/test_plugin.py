@@ -83,8 +83,8 @@ def test_when_parallel_passing_nbs_and_config_then_ok(testdir: Testdir):
 
 
 def test_when_failing_nb_then_fail(testdir: Testdir):
-    write_nb(failing_nb, os.path.join(str(testdir.tmpdir), "test_collection.ipynb"))
+    write_nb(failing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
+    write_nb(failing_nb, os.path.join(str(testdir.tmpdir), "b.ipynb"))
 
     hook_recorder = testdir.inline_run("--nbmake")
-
     assert hook_recorder.ret == ExitCode.TESTS_FAILED  # type: ignore

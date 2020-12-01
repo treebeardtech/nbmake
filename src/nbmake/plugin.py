@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
+from _pytest._code.code import TerminalRepr  # type: ignore
 from _pytest.config import Config  # type: ignore
 from _pytest.config.argparsing import Parser  # type: ignore
 from jupyter_cache import get_cache  # type: ignore
@@ -14,6 +15,7 @@ from pygments.lexers import Python3TracebackLexer  # type: ignore
 
 from .jupyter_book_result import JupyterBookResult
 from .jupyter_book_run import JupyterBookRun
+from .nbmake_failure_repr import NbMakeFailureRepr
 
 
 def pytest_addoption(parser: Any):
@@ -67,19 +69,24 @@ class NotebookItem(pytest.Item):  # type: ignore
 
         run = JupyterBookRun(Path(self.filename), Path(config) if config else None)
         res: JupyterBookResult = run.execute()
-
         if res.failing_cell_index != None:
             raise NotebookFailedException(res)
 
-    def repr_failure(self, excinfo: Any) -> str:
+    def repr_failure(self, excinfo: Any) -> TerminalRepr:  # type: ignore
         def create_internal_err() -> str:
             tb = "".join(traceback.format_tb(excinfo.tb))
-            err_str = f"NBMAKE INTERNAL ERROR:\n{excinfo.value}\n{tb}"
-            if os.name == "nt":
-                return err_str
+            err = f"{excinfo.value}\n{tb}"
+            err_str: str = (
+                err
+                if os.name == "nt"
+                else highlight(  # type: ignore
+                    err, Python3TracebackLexer(), TerminalTrueColorFormatter()
+                )
+            )
 
-            return highlight(  # type: ignore
-                err_str, Python3TracebackLexer(), TerminalTrueColorFormatter()
+            return NbMakeFailureRepr(
+                err_str,
+                "NBMAKE INTERNAL ERROR",
             )
 
         if type(excinfo.value) != NotebookFailedException:
@@ -90,6 +97,10 @@ class NotebookItem(pytest.Item):  # type: ignore
             return create_internal_err()
 
         failing_cell = res.document["cells"][res.failing_cell_index]["outputs"][0]
-        tb = "\n".join(failing_cell.get("traceback", []))
-        summary = f"{self.filename} failed at cell {int(res.failing_cell_index) + 1} of {len(res.document['cells'])}"
-        return f"{summary}:\n{tb}"
+        tb = "\n".join(failing_cell.get("traceback", ""))
+        tbs = tb.split("\n")[-1]
+        summary = f"cell {int(res.failing_cell_index) + 1} of {len(res.document['cells'])}: {tbs}"
+        return NbMakeFailureRepr(f"{summary}:\n{tb}", summary)
+
+    def reportinfo(self):  # type:ignore
+        return self.fspath, 0, self.filename  # type:ignore
