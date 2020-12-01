@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/treebeardtech/nbmake/branch/main/graph/badge.svg?token=9GuDM35FuO)](https://codecov.io/gh/treebeardtech/nbmake)
 [![PyPI version](https://badge.fury.io/py/nbmake.svg)](https://badge.fury.io/py/nbmake)
 
-Pytest plugin for testing Python 3 notebooks
+Pytest plugin for building notebooks
 
 ## Functionality
 

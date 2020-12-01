@@ -72,7 +72,7 @@ class NotebookItem(pytest.Item):  # type: ignore
             raise NotebookFailedException(res)
 
     def repr_failure(self, excinfo: Any) -> str:
-        if type(excinfo.value) != NotebookFailedException:
+        def create_internal_err() -> str:
             tb = "".join(traceback.format_tb(excinfo.tb))
             err_str = f"NBMAKE INTERNAL ERROR:\n{excinfo.value}\n{tb}"
             if os.name == "nt":
@@ -82,5 +82,14 @@ class NotebookItem(pytest.Item):  # type: ignore
                 err_str, Python3TracebackLexer(), TerminalTrueColorFormatter()
             )
 
+        if type(excinfo.value) != NotebookFailedException:
+            return create_internal_err()
+
         res: JupyterBookResult = excinfo.value.args[0]
-        return f"🍋 repr_failure\n {res.document['cells'][res.failing_cell_index]}"
+        if isinstance(res.failing_cell_index, type(None)):
+            return create_internal_err()
+
+        failing_cell = res.document["cells"][res.failing_cell_index]["outputs"][0]
+        tb = "\n".join(failing_cell.get("traceback", []))
+        summary = f"{self.filename} failed at cell {int(res.failing_cell_index) + 1} of {len(res.document['cells'])}"
+        return f"{summary}:\n{tb}"

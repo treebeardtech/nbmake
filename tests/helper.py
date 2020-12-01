@@ -30,7 +30,7 @@ passing_nb = [
 
 failing_nb = [
     # In [1]:
-    "raise Exception()"
+    "raise Exception('something went wrong')"
 ]
 
 
