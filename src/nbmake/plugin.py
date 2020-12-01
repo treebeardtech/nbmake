@@ -31,7 +31,7 @@ def pytest_addoption(parser: Any):
 def pytest_configure(config: Config):  # type: ignore
     # hack to prevent race condition initialising cache
     # TODO infer cache loc, move this to a more appropriate hook
-    if config.jbconfig:
+    if hasattr(config.option, "jbconfig"):  # type: ignore
         get_cache("_build/.jupyter_cache").list_cache_records()
         get_cache("docs/_build/.jupyter_cache").list_cache_records()
 
