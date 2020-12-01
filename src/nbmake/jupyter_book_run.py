@@ -52,14 +52,11 @@ class JupyterBookRun:
                 Path(os.path.dirname(config_filename)) / "_build/.jupyter_cache"
             )
 
-            default_conf_override = {
-                "execute": {
-                    "execute_notebooks": "cache",
-                    "cache": str(default_cache_loc),
-                }
-            }
+            loaded["execute"] = loaded.get("execute", {})
+            loaded["execute"]["execute_notebooks"] = "cache"
+            loaded["execute"]["cache"] = str(default_cache_loc)
 
-            return {**loaded, **default_conf_override}
+            return loaded
 
     def _get_executed_ipynb(self) -> Dict[Any, Any]:
 
@@ -84,7 +81,7 @@ class JupyterBookRun:
     def rm_cache(self):
         if not self.cache:
             return
-        matches = [r for r in self.cache.list_cache_records() if r.uri == self.filename]  # type: ignore
+        matches = [r for r in self.cache.list_cache_records() if r.uri == str(self.filename.absolute())]  # type: ignore
 
         if matches:
             self.cache.remove_cache(matches[0].pk)  # type: ignore

@@ -16,4 +16,14 @@ def get_datadir() -> pathlib.Path:
 
 
 data_dir = pathlib.Path.home() / get_datadir() / "nbmake"
-data_dir.mkdir(parents=True, exist_ok=True)
+try:
+    data_dir.mkdir(parents=True, exist_ok=True)
+except:
+    try:
+        print(f"Failed to create data dir {data_dir}, trying another")
+        data_dir = pathlib.Path(f"/tmp/nbmake")
+        data_dir.mkdir(parents=True, exist_ok=True)
+    except:
+        print(f"Failed to create data dir {data_dir}, trying another")
+        data_dir = pathlib.Path(f".nbmake").absolute()
+        data_dir.mkdir(parents=True, exist_ok=True)

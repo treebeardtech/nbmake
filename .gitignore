@@ -134,3 +134,4 @@ typeshed
 **/.nbmake
 trash
 **/_build
+setup.py
