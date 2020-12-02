@@ -6,10 +6,6 @@ from _pytest._code.code import (  # type: ignore
 
 
 class NbMakeFailureRepr(TerminalRepr):  # type: ignore
-    """
-    Representation of a test failure.
-    """
-
     def __init__(self, term: str, summary: str):
         self.term = term
         self.reprcrash = ReprFileLocation("", "", summary)  # type: ignore
