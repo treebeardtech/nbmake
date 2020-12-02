@@ -15,16 +15,20 @@ pytest_plugins = "pytester"
 def test_collection(testdir: Testdir):
     write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
 
-    items, _ = testdir.inline_genitems("--nbmake")
+    items, hook_recorder = testdir.inline_genitems("--nbmake")
 
+    assert hook_recorder.ret == ExitCode.OK  # type: ignore
     assert len(items) == 1
 
 
 def test_when_ignored_none_collected(testdir: Testdir):
     write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
 
-    items, _ = testdir.inline_genitems("--nbmake --ignore **/*ipynb")
+    items, hook_recorder = testdir.inline_genitems(
+        "--nbmake", "--ignore-glob", "*.ipynb"
+    )
 
+    assert hook_recorder.ret == ExitCode.NO_TESTS_COLLECTED  # type: ignore
     assert len(items) == 0
 
 

@@ -12,7 +12,7 @@ import yaml  # type: ignore
 from jupyter_cache import get_cache  # type: ignore
 from jupyter_cache.cache.main import JupyterCacheBase  # type: ignore
 
-from .jupyter_book_result import JupyterBookResult
+from .jupyter_book_result import JupyterBookError, JupyterBookResult
 from .util import data_dir
 
 JB_BINARY: Path = (
@@ -64,9 +64,10 @@ class JupyterBookRun:
             x = json.loads(j.read())
             return x
 
-    def _get_failing_cell_index(self, doc: Dict[Any, Any]) -> Optional[int]:
-        code_cells = [cell for cell in doc["cells"] if cell["cell_type"] == "code"]
-        for i, cell in enumerate(code_cells):
+    def _get_error(self, doc: Dict[Any, Any]) -> Optional[JupyterBookError]:
+        for i, cell in enumerate(doc["cells"]):
+            if cell["cell_type"] != "code":
+                continue
             errors = [
                 output
                 for output in cell["outputs"]
@@ -74,7 +75,14 @@ class JupyterBookRun:
             ]
 
             if errors:
-                return i
+                num_cells = len(doc["cells"])
+                tb = "\n".join(errors[0].get("traceback", ""))
+                last_trace = tb.split("\n")[-1]
+                summary = f"cell {i + 1} of {num_cells}: {last_trace}"
+                trace = f"{summary}:\n{tb}"
+                return JupyterBookError(
+                    summary=summary, trace=trace, failing_cell_index=i
+                )
 
         return None
 
@@ -109,5 +117,5 @@ class JupyterBookRun:
             print(err.output.decode())
 
         doc = self._get_executed_ipynb()
-        failing_cell_index = self._get_failing_cell_index(doc)
-        return JupyterBookResult(document=doc, failing_cell_index=failing_cell_index)
+        err = self._get_error(doc)
+        return JupyterBookResult(document=doc, error=err)

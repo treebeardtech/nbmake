@@ -23,7 +23,7 @@ class TestJupyterBookRun:
         run = JupyterBookRun(filename)  # type: ignore
         res: JupyterBookResult = run.execute()  # type: ignore
 
-        assert res.failing_cell_index == None
+        assert res.error == None
 
     def test_when_passing_and_config_then_cache_populated(self, testdir: Testdir):
         write_nb(passing_nb, filename)
@@ -32,7 +32,7 @@ class TestJupyterBookRun:
         run = JupyterBookRun(filename, conf_path)  # type: ignore
         res: JupyterBookResult = run.execute()  # type: ignore
 
-        assert res.failing_cell_index == None
+        assert res.error == None
 
         cache = get_cache("_build/.jupyter_cache")  # type: ignore
         records = cache.list_cache_records()  # type: ignore
@@ -44,7 +44,7 @@ class TestJupyterBookRun:
         run = JupyterBookRun(filename)  # type: ignore
         res: JupyterBookResult = run.execute()  # type: ignore
 
-        assert res.failing_cell_index == 0
+        assert res.error and res.error.failing_cell_index == 0  # type: ignore
 
     def test_when_config_supplied_then_partially_overriden(self, testdir: Testdir):
         write_nb(passing_nb, filename)
