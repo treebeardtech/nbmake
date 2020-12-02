@@ -85,7 +85,7 @@ class NotebookItem(pytest.Item):  # type: ignore
             )
 
             return NbMakeFailureRepr(
-                err_str,
+                "NBMAKE INTERNAL ERROR\n" + err_str,
                 "NBMAKE INTERNAL ERROR",
             )
 
