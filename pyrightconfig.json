@@ -1,9 +1,17 @@
 {
   "include": ["src", "tests"],
-  "strict": ["."],
+  
+  "typeCheckingMode": "strict",
   "reportUnusedImport": true,
   "pythonVersion": "3.7",
   "typeshedPath": "typeshed",
-  "typingsPath": "src/nbmake/typestubs",
-  "enableTypeIgnoreComments": true
+  "enableTypeIgnoreComments": true,
+  "reportUnknownMemberType": "warning",
+  "reportUnknownParameterType": "warning",
+  "reportUnknownVariableType": "warning",
+  "reportUnknownArgumentType": "warning",
+  "reportGeneralTypeIssues": "warning",
+  "reportPrivateUsage": "warning",
+  "reportUntypedFunctionDecorator": "warning",
+  "reportMissingTypeStubs": false
 }

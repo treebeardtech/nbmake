@@ -3,31 +3,32 @@ import traceback
 from pathlib import Path
 from typing import Any, Generator, Optional
 
-import pytest  # type: ignore
-from _pytest._code.code import (  # type: ignore
+import pytest
+from _pytest._code.code import (
     ReprFileLocation,
     TerminalRepr,
     TerminalWriter,
+    _TracebackStyle,
 )
-from jupyter_cache import get_cache  # type: ignore
-from pygments import highlight  # type: ignore
-from pygments.formatters import TerminalTrueColorFormatter  # type: ignore
-from pygments.lexers import Python3TracebackLexer  # type: ignore
+from jupyter_cache import get_cache
+from pygments import highlight
+from pygments.formatters import TerminalTrueColorFormatter
+from pygments.lexers import Python3TracebackLexer
 
 from .jupyter_book_result import JupyterBookError, JupyterBookResult
 from .jupyter_book_run import JupyterBookRun
 
 
-class NbMakeFailureRepr(TerminalRepr):  # type: ignore
+class NbMakeFailureRepr(TerminalRepr):
     def __init__(self, term: str, summary: str):
         self.term = term
-        self.reprcrash = ReprFileLocation("", "", summary)  # type: ignore
+        self.reprcrash = ReprFileLocation("", "", summary)
 
-    def toterminal(self, tw: TerminalWriter) -> None:  # type: ignore
+    def toterminal(self, tw: TerminalWriter) -> None:
         tw.write(f"{self.term}\n")
 
 
-class NotebookFile(pytest.File):  # type: ignore
+class NotebookFile(pytest.File):
     def collect(self) -> Generator[Any, Any, Any]:
         yield NotebookItem.from_parent(self, filename=self.name)
 
@@ -36,7 +37,7 @@ class NotebookFailedException(Exception):
     pass
 
 
-class NotebookItem(pytest.Item):  # type: ignore
+class NotebookItem(pytest.Item):
     def __init__(self, parent: Any, filename: str):
         super().__init__("", parent)
         self.filename = filename
@@ -44,26 +45,28 @@ class NotebookItem(pytest.Item):  # type: ignore
 
     def runtest(self):
         config: Optional[str] = self.parent.config.option.jbconfig
-        path_output: Path = Path(self.parent.config.option.path_output)  # type: ignore
+        path_output: Path = Path(self.parent.config.option.path_output)
 
         run = JupyterBookRun(
             Path(self.filename),
             path_output=path_output / Path(os.path.splitext(self.filename)[0]),
             config_filename=Path(config) if config else None,
-            cache=get_cache(path_output / "cache"),  # type: ignore
+            cache=get_cache(path_output / "cache"),
         )
         res: JupyterBookResult = run.execute()
         if res.error != None:
             raise NotebookFailedException(res)
 
-    def repr_failure(self, excinfo: Any) -> TerminalRepr:  # type: ignore
+    def repr_failure(
+        self, excinfo: Any, style: Optional[_TracebackStyle] = None
+    ) -> TerminalRepr:
         def create_internal_err() -> str:
             tb = "".join(traceback.format_tb(excinfo.tb))
             err = f"{excinfo.value}\n{tb}"
             err_str: str = (
                 err
                 if os.name == "nt"
-                else highlight(  # type: ignore
+                else highlight(
                     err, Python3TracebackLexer(), TerminalTrueColorFormatter()
                 )
             )

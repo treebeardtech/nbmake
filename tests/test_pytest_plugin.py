@@ -17,7 +17,7 @@ def test_when_nb_present_then_collected(testdir: Testdir):
 
     items, hook_recorder = testdir.inline_genitems("--nbmake")
 
-    assert hook_recorder.ret == ExitCode.OK  # type: ignore
+    assert hook_recorder.ret == ExitCode.OK
     assert len(items) == 1
 
 
@@ -28,7 +28,7 @@ def test_when_ignored_none_collected(testdir: Testdir):
         "--nbmake", "--ignore-glob", "*.ipynb"
     )
 
-    assert hook_recorder.ret == ExitCode.NO_TESTS_COLLECTED  # type: ignore
+    assert hook_recorder.ret == ExitCode.NO_TESTS_COLLECTED
     assert len(items) == 0
 
 
@@ -41,7 +41,7 @@ def test_when_config_passed_then_forwarded(testdir: Testdir):
 
     hook_recorder = testdir.inline_run("--nbmake", f"--jbconfig={config}")
 
-    assert hook_recorder.ret == ExitCode.OK  # type: ignore
+    assert hook_recorder.ret == ExitCode.OK
 
 
 def test_when_passing_nbs_then_ok(testdir: Testdir):
@@ -59,10 +59,10 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
 
     hook_recorder = testdir.inline_run("--nbmake")
 
-    assert hook_recorder.ret == ExitCode.OK  # type: ignore
+    assert hook_recorder.ret == ExitCode.OK
 
 
-@pytest.mark.xfail(True, reason="Flaky, related to nbclient error")  # type: ignore
+@pytest.mark.xfail(True, reason="Flaky, related to nbclient error")
 def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
     for i in range(10):
         write_nb(
@@ -72,11 +72,11 @@ def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
 
     hook_recorder = testdir.inline_run("--nbmake", "-n=4")
 
-    assert hook_recorder.ret == ExitCode.OK  # type: ignore
+    assert hook_recorder.ret == ExitCode.OK
 
 
 def test_when_failing_nb_then_fail(testdir: Testdir):
     write_nb(failing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
     hook_recorder = testdir.inline_run("--nbmake")
-    assert hook_recorder.ret == ExitCode.TESTS_FAILED  # type: ignore
+    assert hook_recorder.ret == ExitCode.TESTS_FAILED

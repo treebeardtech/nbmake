@@ -1,0 +1,7 @@
+exclude_patterns:
+- .*/**/*
+- Library/**/*
+- .pytest_cache/**/*
+execute:
+  cache: /Users/alexremedios/Library/Application Support/nbmake/4b904c87-c531-4fb4-b7ae-c5cd1b1fae3e/cache
+  execute_notebooks: cache

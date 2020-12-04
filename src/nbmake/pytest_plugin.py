@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import Any, List, Optional
 
 import yaml
-from _pytest.config import Config  # type: ignore
-from jupyter_cache import get_cache  # type: ignore
-from jupyter_cache.cache.main import JupyterCacheBase  # type: ignore
+from _pytest.config import Config
+from jupyter_cache import get_cache
+from jupyter_cache.cache.main import JupyterCacheBase
 
 from .pytest_items import NotebookFile
 from .util import data_dir
@@ -34,7 +34,7 @@ def pytest_addoption(parser: Any):
     # "--nitpick",
 
 
-def pytest_configure(config: Config):  # type: ignore
+def pytest_configure(config: Config):
     # hack to prevent race condition initialising cache
     config_path = Path("_config.yml")
     path_out: str = config.option.path_output
@@ -58,7 +58,7 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     """
     opt = parent.config.option
     if opt.nbmake and fnmatch(path, "*.ipynb"):
-        return NotebookFile.from_parent(parent, fspath=path)  # type: ignore
+        return NotebookFile.from_parent(parent, fspath=path)
 
     return None
 
@@ -81,7 +81,7 @@ def build_toc(files: List[Path]):
 #     """ whole test run finishes. """
 
 
-def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Config):  # type: ignore
+def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Config):
     option: Any = config.option
     toc_path = "_toc.yml"
     if not hasattr(option, "path_output"):
@@ -89,9 +89,9 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
 
     path_output: str = config.option.path_output
 
-    cache: JupyterCacheBase = get_cache(Path(path_output) / "cache")  # type: ignore
+    cache: JupyterCacheBase = get_cache(Path(path_output) / "cache")
 
-    if len(cache.list_cache_records()) == 0:  # type: ignore
+    if len(cache.list_cache_records()) == 0:
         return
 
     import subprocess
@@ -106,7 +106,7 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
         f"--toc={toc_path}",
         f"--config={config_path}",
         f"--path-output={path_output}",
-        str(config.rootdir),  # type: ignore
+        str(config.rootdir),
     ]
     try:
         terminalreporter.line(

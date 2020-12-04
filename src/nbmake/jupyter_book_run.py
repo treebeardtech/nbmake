@@ -7,14 +7,14 @@ from subprocess import CalledProcessError
 from typing import Any, Dict, List, Optional
 
 import jupyter_book
-import yaml  # type: ignore
-from jupyter_cache import get_cache  # type: ignore
-from jupyter_cache.cache.main import JupyterCacheBase  # type: ignore
+import yaml
+from jupyter_cache.cache.main import JupyterCacheBase
 
 from .jupyter_book_result import JupyterBookError, JupyterBookResult
 
+jb_path: str = jupyter_book.__file__
 JB_BINARY: Path = (
-    Path(os.path.dirname(jupyter_book.__file__))
+    Path(os.path.dirname(jb_path))
     / ("../../../Scripts/jb.exe" if os.name == "nt" else "../../../../bin/jb")
 ).resolve()
 
@@ -24,14 +24,14 @@ class JupyterBookRun:
     basename: Path
     built_ipynb: Path
     config: Optional[Dict[Any, Any]] = None
-    cache: JupyterCacheBase  # type: ignore
+    cache: JupyterCacheBase
     path_output: Path
 
     def __init__(
         self,
         filename: Path,
         path_output: Path,
-        cache: JupyterCacheBase,  # type: ignore
+        cache: JupyterCacheBase,
         config_filename: Optional[Path] = None,
     ) -> None:
         # TODO validate input paths
@@ -44,21 +44,25 @@ class JupyterBookRun:
         )
 
         user_config = self.get_user_config(config_filename)
-        self.config = self.get_config(user_config)  # type: ignore
-        self.cache = cache  # type: ignore
+        self.config = self.get_config(user_config)
+        self.cache = cache
 
-    def get_user_config(self, config_filename: Optional[Path]) -> Optional[dict]:
+    def get_user_config(
+        self, config_filename: Optional[Path]
+    ) -> Optional[Dict[Any, Any]]:
         if not config_filename:
             return None
 
         with open(config_filename) as conf:
-            loaded: Any = yaml.load(conf, Loader=yaml.FullLoader)
+            loaded: Dict[Any, Any] = yaml.load(conf, Loader=yaml.FullLoader)
             if not loaded:
                 raise Exception("Failed to read jb config")
         return loaded
 
-    def get_config(self, user_config: Optional[dict]):
-        loaded = dict(user_config or {})  # type: ignore
+    def get_config(self, user_config: Optional[Dict[Any, Any]]) -> Dict[Any, Any]:
+        loaded: Dict[Any, Any] = {}
+        if not user_config is None:
+            loaded = user_config
         loaded["execute"] = loaded.get("execute", {})
         loaded["execute"]["execute_notebooks"] = "force"
         return loaded
@@ -94,10 +98,14 @@ class JupyterBookRun:
     def rm_cache(self):
         if not self.cache:
             return
-        matches = [r for r in self.cache.list_cache_records() if r.uri == str(self.filename.absolute())]  # type: ignore
+        matches = [
+            r
+            for r in self.cache.list_cache_records()
+            if r.uri == str(self.filename.absolute())
+        ]
 
         if matches:
-            self.cache.remove_cache(matches[0].pk)  # type: ignore
+            self.cache.remove_cache(matches[0].pk)
 
     def execute(self) -> JupyterBookResult:
         self.rm_cache()

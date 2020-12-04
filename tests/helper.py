@@ -3,8 +3,7 @@ from typing import Any, Callable, Dict, List, TypeVar
 
 import yaml
 from nbformat import write
-from nbformat.v4 import new_markdown_cell  # type: ignore
-from nbformat.v4 import new_code_cell, new_notebook
+from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
 
 T = TypeVar("T")
 
@@ -43,7 +42,7 @@ failing_nb = [
 
 def write_nb(sources: List[str], path: Path, title: str = "default-title"):
     nb = new_notebook()
-    nb.cells.append(new_markdown_cell(f"# {title}"))  # type: ignore
+    nb.cells.append(new_markdown_cell(f"# {title}"))
     for src in sources:
         nb.cells.append(new_code_cell(src))
     write(nb, str(path))
