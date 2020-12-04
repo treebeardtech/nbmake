@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Callable, Dict, List, TypeVar
 
 import yaml
@@ -39,14 +40,14 @@ failing_nb = [
 #     return nb
 
 
-def write_nb(sources: List[str], path: str):
+def write_nb(sources: List[str], path: Path):
     nb = new_notebook()
     for src in sources:
         nb.cells.append(new_code_cell(src))
-    write(nb, path)
+    write(nb, str(path))
 
 
-def write_config(conf: Dict[Any, Any], filename: str = "_config.yml") -> str:
+def write_config(conf: Dict[Any, Any], filename: Path = Path("_config.yml")) -> Path:
     with open(filename, "w") as c:
         yaml.dump(conf, c)
     return filename

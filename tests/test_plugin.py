@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import os
 from pathlib import Path
 
 import yaml
@@ -13,7 +12,7 @@ pytest_plugins = "pytester"
 
 
 def test_collection(testdir: Testdir):
-    write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
+    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
     items, hook_recorder = testdir.inline_genitems("--nbmake")
 
@@ -22,7 +21,7 @@ def test_collection(testdir: Testdir):
 
 
 def test_when_ignored_none_collected(testdir: Testdir):
-    write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
+    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
     items, hook_recorder = testdir.inline_genitems(
         "--nbmake", "--ignore-glob", "*.ipynb"
@@ -33,7 +32,7 @@ def test_when_ignored_none_collected(testdir: Testdir):
 
 
 def test_when_config_passed_then_forwarded(testdir: Testdir):
-    write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
+    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
     config = "x.yml"
     with open(config, "w") as c:
@@ -45,15 +44,15 @@ def test_when_config_passed_then_forwarded(testdir: Testdir):
 
 
 def test_when_passing_nbs_then_ok(testdir: Testdir):
-    write_nb(passing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
+    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
     testdir.mkdir("subdir")
     write_nb(
         ["import time;time.sleep(5)"],
-        os.path.join(str(testdir.tmpdir), Path("subdir/a.ipynb")),
+        Path(testdir.tmpdir) / Path("subdir/a.ipynb"),
     )
     write_nb(
         passing_nb,
-        os.path.join(str(testdir.tmpdir), Path("subdir/b.ipynb")),
+        Path(testdir.tmpdir) / Path("subdir/b.ipynb"),
     )
 
     hook_recorder = testdir.inline_run("--nbmake")
@@ -65,7 +64,7 @@ def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
     for i in range(10):
         write_nb(
             ["import time;time.sleep(1)"],
-            os.path.join(str(testdir.tmpdir), f"{i}.ipynb"),
+            Path(testdir.tmpdir) / f"{i}.ipynb",
         )
 
     hook_recorder = testdir.inline_run("--nbmake", "-n=4")
@@ -77,7 +76,7 @@ def test_when_parallel_passing_nbs_and_config_then_ok(testdir: Testdir):
     for i in range(10):
         write_nb(
             ["import time;time.sleep(1)"],
-            os.path.join(str(testdir.tmpdir), f"{i}.ipynb"),
+            Path(testdir.tmpdir) / f"{i}.ipynb",
         )
     write_config({"title": "blah"})
     hook_recorder = testdir.inline_run("--nbmake", "-n=4", "--jbconfig=_config.yml")
@@ -86,7 +85,7 @@ def test_when_parallel_passing_nbs_and_config_then_ok(testdir: Testdir):
 
 
 def test_when_failing_nb_then_fail(testdir: Testdir):
-    write_nb(failing_nb, os.path.join(str(testdir.tmpdir), "a.ipynb"))
+    write_nb(failing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
     hook_recorder = testdir.inline_run("--nbmake")
     assert hook_recorder.ret == ExitCode.TESTS_FAILED  # type: ignore

@@ -26,7 +26,7 @@ class JupyterBookRun:
     basename: Path
     built_ipynb: Path
     config: Optional[Dict[Any, Any]] = None
-    cache: Optional[JupyterCacheBase] = None  # type: ignore
+    cache: JupyterCacheBase  # type: ignore
 
     def __init__(self, filename: Path, config_filename: Optional[Path] = None) -> None:
         # TODO validate input paths
@@ -38,25 +38,25 @@ class JupyterBookRun:
             / f"_build/_page/{str(self.basename).replace('.ipynb','')}/jupyter_execute/{self.basename}"
         )
 
-        if config_filename:
-            self.config = self.get_config(config_filename)  # type: ignore
-            self.cache = get_cache(self.config["execute"]["cache"])  # type: ignore
+        user_config = self.get_user_config(config_filename)
+        self.config = self.get_config(user_config)  # type: ignore
+        self.cache = get_cache(self.path_output / "_build/.jupyter_cache")  # type: ignore
 
-    def get_config(self, config_filename: Path) -> Dict[Any, Any]:
+    def get_user_config(self, config_filename: Optional[Path]) -> Optional[dict]:
+        if not config_filename:
+            return None
+
         with open(config_filename) as conf:
             loaded: Any = yaml.load(conf, Loader=yaml.FullLoader)
             if not loaded:
                 raise Exception("Failed to read jb config")
+        return loaded
 
-            default_cache_loc = (
-                Path(os.path.dirname(config_filename)) / "_build/.jupyter_cache"
-            )
-
-            loaded["execute"] = loaded.get("execute", {})
-            loaded["execute"]["execute_notebooks"] = "cache"
-            loaded["execute"]["cache"] = str(default_cache_loc)
-
-            return loaded
+    def get_config(self, user_config: Optional[dict]):
+        loaded = dict(user_config or {})  # type: ignore
+        loaded["execute"] = loaded.get("execute", {})
+        loaded["execute"]["execute_notebooks"] = "force"
+        return loaded
 
     def _get_executed_ipynb(self) -> Dict[Any, Any]:
 
@@ -104,6 +104,7 @@ class JupyterBookRun:
         args: List[str] = [
             str(JB_BINARY),
             "build",
+            # "-W",
             "--config",
             str(config_filename),
             "--path-output",
@@ -115,6 +116,8 @@ class JupyterBookRun:
             print(out.decode())
         except CalledProcessError as err:
             print(err.output.decode())
+
+        self.cache.cache_notebook_file(self.built_ipynb, check_validity=False)
 
         doc = self._get_executed_ipynb()
         err = self._get_error(doc)

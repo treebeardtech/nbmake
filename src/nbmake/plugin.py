@@ -49,6 +49,15 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignor
     return None
 
 
+# def pytest_terminal_summary(terminalreporter, exitstatus, config):
+#     reports = terminalreporter.getreports('')
+#     content = os.linesep.join(text for report in reports for secname, text in report.sections)
+#     if content:
+#         terminalreporter.ensure_newline()
+#         terminalreporter.section('My custom section', sep='-', blue=True, bold=True)
+#         terminalreporter.line(content)
+
+
 class NotebookFile(pytest.File):  # type: ignore
     def collect(self) -> Generator[Any, Any, Any]:
         yield NotebookItem.from_parent(self, filename=self.name)

@@ -1,5 +1,5 @@
-import os
 import subprocess
+from pathlib import Path
 from unittest.mock import patch
 
 import yaml
@@ -13,7 +13,7 @@ from .helper import failing_nb, passing_nb, write_config, write_nb
 
 pytest_plugins = "pytester"
 
-filename = "x.ipynb"
+filename = Path("x.ipynb")
 
 
 class TestJupyterBookRun:
@@ -25,19 +25,30 @@ class TestJupyterBookRun:
 
         assert res.error == None
 
-    def test_when_passing_and_config_then_cache_populated(self, testdir: Testdir):
+    def test_when_passing_then_cache_populated(self, testdir: Testdir):
         write_nb(passing_nb, filename)
-        conf_path = write_config({"title": "blah"})
 
-        run = JupyterBookRun(filename, conf_path)  # type: ignore
+        run = JupyterBookRun(filename)  # type: ignore
         res: JupyterBookResult = run.execute()  # type: ignore
 
         assert res.error == None
 
-        cache = get_cache("_build/.jupyter_cache")  # type: ignore
-        records = cache.list_cache_records()  # type: ignore
+        records = run.cache.list_cache_records()  # type: ignore
         assert len(records) == 1  # type: ignore
-        assert records[0].uri == os.path.abspath(filename)  # type: ignore
+        assert records[0].uri.endswith(str(filename))  # type: ignore
+
+    def test_when_failing_then_cache_populated(self, testdir: Testdir):
+        write_nb(failing_nb, filename)
+        # conf_path = write_config({"title": "blah"})
+
+        run = JupyterBookRun(filename)  # , conf_path)  # type: ignore
+        res: JupyterBookResult = run.execute()  # type: ignore
+
+        assert res.error
+
+        records = run.cache.list_cache_records()  # type: ignore
+        assert len(records) == 1  # type: ignore
+        assert records[0].uri.endswith(str(filename))  # type: ignore
 
     def test_failing(self, testdir: Testdir):
         write_nb(failing_nb, filename)
@@ -64,7 +75,4 @@ class TestJupyterBookRun:
                 config = yaml.load(c)
 
                 assert config["execute"]["timeout"] == 20
-                assert config["execute"]["execute_notebooks"] == "cache"
-                assert config["execute"]["cache"] != None
-
-            run.execute()
+                assert config["execute"]["execute_notebooks"] == "force"
