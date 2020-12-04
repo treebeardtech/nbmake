@@ -13,6 +13,12 @@ from .pytest_items import NotebookFile
 from .util import data_dir
 
 
+class NbMakePaths:
+    config: Optional[Path]
+    toc: Optional[Path]
+    output: Optional[Path]
+
+
 def pytest_addoption(parser: Any):
     group = parser.getgroup("nbmake", "notebook testing")
     group.addoption("--nbmake", action="store_true", help="Test notebooks")
