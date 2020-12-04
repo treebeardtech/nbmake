@@ -1,10 +1,13 @@
 import uuid
+from datetime import datetime
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, List, Optional
 
 import yaml
-from _pytest.config import Config, TerminalReporter  # type: ignore
+from _pytest.config import Config  # type: ignore
+from jupyter_cache import get_cache  # type: ignore
+from jupyter_cache.cache.main import JupyterCacheBase  # type: ignore
 
 from .pytest_items import NotebookFile
 from .util import data_dir
@@ -72,9 +75,17 @@ def build_toc(files: List[Path]):
 #     """ whole test run finishes. """
 
 
-def pytest_terminal_summary(terminalreporter: TerminalReporter, exitstatus: int, config: Config):  # type: ignore
+def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Config):  # type: ignore
+    option: Any = config.option
     toc_path = "_toc.yml"
-    if not (getattr(config.option, "nbmake") and Path(toc_path).exists()):  # type: ignore
+    if not hasattr(option, "path_output"):
+        return
+
+    path_output: str = config.option.path_output
+
+    cache: JupyterCacheBase = get_cache(Path(path_output) / "cache")  # type: ignore
+
+    if len(cache.list_cache_records()) == 0:  # type: ignore
         return
 
     import subprocess
@@ -83,7 +94,6 @@ def pytest_terminal_summary(terminalreporter: TerminalReporter, exitstatus: int,
     from .jupyter_book_run import JB_BINARY
 
     config_path = "_config.yml"
-    path_output: str = config.option.path_output
     args = [
         str(JB_BINARY),
         "build",
@@ -93,15 +103,25 @@ def pytest_terminal_summary(terminalreporter: TerminalReporter, exitstatus: int,
         str(config.rootdir),  # type: ignore
     ]
     try:
+        terminalreporter.line(
+            f"\n\n{_ts()} Nbmake building test report: {' '.join(args)}"
+        )
+
         out = subprocess.check_output(args, stderr=subprocess.STDOUT)
         (Path(path_output) / "nbmake.log").write_bytes(out)
 
         url = (
             f"  file://{Path(path_output).absolute().as_posix()}/_build/html/index.html"
         )
-        terminalreporter.line(f"\n\nBuilt test report (Open in browser).\n\n{url}\n")
+        terminalreporter.line(
+            f"\n\n{_ts()} Built test report (Open in browser).\n\n{url}\n"
+        )
     except CalledProcessError as err:
         terminalreporter.line(
-            f"Nbmake failed to build test report with command\n{' '.join(args)}"
+            f"\n\n{_ts()} (non-fatal) Nbmake failed to build test report:\n\n"
         )
         terminalreporter.line(err.output.decode())
+
+
+def _ts():
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
