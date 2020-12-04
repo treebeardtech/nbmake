@@ -6,7 +6,7 @@ import yaml
 from _pytest.pytester import Testdir
 from pytest import ExitCode
 
-from .helper import failing_nb, passing_nb, write_config, write_nb
+from .helper import failing_nb, passing_nb, write_nb
 
 pytest_plugins = "pytester"
 
@@ -69,18 +69,6 @@ def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
         )
 
     hook_recorder = testdir.inline_run("--nbmake", "-n=4")
-
-    assert hook_recorder.ret == ExitCode.OK  # type: ignore
-
-
-def test_when_parallel_passing_nbs_and_config_then_ok(testdir: Testdir):
-    for i in range(10):
-        write_nb(
-            ["import time;time.sleep(1)"],
-            Path(testdir.tmpdir) / f"{i}.ipynb",
-        )
-    write_config({"title": "blah"})
-    hook_recorder = testdir.inline_run("--nbmake", "-n=4", "--jbconfig=_config.yml")
 
     assert hook_recorder.ret == ExitCode.OK  # type: ignore
 

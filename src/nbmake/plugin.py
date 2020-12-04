@@ -3,7 +3,7 @@ import traceback
 import uuid
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import Any, Generator, Optional
+from typing import Any, Generator, List, Optional
 
 import pytest  # type: ignore
 import yaml
@@ -30,7 +30,7 @@ def pytest_addoption(parser: Any):
         help="Your jupyter-book config file",
     )
     group.addoption(
-        "--path-output", action="store", default=data_dir / str(uuid.uuid4())
+        "--path-output", action="store", default=str(data_dir / str(uuid.uuid4()))
     )
     # "--warningiserror",
     # "--nitpick",
@@ -38,10 +38,20 @@ def pytest_addoption(parser: Any):
 
 def pytest_configure(config: Config):  # type: ignore
     # hack to prevent race condition initialising cache
-    # TODO infer cache loc
-    if hasattr(config.option, "jbconfig") and config.option.jbconfig:  # type: ignore
-        get_cache("_build/.jupyter_cache").list_cache_records()
-        get_cache("docs/_build/.jupyter_cache").list_cache_records()
+    config_path = Path("_config.yml")
+    path_out: str = config.option.path_output
+    config_path.write_text(
+        yaml.dump(
+            {
+                "exclude_patterns": [".*/**/*", "Library/**/*", ".pytest_cache/**/*"],
+                "execute": {
+                    "execute_notebooks": "cache",
+                    "cache": str(Path(path_out) / "cache"),
+                    # "only_build_toc_files": True
+                },
+            }
+        )
+    )
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignore
@@ -57,36 +67,30 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignor
 
 def pytest_collectreport(report: Any) -> None:
     """Collector finished collecting."""
-    toc = [
-        {"file": i.name.replace(".ipynb", "")}
-        for i in report.result
-        if isinstance(i, NotebookFile)
-    ]
+    build_toc([Path(i.name) for i in report.result if isinstance(i, NotebookFile)])
+
+
+def build_toc(files: List[Path]):
+    toc = [{"file": str(f).replace(".ipynb", "")} for f in files]
     if len(toc) == 0:
         return
     toc[0]["title"] = "test results"
     toc_path = Path("_toc.yml")
     toc_path.write_text(yaml.dump(toc))
-    config_path = Path("_config.yml")
-    config_path.write_text(
-        yaml.dump(
-            {"exclude_patterns": [".*/**/*", "Library/**/*", ".pytest_cache/**/*"]}
-        )
-    )
 
 
 def pytest_sessionfinish(session: Any, exitstatus: Any):
     """ whole test run finishes. """
+
+    toc_path = "_toc.yml"
+    if not (getattr(session.config.option, "nbmake") and Path(toc_path).exists()):
+        return
 
     import subprocess
     from subprocess import CalledProcessError
 
     from .jupyter_book_run import JB_BINARY
 
-    toc_path = "_toc.yml"
-
-    if not (getattr(session.config.option, "nbmake") and Path(toc_path).exists()):
-        return
     config_path = "_config.yml"
 
     args = [
@@ -98,6 +102,7 @@ def pytest_sessionfinish(session: Any, exitstatus: Any):
         str(session.config.rootdir),
     ]
     try:
+        print("\n\nBUILDING FINAL")
         out = subprocess.check_output(args, stderr=subprocess.STDOUT)
         print(out.decode())
     except CalledProcessError as err:
@@ -139,12 +144,13 @@ class NotebookItem(pytest.Item):  # type: ignore
 
     def runtest(self):
         config: Optional[str] = self.parent.config.option.jbconfig
-        path_output: Optional[Path] = self.parent.config.option.path_output
+        path_output: Path = Path(self.parent.config.option.path_output)  # type: ignore
 
         run = JupyterBookRun(
             Path(self.filename),
-            Path(config) if config else None,
-            path_output=path_output,
+            path_output=path_output / Path(os.path.splitext(self.filename)[0]),
+            config_filename=Path(config) if config else None,
+            cache=get_cache(path_output / "cache"),  # type: ignore
         )
         res: JupyterBookResult = run.execute()
         if res.error != None:

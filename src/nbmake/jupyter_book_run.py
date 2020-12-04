@@ -2,7 +2,6 @@ import json
 import os
 import subprocess
 import tempfile
-import uuid
 from pathlib import Path
 from subprocess import CalledProcessError
 from typing import Any, Dict, List, Optional
@@ -13,7 +12,6 @@ from jupyter_cache import get_cache  # type: ignore
 from jupyter_cache.cache.main import JupyterCacheBase  # type: ignore
 
 from .jupyter_book_result import JupyterBookError, JupyterBookResult
-from .util import data_dir
 
 JB_BINARY: Path = (
     Path(os.path.dirname(jupyter_book.__file__))
@@ -32,13 +30,14 @@ class JupyterBookRun:
     def __init__(
         self,
         filename: Path,
+        path_output: Path,
+        cache: JupyterCacheBase,  # type: ignore
         config_filename: Optional[Path] = None,
-        path_output: Optional[Path] = None,
     ) -> None:
         # TODO validate input paths
         self.filename = Path(filename)
         self.basename = Path(os.path.basename(self.filename))
-        self.path_output = path_output or data_dir / str(uuid.uuid4())  # type: ignore
+        self.path_output = path_output
         self.built_ipynb = (
             self.path_output
             / f"_build/_page/{str(self.basename).replace('.ipynb','')}/jupyter_execute/{self.basename}"
@@ -46,7 +45,7 @@ class JupyterBookRun:
 
         user_config = self.get_user_config(config_filename)
         self.config = self.get_config(user_config)  # type: ignore
-        self.cache = get_cache(self.path_output / "_build/.jupyter_cache")  # type: ignore
+        self.cache = cache  # type: ignore
 
     def get_user_config(self, config_filename: Optional[Path]) -> Optional[dict]:
         if not config_filename:
