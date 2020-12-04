@@ -62,7 +62,7 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     assert hook_recorder.ret == ExitCode.OK  # type: ignore
 
 
-@pytest.mark.xfail("")  # type: ignore
+@pytest.mark.xfail(True, reason="Flaky, related to nbclient error")  # type: ignore
 def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
     for i in range(10):
         write_nb(

@@ -117,10 +117,13 @@ class JupyterBookRun:
             str(self.filename),
         ]
         try:
-            out = subprocess.check_output(args, stderr=subprocess.STDOUT)
-            print(out.decode())
+            print(f"\nnbmake: Running {' '.join(args)}")
+            subprocess.check_output(args, stderr=subprocess.STDOUT)
+            # print(out.decode()) tODO log
         except CalledProcessError as err:
-            print(err.output.decode())
+            print(
+                f"\nnbmake: the jupyter-book command failed.\n\n{err.output.decode()}"
+            )
 
         self.cache.cache_notebook_file(
             self.built_ipynb, check_validity=False, overwrite=True
