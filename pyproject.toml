@@ -12,7 +12,7 @@ readme = "README.md"
 version = "0.0.1"
 
 [tool.poetry.plugins."pytest11"]
-nbmake = "nbmake.plugin"
+nbmake = "nbmake.pytest_plugin"
 
 [tool.poetry.dependencies]
 PyYAML = "^5.3.1"

@@ -2,6 +2,7 @@ from __future__ import print_function
 
 from pathlib import Path
 
+import pytest
 import yaml
 from _pytest.pytester import Testdir
 from pytest import ExitCode
@@ -61,6 +62,7 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     assert hook_recorder.ret == ExitCode.OK  # type: ignore
 
 
+@pytest.mark.xfail("")  # type: ignore
 def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
     for i in range(10):
         write_nb(

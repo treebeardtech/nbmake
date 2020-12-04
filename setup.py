@@ -27,7 +27,7 @@ install_requires = [
     "pytest>=6.1.2,<7.0.0",
 ]
 
-entry_points = {"pytest11": ["nbmake = nbmake.plugin"]}
+entry_points = {"pytest11": ["nbmake = nbmake.pytest_plugin"]}
 
 setup_kwargs = {
     "name": "nbmake",
