@@ -4,7 +4,11 @@ from pathlib import Path
 from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
-from _pytest._code.code import ReprFileLocation, TerminalWriter  # type: ignore
+from _pytest._code.code import (  # type: ignore
+    ReprFileLocation,
+    TerminalRepr,
+    TerminalWriter,
+)
 from jupyter_cache import get_cache  # type: ignore
 from pygments import highlight  # type: ignore
 from pygments.formatters import TerminalTrueColorFormatter  # type: ignore

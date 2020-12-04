@@ -12,7 +12,7 @@ from .helper import failing_nb, passing_nb, write_nb
 pytest_plugins = "pytester"
 
 
-def test_collection(testdir: Testdir):
+def test_when_nb_present_then_collected(testdir: Testdir):
     write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
     items, hook_recorder = testdir.inline_genitems("--nbmake")
