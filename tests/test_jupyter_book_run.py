@@ -55,7 +55,7 @@ class TestJupyterBookRun:
         run = JupyterBookRun(filename)  # type: ignore
         res: JupyterBookResult = run.execute()  # type: ignore
 
-        assert res.error and res.error.failing_cell_index == 0  # type: ignore
+        assert res.error and res.error.failing_cell_index == 1  # type: ignore
 
     def test_when_config_supplied_then_partially_overriden(self, testdir: Testdir):
         write_nb(passing_nb, filename)

@@ -1,10 +1,12 @@
 import os
 import traceback
+import uuid
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, Generator, Optional
 
 import pytest  # type: ignore
+import yaml
 from _pytest._code.code import TerminalRepr  # type: ignore
 from _pytest.config import Config  # type: ignore
 from _pytest.config.argparsing import Parser  # type: ignore
@@ -16,6 +18,7 @@ from pygments.lexers import Python3TracebackLexer  # type: ignore
 from .jupyter_book_result import JupyterBookError, JupyterBookResult
 from .jupyter_book_run import JupyterBookRun
 from .nbmake_failure_repr import NbMakeFailureRepr
+from .util import data_dir
 
 
 def pytest_addoption(parser: Any):
@@ -25,6 +28,9 @@ def pytest_addoption(parser: Any):
         "--jbconfig",
         action="store",
         help="Your jupyter-book config file",
+    )
+    group.addoption(
+        "--path-output", action="store", default=data_dir / str(uuid.uuid4())
     )
     # "--warningiserror",
     # "--nitpick",
@@ -49,13 +55,71 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:  # type: ignor
     return None
 
 
+def pytest_collectreport(report: Any) -> None:
+    """Collector finished collecting."""
+    toc = [
+        {"file": i.name.replace(".ipynb", "")}
+        for i in report.result
+        if isinstance(i, NotebookFile)
+    ]
+    if len(toc) == 0:
+        return
+    toc[0]["title"] = "test results"
+    toc_path = Path("_toc.yml")
+    toc_path.write_text(yaml.dump(toc))
+    config_path = Path("_config.yml")
+    config_path.write_text(
+        yaml.dump(
+            {"exclude_patterns": [".*/**/*", "Library/**/*", ".pytest_cache/**/*"]}
+        )
+    )
+
+
+def pytest_sessionfinish(session: Any, exitstatus: Any):
+    """ whole test run finishes. """
+
+    import subprocess
+    from subprocess import CalledProcessError
+
+    from .jupyter_book_run import JB_BINARY
+
+    toc_path = "_toc.yml"
+
+    if not (getattr(session.config.option, "nbmake") and Path(toc_path).exists()):
+        return
+    config_path = "_config.yml"
+
+    args = [
+        str(JB_BINARY),
+        "build",
+        f"--toc={toc_path}",
+        f"--config={config_path}",
+        f"--path-output={session.config.option.path_output}",
+        str(session.config.rootdir),
+    ]
+    try:
+        out = subprocess.check_output(args, stderr=subprocess.STDOUT)
+        print(out.decode())
+    except CalledProcessError as err:
+        print(err.output.decode())
+    # run with only_build_toc_files: true
+
+
 # def pytest_terminal_summary(terminalreporter, exitstatus, config):
-#     reports = terminalreporter.getreports('')
-#     content = os.linesep.join(text for report in reports for secname, text in report.sections)
-#     if content:
-#         terminalreporter.ensure_newline()
-#         terminalreporter.section('My custom section', sep='-', blue=True, bold=True)
-#         terminalreporter.line(content)
+
+#     toc_path = Path(config.option.toc)
+#     if not toc_path.exists():
+#         pass
+#     terminalreporter.line(f"BUILDING BOOK: jb build --toc {config.option.toc} --path-output {config.option.path_output} {config.rootdir}")
+#     # run with only_build_toc_files: true
+
+
+# reports = terminalreporter.getreports('')
+# content = os.linesep.join(text for report in reports for secname, text in report.sections)
+# if content:
+#     terminalreporter.ensure_newline()
+#     terminalreporter.section('My custom section', sep='-', blue=True, bold=True)
+#     terminalreporter.line(content)
 
 
 class NotebookFile(pytest.File):  # type: ignore
@@ -75,8 +139,13 @@ class NotebookItem(pytest.Item):  # type: ignore
 
     def runtest(self):
         config: Optional[str] = self.parent.config.option.jbconfig
+        path_output: Optional[Path] = self.parent.config.option.path_output
 
-        run = JupyterBookRun(Path(self.filename), Path(config) if config else None)
+        run = JupyterBookRun(
+            Path(self.filename),
+            Path(config) if config else None,
+            path_output=path_output,
+        )
         res: JupyterBookResult = run.execute()
         if res.error != None:
             raise NotebookFailedException(res)

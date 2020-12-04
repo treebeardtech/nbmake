@@ -27,12 +27,18 @@ class JupyterBookRun:
     built_ipynb: Path
     config: Optional[Dict[Any, Any]] = None
     cache: JupyterCacheBase  # type: ignore
+    path_output: Path
 
-    def __init__(self, filename: Path, config_filename: Optional[Path] = None) -> None:
+    def __init__(
+        self,
+        filename: Path,
+        config_filename: Optional[Path] = None,
+        path_output: Optional[Path] = None,
+    ) -> None:
         # TODO validate input paths
         self.filename = Path(filename)
         self.basename = Path(os.path.basename(self.filename))
-        self.path_output = data_dir / str(uuid.uuid4())
+        self.path_output = path_output or data_dir / str(uuid.uuid4())  # type: ignore
         self.built_ipynb = (
             self.path_output
             / f"_build/_page/{str(self.basename).replace('.ipynb','')}/jupyter_execute/{self.basename}"
@@ -117,7 +123,9 @@ class JupyterBookRun:
         except CalledProcessError as err:
             print(err.output.decode())
 
-        self.cache.cache_notebook_file(self.built_ipynb, check_validity=False)
+        self.cache.cache_notebook_file(
+            self.built_ipynb, check_validity=False, overwrite=True
+        )
 
         doc = self._get_executed_ipynb()
         err = self._get_error(doc)

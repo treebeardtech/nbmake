@@ -44,15 +44,16 @@ def test_when_config_passed_then_forwarded(testdir: Testdir):
 
 
 def test_when_passing_nbs_then_ok(testdir: Testdir):
-    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
+    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb", "a.ipynb")
+    write_nb(passing_nb, Path(testdir.tmpdir) / "b.ipynb", "b.ipynb")
     testdir.mkdir("subdir")
     write_nb(
-        ["import time;time.sleep(5)"],
+        ["import time;time.sleep(0)"],
         Path(testdir.tmpdir) / Path("subdir/a.ipynb"),
+        "subdir/a.ipynb",
     )
     write_nb(
-        passing_nb,
-        Path(testdir.tmpdir) / Path("subdir/b.ipynb"),
+        passing_nb, Path(testdir.tmpdir) / Path("subdir/b.ipynb"), "subdir/b.ipynb"
     )
 
     hook_recorder = testdir.inline_run("--nbmake")
