@@ -41,7 +41,7 @@ class TestJupyterBookRun:
         write_nb(failing_nb, filename)
         # conf_path = write_config({"title": "blah"})
 
-        run = JupyterBookRun(filename)  # , conf_path)  # type: ignore
+        run = JupyterBookRun(filename)  # type: ignore
         res: JupyterBookResult = run.execute()  # type: ignore
 
         assert res.error
