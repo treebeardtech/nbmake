@@ -32,12 +32,12 @@ jobs:
             python-version: "3.6"
           - os: windows-latest
             python-version: "3.7"
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.cfg.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.cfg.python-version }}
       - name: Setup Poetry
         run: pip install poetry && poetry config virtualenvs.create false
       - uses: pre-commit/action@v2.0.0
