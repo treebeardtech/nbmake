@@ -19,7 +19,7 @@ repos:
         entry: poetry install
         language: system
         pass_filenames: false
-        files: pyproject.toml
+        files: pyproject.toml|poetry.lock
   - repo: local
     hooks:
       - id: typeshed
@@ -31,7 +31,7 @@ repos:
     hooks:
       - id: pyright
         name: pyright
-        entry: poetry run pyright
+        entry: bash -c 'poetry shell || pyright'
         language: node
         pass_filenames: false
         types: [python]
