@@ -19,6 +19,7 @@ repos:
         entry: poetry install
         language: system
         pass_filenames: false
+        files: pyproject.toml
   - repo: local
     hooks:
       - id: typeshed
