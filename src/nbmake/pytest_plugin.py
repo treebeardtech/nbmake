@@ -2,14 +2,14 @@ import uuid
 from datetime import datetime
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 import yaml
 from _pytest.config import Config
 from jupyter_cache import get_cache
 from jupyter_cache.cache.main import JupyterCacheBase
 
-from .pytest_items import NotebookFile
+from .pytest_items import NotebookFile, NotebookItem
 from .util import data_dir
 
 
@@ -22,29 +22,39 @@ class NbMakePaths:
 def pytest_addoption(parser: Any):
     group = parser.getgroup("nbmake", "notebook testing")
     group.addoption("--nbmake", action="store_true", help="Test notebooks")
+
+    default_path_output = data_dir / str(uuid.uuid4())
+    default_path_output.mkdir(exist_ok=True, parents=True)
+
     group.addoption(
         "--jbconfig",
         action="store",
         help="Your jupyter-book config file",
+        default=str(default_path_output / "config.yml"),
     )
-    group.addoption(
-        "--path-output", action="store", default=str(data_dir / str(uuid.uuid4()))
-    )
-    # "--warningiserror",
-    # "--nitpick",
+    group.addoption("--path-output", action="store", default=str(default_path_output))
 
 
 def pytest_configure(config: Config):
-    # hack to prevent race condition initialising cache
-    config_path = Path("_config.yml")
-    path_out: str = config.option.path_output
-    config_path.write_text(
+    # config_path: Path = Path(config.option.jbconfig)
+    path_out: Path = Path(config.option.path_output)
+    (path_out / "test_config.yml").write_text(
+        yaml.dump(
+            {
+                "exclude_patterns": [".*/**/*", "Library/**/*", ".pytest_cache/**/*"],
+                "execute": {
+                    "execute_notebooks": "force",
+                },
+            }
+        )
+    )
+    (path_out / "report_config.yml").write_text(
         yaml.dump(
             {
                 "exclude_patterns": [".*/**/*", "Library/**/*", ".pytest_cache/**/*"],
                 "execute": {
                     "execute_notebooks": "cache",
-                    "cache": str(Path(path_out) / "cache"),
+                    "cache": str(path_out / "cache"),
                     # "only_build_toc_files": True
                 },
             }
@@ -53,9 +63,6 @@ def pytest_configure(config: Config):
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
-    """
-    Collect IPython notebooks using the specified pytest hook
-    """
     opt = parent.config.option
     if opt.nbmake and fnmatch(path, "*.ipynb"):
         return NotebookFile.from_parent(parent, fspath=path)
@@ -63,33 +70,27 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     return None
 
 
-def pytest_collectreport(report: Any) -> None:
-    """Collector finished collecting."""
-    build_toc([Path(i.name) for i in report.result if isinstance(i, NotebookFile)])
-
-
-def build_toc(files: List[Path]):
-    toc = [{"file": str(f).replace(".ipynb", "")} for f in files]
-    if len(toc) == 0:
+def pytest_collection_finish(session: Any) -> None:
+    path_output: str = session.config.option.path_output
+    toc_path = Path(path_output) / "_toc.yml"
+    nb_items = [Path(i.filename) for i in session.items if isinstance(i, NotebookItem)]
+    if len(nb_items) == 0:
         return
+
+    toc = [{"file": str(f).replace(".ipynb", "")} for f in nb_items]
     toc[0]["title"] = "test results"
-    toc_path = Path("_toc.yml")
     toc_path.write_text(yaml.dump(toc))
-
-
-# def pytest_sessionfinish(session: Any, exitstatus: Any):
-#     """ whole test run finishes. """
 
 
 def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Config):
     option: Any = config.option
-    toc_path = "_toc.yml"
     if not hasattr(option, "path_output"):
         return
 
-    path_output: str = config.option.path_output
+    path_output = Path(config.option.path_output)
+    toc_path = Path(path_output) / "_toc.yml"
 
-    cache: JupyterCacheBase = get_cache(Path(path_output) / "cache")
+    cache: JupyterCacheBase = get_cache(path_output / "cache")
 
     if len(cache.list_cache_records()) == 0:
         return
@@ -99,11 +100,11 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
 
     from .jupyter_book_run import JB_BINARY
 
-    config_path = "_config.yml"
+    config_path = path_output / "report_config.yml"
     args = [
         str(JB_BINARY),
         "build",
-        f"--toc={toc_path}",
+        f"--toc={str(toc_path)}",
         f"--config={config_path}",
         f"--path-output={path_output}",
         str(config.rootdir),

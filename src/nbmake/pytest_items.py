@@ -39,13 +39,13 @@ class NotebookItem(pytest.Item):
         # self.config = parent.config.option.jbconfig
 
     def runtest(self):
-        config: Optional[str] = self.parent.config.option.jbconfig
+        # config: Optional[str] = self.parent.config.option.jbc c onfig
         path_output: Path = Path(self.parent.config.option.path_output)
 
         run = JupyterBookRun(
             Path(self.filename),
             path_output=path_output / Path(os.path.splitext(self.filename)[0]),
-            config_filename=Path(config) if config else None,
+            config_filename=path_output / "test_config.yml",
             cache=get_cache(path_output / "cache"),
         )
         res: JupyterBookResult = run.execute()
