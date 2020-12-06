@@ -4,12 +4,7 @@ from pathlib import Path
 from typing import Any, Generator, Optional
 
 import pytest
-from _pytest._code.code import (
-    ReprFileLocation,
-    TerminalRepr,
-    TerminalWriter,
-    _TracebackStyle,
-)
+from _pytest._code.code import ReprFileLocation, TerminalRepr, TerminalWriter
 from jupyter_cache import get_cache
 from pygments import highlight
 from pygments.formatters import TerminalTrueColorFormatter
@@ -57,9 +52,7 @@ class NotebookItem(pytest.Item):
         if res.error != None:
             raise NotebookFailedException(res)
 
-    def repr_failure(
-        self, excinfo: Any, style: Optional[_TracebackStyle] = None
-    ) -> TerminalRepr:
+    def repr_failure(self, excinfo: Any, style: Optional[Any] = None) -> TerminalRepr:
         def create_internal_err() -> str:
             tb = "".join(traceback.format_tb(excinfo.tb))
             err = f"{excinfo.value}\n{tb}"
