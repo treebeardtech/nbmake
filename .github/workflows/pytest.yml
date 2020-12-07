@@ -50,7 +50,7 @@ jobs:
 
       - name: Test
         run: |
-          poetry shell
+          . .venv/bin/activate
           pytest --cov-report=xml --cov=src -n=auto tests
           jb build -W -n --keep-going --builder html docs
 
