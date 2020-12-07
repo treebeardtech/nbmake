@@ -81,7 +81,7 @@ class NotebookRun:
         return None
 
     def execute(self) -> NotebookResult:
-        self.path_output.mkdir(exist_ok=True, parents=True)
+        (self.path_output / "_build").mkdir(exist_ok=True, parents=True)
         config_filename = Path(self.path_output / "_build" / "_config.yml")
         config_filename.write_text(yaml.dump(self.config))
 
