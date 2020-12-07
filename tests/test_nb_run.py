@@ -8,8 +8,8 @@ from _pytest.pytester import Testdir
 from jupyter_cache import get_cache
 from jupyter_cache.cache.main import JupyterCacheBase
 
-from nbmake.jupyter_book_result import JupyterBookResult
-from nbmake.jupyter_book_run import JupyterBookRun
+from nbmake.nb_result import NotebookResult
+from nbmake.nb_run import NotebookRun
 
 from .helper import failing_nb, passing_nb, write_config, write_nb
 
@@ -25,14 +25,14 @@ def cache(request) -> JupyterCacheBase:
     return get_cache(path_output / request.node.name / "cache")
 
 
-class TestJupyterBookRun:
+class TestNotebookRun:
     def test_when_passing_then_no_failing_cell(
         self, testdir: Testdir, cache: JupyterCacheBase
     ):
         write_nb(passing_nb, filename)
 
-        run = JupyterBookRun(filename, path_output, cache)
-        res: JupyterBookResult = run.execute()
+        run = NotebookRun(filename, path_output, cache)
+        res: NotebookResult = run.execute()
 
         assert res.error == None
 
@@ -41,8 +41,8 @@ class TestJupyterBookRun:
     ):
         write_nb(passing_nb, filename)
 
-        run = JupyterBookRun(filename, path_output, cache)
-        res: JupyterBookResult = run.execute()
+        run = NotebookRun(filename, path_output, cache)
+        res: NotebookResult = run.execute()
 
         assert res.error == None
 
@@ -55,8 +55,8 @@ class TestJupyterBookRun:
     ):
         write_nb(failing_nb, filename)
 
-        run = JupyterBookRun(filename, path_output, cache)
-        res: JupyterBookResult = run.execute()
+        run = NotebookRun(filename, path_output, cache)
+        res: NotebookResult = run.execute()
 
         assert res.error
 
@@ -66,8 +66,8 @@ class TestJupyterBookRun:
 
     def test_failing(self, testdir: Testdir, cache: JupyterCacheBase):
         write_nb(failing_nb, filename)
-        run = JupyterBookRun(filename, path_output, cache)
-        res: JupyterBookResult = run.execute()
+        run = NotebookRun(filename, path_output, cache)
+        res: NotebookResult = run.execute()
 
         assert res.error and res.error.failing_cell_index == 1
 
@@ -76,7 +76,7 @@ class TestJupyterBookRun:
     ):
         write_nb(passing_nb, filename)
         conf_path = write_config({"execute": {"timeout": 20}})
-        run = JupyterBookRun(filename, path_output, cache, conf_path)
+        run = NotebookRun(filename, path_output, cache, conf_path)
 
         real_check_output = subprocess.check_output
         with patch("subprocess.check_output") as check_output:

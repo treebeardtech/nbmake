@@ -10,8 +10,8 @@ from pygments import highlight
 from pygments.formatters import TerminalTrueColorFormatter
 from pygments.lexers import Python3TracebackLexer
 
-from .jupyter_book_result import JupyterBookError, JupyterBookResult
-from .jupyter_book_run import JupyterBookRun
+from .nb_result import NotebookError, NotebookResult
+from .nb_run import NotebookRun
 
 
 class NbMakeFailureRepr(TerminalRepr):
@@ -43,13 +43,13 @@ class NotebookItem(pytest.Item):
         option = self.parent.config.option
         path_output: Path = Path(option.path_output)
         jb_config = Path(option.jbconfig) if option.jbconfig else None
-        run = JupyterBookRun(
+        run = NotebookRun(
             Path(self.filename),
             path_output=path_output / Path(os.path.splitext(self.filename)[0]),
             config_filename=jb_config,
             cache=get_cache(path_output / "cache"),
         )
-        res: JupyterBookResult = run.execute()
+        res: NotebookResult = run.execute()
         if res.error != None:
             raise NotebookFailedException(res)
 
@@ -73,11 +73,11 @@ class NotebookItem(pytest.Item):
         if type(excinfo.value) != NotebookFailedException:
             return create_internal_err()
 
-        res: JupyterBookResult = excinfo.value.args[0]
+        res: NotebookResult = excinfo.value.args[0]
         if isinstance(res.error, type(None)):
             return create_internal_err()
 
-        error: JupyterBookError = res.error  # type:ignore
+        error: NotebookError = res.error  # type:ignore
         return NbMakeFailureRepr(error.trace, error.summary)
 
     def reportinfo(self):  # type:ignore

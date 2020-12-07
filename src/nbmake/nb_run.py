@@ -7,10 +7,10 @@ import yaml
 from jupyter_cache.cache.main import JupyterCacheBase
 
 from .jupyter_book_adapter import build
-from .jupyter_book_result import JupyterBookError, JupyterBookResult
+from .nb_result import NotebookError, NotebookResult
 
 
-class JupyterBookRun:
+class NotebookRun:
     filename: Path
     basename: Path
     built_ipynb: Path
@@ -60,7 +60,7 @@ class JupyterBookRun:
     def _get_executed_ipynb(self) -> Dict[Any, Any]:
         return json.loads(self.built_ipynb.read_text())
 
-    def _get_error(self, doc: Dict[Any, Any]) -> Optional[JupyterBookError]:
+    def _get_error(self, doc: Dict[Any, Any]) -> Optional[NotebookError]:
         for i, cell in enumerate(doc["cells"]):
             if cell["cell_type"] != "code":
                 continue
@@ -76,13 +76,11 @@ class JupyterBookRun:
                 last_trace = tb.split("\n")[-1]
                 summary = f"cell {i + 1} of {num_cells}: {last_trace}"
                 trace = f"{summary}:\n{tb}"
-                return JupyterBookError(
-                    summary=summary, trace=trace, failing_cell_index=i
-                )
+                return NotebookError(summary=summary, trace=trace, failing_cell_index=i)
 
         return None
 
-    def execute(self) -> JupyterBookResult:
+    def execute(self) -> NotebookResult:
         self.path_output.mkdir(exist_ok=True, parents=True)
         config_filename = Path(self.path_output / "_config.yml")
         config_filename.write_text(yaml.dump(self.config))
@@ -95,4 +93,4 @@ class JupyterBookRun:
 
         doc = self._get_executed_ipynb()
         err = self._get_error(doc)
-        return JupyterBookResult(document=doc, error=err)
+        return NotebookResult(document=doc, error=err)
