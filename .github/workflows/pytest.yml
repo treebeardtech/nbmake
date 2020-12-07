@@ -9,7 +9,7 @@ jobs:
   pytest:
     defaults:
       run:
-        shell: bash -eux
+        shell: bash -eux {0}
     strategy:
       fail-fast: false
       matrix:
@@ -37,12 +37,8 @@ jobs:
           #   python-version: "3.7"
     runs-on: ${{ matrix.cfg.os }}
     steps:
+      - run: echo test
       - uses: actions/checkout@v2
-      - run: |
-          # Hack to get setup-python to work on act
-          if [ ! -f "/etc/lsb-release" ] ; then
-            echo "DISTRIB_RELEASE=18.04" > /etc/lsb-release
-          fi
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.cfg.python-version }}
@@ -56,7 +52,7 @@ jobs:
         run: |
           poetry shell
           pytest --cov-report=xml --cov=src -n=auto tests
-          poetry run jb build -W -n --keep-going --builder html docs
+          jb build -W -n --keep-going --builder html docs
 
       - uses: codecov/codecov-action@v1
         with:
