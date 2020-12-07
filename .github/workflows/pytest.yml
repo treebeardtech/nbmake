@@ -9,7 +9,7 @@ jobs:
   pytest:
     defaults:
       run:
-        shell: bash -eux {0}
+        shell: bash -eux -c 'poetry shell --no-interaction {0}'
     strategy:
       fail-fast: false
       matrix:
@@ -31,10 +31,6 @@ jobs:
           - os: macos-latest
             python-version: "3.9"
             publish-docs: true
-          - os: windows-latest
-            python-version: "3.6"
-          - os: windows-latest
-            python-version: "3.7"
     runs-on: ${{ matrix.cfg.os }}
     steps:
       - run: echo test
@@ -42,16 +38,17 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.cfg.python-version }}
-      - name: Setup Poetry
+      - name: Setup Python Env
         run: pip install poetry && poetry config virtualenvs.in-project true
+        shell: bash
+
       - uses: pre-commit/action@v2.0.0
         with:
           extra_args: "--all-files --verbose"
 
-      - name: Test
-        run: |
-          poetry run pytest --cov-report=xml --cov=src -n=auto tests
-          poetry run jb build -W -n --keep-going --builder html docs
+      - run: pre-commit run --all-files --verbose
+      - run: pytest --cov-report=xml --cov=src
+      - run: jb build -W -n --keep-going --builder html docs
 
       - uses: codecov/codecov-action@v1
         with:
