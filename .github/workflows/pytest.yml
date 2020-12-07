@@ -7,9 +7,6 @@ on:
 
 jobs:
   pytest:
-    defaults:
-      run:
-        shell: bash -eux -c 'poetry shell --no-interaction && {0}'
     strategy:
       fail-fast: false
       matrix:
@@ -40,15 +37,14 @@ jobs:
           python-version: ${{ matrix.cfg.python-version }}
       - name: Setup Python Env
         run: pip install poetry
-        shell: bash
 
       - uses: pre-commit/action@v2.0.0
         with:
           extra_args: "--all-files --verbose"
 
       - run: pre-commit run --all-files --verbose
-      - run: pytest --cov-report=xml --cov=src
-      - run: jb build -W -n --keep-going --builder html docs
+      - run: poetry run pytest --cov-report=xml --cov=src
+      - run: poetry run jb build -W -n --keep-going --builder html docs
 
       - uses: codecov/codecov-action@v1
         with:
