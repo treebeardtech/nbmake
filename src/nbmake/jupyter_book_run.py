@@ -1,28 +1,19 @@
 import json
 import os
-import subprocess
 from pathlib import Path
-from subprocess import CalledProcessError
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
-import jupyter_book
 import yaml
 from jupyter_cache.cache.main import JupyterCacheBase
 
+from .jupyter_book_adapter import build
 from .jupyter_book_result import JupyterBookError, JupyterBookResult
-
-jb_path: str = jupyter_book.__file__
-JB_BINARY: Path = (
-    Path(os.path.dirname(jb_path))
-    / ("../../../Scripts/jb.exe" if os.name == "nt" else "../../../../bin/jb")
-).resolve()
 
 
 class JupyterBookRun:
     filename: Path
     basename: Path
     built_ipynb: Path
-    config_filename: Path
     config: Dict[Any, Any]
     cache: JupyterCacheBase
     path_output: Path
@@ -34,7 +25,6 @@ class JupyterBookRun:
         cache: JupyterCacheBase,
         config_filename: Optional[Path] = None,
     ) -> None:
-        # TODO validate input paths
         self.filename = Path(filename)
         self.basename = Path(os.path.basename(self.filename))
         self.path_output = path_output
@@ -97,24 +87,7 @@ class JupyterBookRun:
         config_filename = Path(self.path_output / "_config.yml")
         config_filename.write_text(yaml.dump(self.config))
 
-        args: List[str] = [
-            str(JB_BINARY),
-            "build",
-            # "-W",
-            "--config",
-            str(config_filename),
-            "--path-output",
-            str(self.path_output),
-            str(self.filename),
-        ]
-        try:
-            print(f"\nnbmake: Running {' '.join(args)}")
-            subprocess.check_output(args, stderr=subprocess.STDOUT)
-            # print(out.decode()) tODO log
-        except CalledProcessError as err:
-            print(
-                f"\nnbmake: the jupyter-book command failed.\n\n{err.output.decode()}"
-            )
+        build(self.filename, self.path_output, config_filename)
 
         self.cache.cache_notebook_file(
             self.built_ipynb, check_validity=False, overwrite=True

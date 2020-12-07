@@ -13,12 +13,6 @@ from .pytest_items import NotebookFile, NotebookItem
 from .util import data_dir
 
 
-class NbMakePaths:
-    config: Optional[Path]
-    toc: Optional[Path]
-    output: Optional[Path]
-
-
 def pytest_addoption(parser: Any):
     group = parser.getgroup("nbmake", "notebook testing")
     group.addoption("--nbmake", action="store_true", help="Test notebooks")
@@ -80,27 +74,13 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
     if len(cache.list_cache_records()) == 0:
         return
 
-    import subprocess
-    from subprocess import CalledProcessError
-
-    from .jupyter_book_run import JB_BINARY
+    from .jupyter_book_adapter import build
 
     config_path = path_output / "report_config.yml"
-    args = [
-        str(JB_BINARY),
-        "build",
-        f"--toc={str(toc_path)}",
-        f"--config={config_path}",
-        f"--path-output={path_output}",
-        str(config.rootdir),
-    ]
-    try:
-        terminalreporter.line(
-            f"\n\n{_ts()} Nbmake building test report: {' '.join(args)}"
-        )
 
-        out = subprocess.check_output(args, stderr=subprocess.STDOUT)
-        (Path(path_output) / "nbmake.log").write_bytes(out)
+    terminalreporter.line(f"\n\n{_ts()} Nbmake building test report...")
+    try:
+        build(Path(config.rootdir), path_output, config_path, toc_path)
 
         url = (
             f"  file://{Path(path_output).absolute().as_posix()}/_build/html/index.html"
@@ -108,11 +88,8 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
         terminalreporter.line(
             f"\n\n{_ts()} Built test report (Open in browser).\n\n{url}\n"
         )
-    except CalledProcessError as err:
-        terminalreporter.line(
-            f"\n\n{_ts()} (non-fatal) Nbmake failed to build test report:\n\n"
-        )
-        terminalreporter.line(err.output.decode())
+    except:
+        terminalreporter.line(f"Non-fatal error building final test report")
 
 
 def _ts():

@@ -54,7 +54,6 @@ class TestJupyterBookRun:
         self, testdir: Testdir, cache: JupyterCacheBase
     ):
         write_nb(failing_nb, filename)
-        # conf_path = write_config({"title": "blah"})
 
         run = JupyterBookRun(filename, path_output, cache)
         res: JupyterBookResult = run.execute()

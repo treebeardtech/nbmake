@@ -10,7 +10,6 @@
   "reportUnknownParameterType": "warning",
   "reportUnknownVariableType": "warning",
   "reportUnknownArgumentType": "warning",
-  "reportGeneralTypeIssues": "warning",
   "reportPrivateUsage": "warning",
   "reportUntypedFunctionDecorator": "warning",
   "reportMissingTypeStubs": false
