@@ -26,6 +26,7 @@ def build(
 
     try:
         print(f"\nnbmake: Running {' '.join(args)}")
-        subprocess.check_output(args, stderr=subprocess.STDOUT)
+        output = subprocess.check_output(args, stderr=subprocess.STDOUT)
+        print(output.decode())
     except CalledProcessError as err:
         print(f"\nnbmake: the jupyter-book command failed.\n\n{err.output.decode()}")
