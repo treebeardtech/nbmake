@@ -43,7 +43,7 @@ jobs:
         with:
           python-version: ${{ matrix.cfg.python-version }}
       - name: Setup Poetry
-        run: pip install poetry
+        run: pip install poetry && poetry config virtualenvs.in-project true
       - uses: pre-commit/action@v2.0.0
         with:
           extra_args: "--verbose"
