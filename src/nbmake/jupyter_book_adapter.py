@@ -1,16 +1,7 @@
-import os
 import subprocess
 from pathlib import Path
 from subprocess import CalledProcessError
 from typing import List, Optional
-
-import jupyter_book
-
-jb_path: str = jupyter_book.__file__
-JB_BINARY: Path = (
-    Path(os.path.dirname(jb_path))
-    / ("../../../Scripts/jb.exe" if os.name == "nt" else "../../../../bin/jb")
-).resolve()
 
 
 def build(
@@ -19,7 +10,7 @@ def build(
     config: Optional[Path] = None,
     toc: Optional[Path] = None,
 ):
-    args: List[str] = [str(JB_BINARY), "build", str(source)]
+    args: List[str] = ["jb", "build", str(source)]
 
     if out:
         args += ["--path-output", str(out)]

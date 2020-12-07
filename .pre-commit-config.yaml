@@ -15,14 +15,14 @@ repos:
   - repo: local
     hooks:
       - id: poetry
-        name: poetry
-        entry: poetry install
+        name: sync with poetry
+        entry: bash -c 'poetry install && poetry run dephell deps convert'
         language: system
         pass_filenames: false
         files: pyproject.toml|poetry.lock
   - repo: local
     hooks:
-      - id: typeshed
+      - id: install typeshed
         name: typeshed
         entry: bash -c 'git clone https://github.com/python/typeshed.git || true; pushd typeshed && git checkout 9af49c0 || popd'
         language: system

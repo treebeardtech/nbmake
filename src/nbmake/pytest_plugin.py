@@ -30,11 +30,11 @@ def pytest_configure(config: Config):
     (path_out / "report_config.yml").write_text(
         yaml.dump(
             {
-                "exclude_patterns": [".*/**/*", "Library/**/*", ".pytest_cache/**/*"],
+                "exclude_patterns": [".*/**/*"],
+                "only_build_toc_files": True,
                 "execute": {
                     "execute_notebooks": "cache",
                     "cache": str(path_out / "cache"),
-                    "only_build_toc_files": True,
                 },
             }
         )

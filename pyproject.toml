@@ -28,6 +28,12 @@ pre-commit = "^2.8.2"
 pytest-cov = "^2.10.1"
 pytest-xdist = "^2.1.0"
 virtualenv = "^20.1.0"
+dephell = "^0.8.3"
+
+
+[tool.dephell.main]
+from = {format = "poetry", path = "pyproject.toml"}
+to = {format = "setuppy", path = "setup.py"}
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
