@@ -9,7 +9,7 @@ jobs:
   pytest:
     defaults:
       run:
-        shell: bash -eux -c 'poetry shell --no-interaction {0}'
+        shell: bash -eux -c 'poetry shell --no-interaction && {0}'
     strategy:
       fail-fast: false
       matrix:
