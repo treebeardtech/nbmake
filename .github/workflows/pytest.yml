@@ -14,27 +14,27 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-          # - os: ubuntu-latest
-          #   python-version: "3.6"
-          # - os: ubuntu-latest
-          #   python-version: "3.7"
+          - os: ubuntu-latest
+            python-version: "3.6"
+          - os: ubuntu-latest
+            python-version: "3.7"
           - os: ubuntu-latest
             python-version: "3.8"
-          # - os: ubuntu-latest
-          #   python-version: "3.9"
-          # - os: macos-latest
-          #   python-version: "3.6"
-          # - os: macos-latest
-          #   python-version: "3.7"
-          # - os: macos-latest
-          #   python-version: "3.8"
-          # - os: macos-latest
-          #   python-version: "3.9"
-          #   publish-docs: true
-          # - os: windows-latest
-          #   python-version: "3.6"
-          # - os: windows-latest
-          #   python-version: "3.7"
+          - os: ubuntu-latest
+            python-version: "3.9"
+          - os: macos-latest
+            python-version: "3.6"
+          - os: macos-latest
+            python-version: "3.7"
+          - os: macos-latest
+            python-version: "3.8"
+          - os: macos-latest
+            python-version: "3.9"
+            publish-docs: true
+          - os: windows-latest
+            python-version: "3.6"
+          - os: windows-latest
+            python-version: "3.7"
     runs-on: ${{ matrix.cfg.os }}
     steps:
       - run: echo test
@@ -50,16 +50,9 @@ jobs:
 
       - name: Test
         run: |
-          pwd
-          ls -la
-          poetry env list
           poetry env info
-          poetry install
-          poetry env list
-          poetry env info
-          . "$(poetry env info -p)"/bin/activate
-          # pytest --cov-report=xml --cov=src -n=auto tests
-          # jb build -W -n --keep-going --builder html docs
+          pytest --cov-report=xml --cov=src -n=auto tests
+          jb build -W -n --keep-going --builder html docs
 
       - uses: codecov/codecov-action@v1
         with:
