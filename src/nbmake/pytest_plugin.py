@@ -18,7 +18,6 @@ def pytest_addoption(parser: Any):
     group.addoption("--nbmake", action="store_true", help="Test notebooks")
 
     default_path_output = data_dir / str(uuid.uuid4())
-    default_path_output.mkdir(exist_ok=True, parents=True)
 
     group.addoption("--jbconfig", action="store", help="Your jupyter-book config file")
     group.addoption("--path-output", action="store", default=str(default_path_output))
@@ -26,6 +25,7 @@ def pytest_addoption(parser: Any):
 
 def pytest_configure(config: Config):
     path_out: Path = Path(config.option.path_output)
+    path_out.mkdir(exist_ok=True, parents=True)
 
     (path_out / "report_config.yml").write_text(
         yaml.dump(
