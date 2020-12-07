@@ -2,7 +2,6 @@ from __future__ import print_function
 
 from pathlib import Path
 
-import pytest
 import yaml
 from _pytest.pytester import Testdir
 from pytest import ExitCode
@@ -45,11 +44,11 @@ def test_when_config_passed_then_forwarded(testdir: Testdir):
 
 def test_when_passing_nbs_then_ok(testdir: Testdir):
     write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb", "a.ipynb")
-    write_nb(passing_nb, Path(testdir.tmpdir) / "b.ipynb", "b.ipynb")
+    write_nb(passing_nb, Path(testdir.tmpdir) / "b nb.ipynb", "b.ipynb")
     testdir.mkdir("subdir")
     write_nb(
         ["import time;time.sleep(0)"],
-        Path(testdir.tmpdir) / Path("subdir/a.ipynb"),
+        Path(testdir.tmpdir) / Path("sub dir/a.ipynb"),
         "subdir/a.ipynb",
     )
     write_nb(
@@ -57,19 +56,6 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     )
 
     hook_recorder = testdir.inline_run("--nbmake")
-
-    assert hook_recorder.ret == ExitCode.OK
-
-
-@pytest.mark.xfail(True, reason="Flaky, related to nbclient error")
-def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
-    for i in range(10):
-        write_nb(
-            ["import time;time.sleep(1)"],
-            Path(testdir.tmpdir) / f"{i}.ipynb",
-        )
-
-    hook_recorder = testdir.inline_run("--nbmake", "-n=4")
 
     assert hook_recorder.ret == ExitCode.OK
 
