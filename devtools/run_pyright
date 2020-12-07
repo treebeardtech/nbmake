@@ -1,8 +1,0 @@
-# #!/usr/bin/env bash
-# set -euo pipefail -x
-
-# if [[ -n "$CI" ]]; then
-#   poetry run pyright
-# else
-#   pyright
-# fi;
