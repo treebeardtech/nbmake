@@ -50,6 +50,12 @@ jobs:
 
       - name: Test
         run: |
+          pwd
+          ls -la
+          poetry env list
+          poetry env info
+          poetry install
+          poetry env list
           poetry env info
           . "$(poetry env info -p)"/bin/activate
           pytest --cov-report=xml --cov=src -n=auto tests
