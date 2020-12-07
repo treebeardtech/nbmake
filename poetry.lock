@@ -744,6 +744,7 @@ jsonschema = "*"
 myst-nb = ">=0.10.1,<0.11.0"
 nbconvert = "<6"
 nbformat = "*"
+nested-lookup = ">=0.2.21,<0.3.0"
 pyyaml = "*"
 sphinx = ">=2,<4"
 sphinx-book-theme = ">=0.0.39"
@@ -755,7 +756,7 @@ sphinx-togglebutton = "*"
 sphinxcontrib-bibtex = "*"
 
 [package.extras]
-all = ["pytest-timeout", "sphinxext-rediraffe (>=0.2.3,<0.3.0)", "numpy", "pytest (>=3.6,<4)", "sphinx-click", "black", "plotly", "cookiecutter", "sphinx-inline-tabs", "pre-commit (==1.17.0)", "beautifulsoup4", "jupytext (>=1.6.0,<1.7.0)", "flake8 (>=3.7.0,<3.8.0)", "pytest-cov", "altair", "pytest-regressions", "folium", "pandas", "pyppeteer", "coverage", "ipywidgets", "sphinx-tabs", "nbclient", "matplotlib", "pytest-xdist", "sympy", "bokeh"]
+all = ["pre-commit (==1.17.0)", "pandas", "pytest-timeout", "coverage", "altair", "sphinx-tabs", "pytest-cov", "pyppeteer", "jupytext (>=1.6.0,<1.7.0)", "pytest-regressions", "sphinx-inline-tabs", "sphinx-click", "black", "sphinxext-rediraffe (>=0.2.3,<0.3.0)", "bokeh", "cookiecutter", "sympy", "nbclient", "pytest (>=3.6,<4)", "plotly", "beautifulsoup4", "pytest-xdist", "flake8 (>=3.7.0,<3.8.0)", "matplotlib", "numpy", "folium", "ipywidgets"]
 code_style = ["flake8 (>=3.7.0,<3.8.0)", "black", "pre-commit (==1.17.0)"]
 pdfhtml = ["pyppeteer"]
 sphinx = ["folium", "numpy", "matplotlib", "ipywidgets", "pandas", "nbclient", "sympy", "plotly", "bokeh", "altair", "sphinx-click", "sphinx-inline-tabs", "jupytext (>=1.6.0,<1.7.0)", "sphinxext-rediraffe (>=0.2.3,<0.3.0)"]
@@ -764,8 +765,8 @@ testing = ["coverage", "pytest (>=3.6,<4)", "pytest-cov", "pytest-xdist", "pytes
 [package.source]
 type = "git"
 url = "https://github.com/alex-treebeard/jupyter-book.git"
-reference = "master"
-resolved_reference = "db0dc757abf728d1223e60e6a795072166c86b08"
+reference = "toc-run"
+resolved_reference = "a566b0499b727cc66ffde30c7a99ff2a4eae0fda"
 
 [[package]]
 name = "jupyter-cache"
@@ -1044,6 +1045,17 @@ description = "Patch asyncio to allow nested event loops"
 category = "main"
 optional = false
 python-versions = ">=3.5"
+
+[[package]]
+name = "nested-lookup"
+version = "0.2.21"
+description = "Python functions for working with deeply nested documents (lists and dicts)"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
 
 [[package]]
 name = "nodeenv"
@@ -1933,7 +1945,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.1"
-content-hash = "43bce7116fb21d746a8e95fafb804b6371c11108bf91cedc946ca59bb1cdd82c"
+content-hash = "2de2921eba3a0ff6eb90c5aba58b42d7238c9b8b7b2497f681cca7ade6a6d1d3"
 
 [metadata.files]
 aiohttp = [
@@ -2430,6 +2442,9 @@ nbformat = [
 nest-asyncio = [
     {file = "nest_asyncio-1.4.3-py3-none-any.whl", hash = "sha256:dbe032f3e9ff7f120e76be22bf6e7958e867aed1743e6894b8a9585fe8495cc9"},
     {file = "nest_asyncio-1.4.3.tar.gz", hash = "sha256:eaa09ef1353ebefae19162ad423eef7a12166bcc63866f8bff8f3635353cd9fa"},
+]
+nested-lookup = [
+    {file = "nested-lookup-0.2.21.tar.gz", hash = "sha256:23789e328bd1d0b3f9db93cf51b7103a978dd0d8a834770d2c19b365e934ab96"},
 ]
 nodeenv = [
     {file = "nodeenv-1.5.0-py2.py3-none-any.whl", hash = "sha256:5304d424c529c997bc888453aeaa6362d242b6b4631e90f3d4bf1b290f1c84a9"},
