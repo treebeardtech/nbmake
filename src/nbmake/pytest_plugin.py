@@ -34,7 +34,7 @@ def pytest_configure(config: Config):
                 "execute": {
                     "execute_notebooks": "cache",
                     "cache": str(path_out / "cache"),
-                    # "only_build_toc_files": True
+                    "only_build_toc_files": True,
                 },
             }
         )

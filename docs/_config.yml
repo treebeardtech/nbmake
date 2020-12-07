@@ -5,7 +5,6 @@ description: >-
   nbmake example
 exclude_patterns:
   - .pytest_cache
-  - _build
-
+only_build_toc_files: true
 execute:
   execute_notebooks: cache
