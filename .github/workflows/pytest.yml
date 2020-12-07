@@ -41,6 +41,8 @@ jobs:
       - name: Setup Poetry
         run: pip install poetry
       - uses: pre-commit/action@v2.0.0
+        with:
+          extra_args: "--verbose"
 
       - run: poetry run pytest --cov-report=xml --cov=src -n=auto tests
       - run: poetry run jb build -W -n --keep-going --builder html docs
