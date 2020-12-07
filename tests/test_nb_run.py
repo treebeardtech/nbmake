@@ -22,7 +22,7 @@ path_output = Path("_build")
 
 @pytest.fixture
 def cache(request) -> JupyterCacheBase:
-    return get_cache(path_output / request.node.name / "cache")
+    return get_cache(path_output / request.node.name / "_build" / ".jupyter_cache")
 
 
 class TestNotebookRun:

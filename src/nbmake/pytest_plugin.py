@@ -25,16 +25,16 @@ def pytest_addoption(parser: Any):
 
 def pytest_configure(config: Config):
     path_out: Path = Path(config.option.path_output)
-    path_out.mkdir(exist_ok=True, parents=True)
+    (path_out / "_build").mkdir(exist_ok=True, parents=True)
 
-    (path_out / "report_config.yml").write_text(
+    (path_out / "_build" / "report_config.yml").write_text(
         yaml.dump(
             {
                 "exclude_patterns": [".*/**/*"],
                 "only_build_toc_files": True,
                 "execute": {
                     "execute_notebooks": "cache",
-                    "cache": str(path_out / "cache"),
+                    "cache": str(path_out / "_build" / ".jupyter_cache"),
                 },
             }
         )
@@ -51,7 +51,7 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
 
 def pytest_collection_finish(session: Any) -> None:
     path_output: str = session.config.option.path_output
-    toc_path = Path(path_output) / "_toc.yml"
+    toc_path = Path(path_output) / "_build" / "_toc.yml"
     nb_items = [Path(i.filename) for i in session.items if isinstance(i, NotebookItem)]
     if len(nb_items) == 0:
         return
@@ -67,16 +67,16 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
         return
 
     path_output = Path(config.option.path_output)
-    toc_path = Path(path_output) / "_toc.yml"
+    toc_path = Path(path_output) / "_build" / "_toc.yml"
 
-    cache: JupyterCacheBase = get_cache(path_output / "cache")
+    cache: JupyterCacheBase = get_cache(path_output / "_build" / ".jupyter_cache")
 
     if len(cache.list_cache_records()) == 0:
         return
 
     from .jupyter_book_adapter import build
 
-    config_path = path_output / "report_config.yml"
+    config_path = path_output / "_build" / "report_config.yml"
 
     terminalreporter.line(f"\n\n{_ts()} Nbmake building test report...")
     try:
