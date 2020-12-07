@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: ${{ matrix.cfg.python-version }}
       - name: Setup Python Env
-        run: pip install poetry && pre-commit run --all-files --verbose
+        run: pip install poetry pre-commit && pre-commit run --all-files --verbose
       - run: poetry run pytest --cov-report=xml --cov=src
       - run: poetry run jb build -W -n --keep-going --builder html docs
 
