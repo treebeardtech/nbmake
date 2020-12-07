@@ -50,9 +50,8 @@ jobs:
 
       - name: Test
         run: |
-          poetry shell
-          pytest --cov-report=xml --cov=src -n=auto tests
-          jb build -W -n --keep-going --builder html docs
+          poetry run pytest --cov-report=xml --cov=src -n=auto tests
+          poetry run jb build -W -n --keep-going --builder html docs
 
       - uses: codecov/codecov-action@v1
         with:
