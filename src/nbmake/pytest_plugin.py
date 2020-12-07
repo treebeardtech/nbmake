@@ -26,28 +26,13 @@ def pytest_addoption(parser: Any):
     default_path_output = data_dir / str(uuid.uuid4())
     default_path_output.mkdir(exist_ok=True, parents=True)
 
-    group.addoption(
-        "--jbconfig",
-        action="store",
-        help="Your jupyter-book config file",
-        default=str(default_path_output / "config.yml"),
-    )
+    group.addoption("--jbconfig", action="store", help="Your jupyter-book config file")
     group.addoption("--path-output", action="store", default=str(default_path_output))
 
 
 def pytest_configure(config: Config):
-    # config_path: Path = Path(config.option.jbconfig)
     path_out: Path = Path(config.option.path_output)
-    (path_out / "test_config.yml").write_text(
-        yaml.dump(
-            {
-                "exclude_patterns": [".*/**/*", "Library/**/*", ".pytest_cache/**/*"],
-                "execute": {
-                    "execute_notebooks": "force",
-                },
-            }
-        )
-    )
+
     (path_out / "report_config.yml").write_text(
         yaml.dump(
             {

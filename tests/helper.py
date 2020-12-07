@@ -49,6 +49,5 @@ def write_nb(sources: List[str], path: Path, title: str = "default-title"):
 
 
 def write_config(conf: Dict[Any, Any], filename: Path = Path("_config.yml")) -> Path:
-    with open(filename, "w") as c:
-        yaml.dump(conf, c)
+    Path(filename).write_text(yaml.dump(conf))
     return filename

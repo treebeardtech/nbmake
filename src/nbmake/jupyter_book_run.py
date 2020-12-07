@@ -1,7 +1,6 @@
 import json
 import os
 import subprocess
-import tempfile
 from pathlib import Path
 from subprocess import CalledProcessError
 from typing import Any, Dict, List, Optional
@@ -23,7 +22,8 @@ class JupyterBookRun:
     filename: Path
     basename: Path
     built_ipynb: Path
-    config: Optional[Dict[Any, Any]] = None
+    config_filename: Path
+    config: Dict[Any, Any]
     cache: JupyterCacheBase
     path_output: Path
 
@@ -53,10 +53,9 @@ class JupyterBookRun:
         if not config_filename:
             return None
 
-        with open(config_filename) as conf:
-            loaded: Dict[Any, Any] = yaml.load(conf, Loader=yaml.FullLoader)
-            if not loaded:
-                raise Exception("Failed to read jb config")
+        loaded: Dict[Any, Any] = yaml.load(config_filename.read_text())
+        if not loaded:
+            raise Exception("Failed to read jb config")
         return loaded
 
     def get_config(self, user_config: Optional[Dict[Any, Any]]) -> Dict[Any, Any]:
@@ -65,13 +64,11 @@ class JupyterBookRun:
             loaded = user_config
         loaded["execute"] = loaded.get("execute", {})
         loaded["execute"]["execute_notebooks"] = "force"
+        loaded["execute"]["cache"] = None
         return loaded
 
     def _get_executed_ipynb(self) -> Dict[Any, Any]:
-
-        with open(self.built_ipynb) as j:
-            x = json.loads(j.read())
-            return x
+        return json.loads(self.built_ipynb.read_text())
 
     def _get_error(self, doc: Dict[Any, Any]) -> Optional[JupyterBookError]:
         for i, cell in enumerate(doc["cells"]):
@@ -95,24 +92,10 @@ class JupyterBookRun:
 
         return None
 
-    def rm_cache(self):
-        if not self.cache:
-            return
-        matches = [
-            r
-            for r in self.cache.list_cache_records()
-            if r.uri == str(self.filename.absolute())
-        ]
-
-        if matches:
-            self.cache.remove_cache(matches[0].pk)
-
     def execute(self) -> JupyterBookResult:
-        self.rm_cache()
-
-        config_filename = Path(f"{tempfile.NamedTemporaryFile().name}.yml")
-        with open(config_filename, "w") as yaml_file:
-            yaml.dump(self.config or {}, yaml_file)
+        self.path_output.mkdir(exist_ok=True, parents=True)
+        config_filename = Path(self.path_output / "_config.yml")
+        config_filename.write_text(yaml.dump(self.config))
 
         args: List[str] = [
             str(JB_BINARY),

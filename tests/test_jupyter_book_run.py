@@ -88,8 +88,8 @@ class TestJupyterBookRun:
 
             jb_args = check_output.call_args[0][0]
             config_path = jb_args[jb_args.index("--config") + 1]
-            with open(config_path, "r") as c:
-                config = yaml.load(c)
+            config = yaml.load(Path(config_path).read_text())
 
-                assert config["execute"]["timeout"] == 20
-                assert config["execute"]["execute_notebooks"] == "force"
+            assert config["execute"]["timeout"] == 20
+            assert config["execute"]["execute_notebooks"] == "force"
+            assert config["execute"]["cache"] is None

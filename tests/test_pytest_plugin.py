@@ -36,8 +36,7 @@ def test_when_config_passed_then_forwarded(testdir: Testdir):
     write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
     config = "x.yml"
-    with open(config, "w") as c:
-        yaml.dump({"execute": {}}, c)
+    Path(config).write_text(yaml.dump({"execute": {}}))
 
     hook_recorder = testdir.inline_run("--nbmake", f"--jbconfig={config}")
 
