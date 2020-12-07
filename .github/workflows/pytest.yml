@@ -39,7 +39,7 @@ jobs:
         with:
           python-version: ${{ matrix.cfg.python-version }}
       - name: Setup Python Env
-        run: pip install poetry && poetry config virtualenvs.in-project true
+        run: pip install poetry
         shell: bash
 
       - uses: pre-commit/action@v2.0.0
