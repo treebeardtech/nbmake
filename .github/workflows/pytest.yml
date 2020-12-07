@@ -7,34 +7,42 @@ on:
 
 jobs:
   pytest:
+    defaults:
+      run:
+        shell: bash -eux
     strategy:
       fail-fast: false
       matrix:
         cfg:
-          - os: ubuntu-latest
-            python-version: "3.6"
-          - os: ubuntu-latest
-            python-version: "3.7"
+          # - os: ubuntu-latest
+          #   python-version: "3.6"
+          # - os: ubuntu-latest
+          #   python-version: "3.7"
           - os: ubuntu-latest
             python-version: "3.8"
-          - os: ubuntu-latest
-            python-version: "3.9"
-          - os: macos-latest
-            python-version: "3.6"
-          - os: macos-latest
-            python-version: "3.7"
-          - os: macos-latest
-            python-version: "3.8"
-          - os: macos-latest
-            python-version: "3.9"
-            publish-docs: true
-          - os: windows-latest
-            python-version: "3.6"
-          - os: windows-latest
-            python-version: "3.7"
+          # - os: ubuntu-latest
+          #   python-version: "3.9"
+          # - os: macos-latest
+          #   python-version: "3.6"
+          # - os: macos-latest
+          #   python-version: "3.7"
+          # - os: macos-latest
+          #   python-version: "3.8"
+          # - os: macos-latest
+          #   python-version: "3.9"
+          #   publish-docs: true
+          # - os: windows-latest
+          #   python-version: "3.6"
+          # - os: windows-latest
+          #   python-version: "3.7"
     runs-on: ${{ matrix.cfg.os }}
     steps:
       - uses: actions/checkout@v2
+      - run: |
+          # Hack to get setup-python to work on act
+          if [ ! -f "/etc/lsb-release" ] ; then
+            echo "DISTRIB_RELEASE=18.04" > /etc/lsb-release
+          fi
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.cfg.python-version }}
@@ -44,8 +52,11 @@ jobs:
         with:
           extra_args: "--verbose"
 
-      - run: poetry run pytest --cov-report=xml --cov=src -n=auto tests
-      - run: poetry run jb build -W -n --keep-going --builder html docs
+      - name: Test
+        run: |
+          poetry shell
+          pytest --cov-report=xml --cov=src -n=auto tests
+          poetry run jb build -W -n --keep-going --builder html docs
 
       - uses: codecov/codecov-action@v1
         with:
