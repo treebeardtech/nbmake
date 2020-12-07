@@ -30,19 +30,12 @@ jobs:
             publish-docs: true
     runs-on: ${{ matrix.cfg.os }}
     steps:
-      - run: echo test
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.cfg.python-version }}
       - name: Setup Python Env
-        run: pip install poetry
-
-      - uses: pre-commit/action@v2.0.0
-        with:
-          extra_args: "--all-files --verbose"
-
-      - run: pre-commit run --all-files --verbose
+        run: pip install poetry && pre-commit run --all-files --verbose
       - run: poetry run pytest --cov-report=xml --cov=src
       - run: poetry run jb build -W -n --keep-going --builder html docs
 
