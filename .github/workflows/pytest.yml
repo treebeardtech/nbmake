@@ -39,11 +39,11 @@ jobs:
         with:
           python-version: ${{ matrix.cfg.python-version }}
       - name: Setup Poetry
-        run: pip install poetry && poetry config virtualenvs.create false
+        run: pip install poetry
       - uses: pre-commit/action@v2.0.0
 
-      - run: pytest --cov-report=xml --cov=src -n=auto tests
-      - run: jb build -W -n --keep-going --builder html docs
+      - run: poetry run pytest --cov-report=xml --cov=src -n=auto tests
+      - run: poetry run jb build -W -n --keep-going --builder html docs
 
       - uses: codecov/codecov-action@v1
         with:
