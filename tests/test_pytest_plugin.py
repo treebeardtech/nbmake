@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+from importlib import import_module, reload
 from pathlib import Path
 
 import yaml
@@ -9,6 +10,14 @@ from pytest import ExitCode
 from .helper import failing_nb, passing_nb, write_nb
 
 pytest_plugins = "pytester"
+
+
+def test_import():
+    reload(import_module("nbmake.jupyter_book_adapter"))
+    reload(import_module("nbmake.nb_result"))
+    reload(import_module("nbmake.nb_run"))
+    reload(import_module("nbmake.pytest_plugin"))
+    reload(import_module("nbmake.pytest_items"))
 
 
 def test_when_nb_present_then_collected(testdir: Testdir):
