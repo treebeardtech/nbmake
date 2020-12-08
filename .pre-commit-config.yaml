@@ -3,10 +3,6 @@ repos:
     rev: master
     hooks:
       - id: nbstripout
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: master
-    hooks:
-      - id: pretty-format-json
   - repo: https://github.com/ambv/black
     rev: stable
     hooks:
