@@ -37,6 +37,7 @@ jobs:
       - name: Setup Python Env
         run: pip install poetry pre-commit && pre-commit run --all-files --verbose
       - run: poetry run pytest --cov-report=xml --cov=src
+      - run: poetry run python -m ipykernel install --user --name nbmake
       - run: poetry run jb build -W -n --keep-going --builder html docs
 
       - uses: codecov/codecov-action@v1
