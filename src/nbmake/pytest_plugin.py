@@ -19,8 +19,8 @@ def pytest_addoption(parser: Any):
 
     default_path_output = data_dir / str(uuid.uuid4())
 
-    group.addoption("--jbconfig", action="store", help="Your jupyter-book config file")
-    group.addoption("--path-output", action="store", default=str(default_path_output))
+    group.addoption("--jbconfig", action="store", help="Your jupyter-book config file https://jupyterbook.org/customize/config.html#configuration-defaults\nblahblba")
+    group.addoption("--path-output", action="store", default=str(default_path_output), help="The directory of the output test report, and jupyter cache")
 
 
 def pytest_configure(config: Config):

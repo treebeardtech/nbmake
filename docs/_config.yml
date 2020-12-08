@@ -4,7 +4,19 @@ email: alex@treebeard.io
 description: >-
   nbmake example
 exclude_patterns:
-  - .pytest_cache
+  - .*/*
+  - .*/**/*
+  - _build
 only_build_toc_files: true
-execute:
-  execute_notebooks: cache
+html:
+  use_edit_page_button: true
+  use_repository_button: true
+
+repository:
+  url: https://github.com/treebeardtech/nbmake
+  branch: main
+  path_to_book: docs
+
+launch_buttons: 
+  thebe: null
+  binder: null
