@@ -18,5 +18,5 @@ repository:
   path_to_book: docs
 
 launch_buttons: 
-  thebe: null
-  binder: null
+  thebe: false
+  binder: false
