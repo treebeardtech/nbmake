@@ -1,8 +1,9 @@
+from pathlib import Path
 from typing import Any, Callable, Dict, List, TypeVar
 
 import yaml
 from nbformat import write
-from nbformat.v4 import new_code_cell, new_notebook
+from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
 
 T = TypeVar("T")
 
@@ -30,7 +31,7 @@ passing_nb = [
 
 failing_nb = [
     # In [1]:
-    "raise Exception()"
+    "raise Exception('something went wrong')"
 ]
 
 
@@ -39,14 +40,14 @@ failing_nb = [
 #     return nb
 
 
-def write_nb(sources: List[str], path: str):
+def write_nb(sources: List[str], path: Path, title: str = "default-title"):
     nb = new_notebook()
+    nb.cells.append(new_markdown_cell(f"# {title}"))
     for src in sources:
         nb.cells.append(new_code_cell(src))
-    write(nb, path)
+    write(nb, str(path))
 
 
-def write_config(conf: Dict[Any, Any], filename: str = "_config.yml") -> str:
-    with open(filename, "w") as c:
-        yaml.dump(conf, c)
+def write_config(conf: Dict[Any, Any], filename: Path = Path("_config.yml")) -> Path:
+    Path(filename).write_text(yaml.dump(conf))
     return filename

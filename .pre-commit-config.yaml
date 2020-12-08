@@ -1,4 +1,8 @@
 repos:
+  - repo: https://github.com/kynan/nbstripout
+    rev: master
+    hooks:
+      - id: nbstripout
   - repo: https://github.com/ambv/black
     rev: stable
     hooks:
@@ -10,14 +14,32 @@ repos:
         args: ["-m", "3", "--tc"]
   - repo: local
     hooks:
+      - id: poetry
+        name: sync with poetry
+        entry: poetry install
+        language: system
+        pass_filenames: false
+        files: pyproject.toml|poetry.lock
+  - repo: local
+    hooks:
+      - id: install typeshed
+        name: typeshed
+        entry: bash -c 'git clone https://github.com/python/typeshed.git || true; pushd typeshed && git checkout 9af49c0 || popd'
+        language: system
+        pass_filenames: false
+  - repo: local
+    hooks:
       - id: pyright
         name: pyright
-        entry: pyright
+        entry: poetry run pyright
         language: node
         pass_filenames: false
         types: [python]
-        additional_dependencies: ["pyright@1.1.30"]
-  - repo: https://github.com/kynan/nbstripout
-    rev: master
+        additional_dependencies: ["pyright@1.1.91"]
+  - repo: local
     hooks:
-      - id: nbstripout
+      - id: smoketest
+        name: smoketest
+        entry: poetry run pytest -k test_when_nb_present_then_collected
+        language: system
+        pass_filenames: false

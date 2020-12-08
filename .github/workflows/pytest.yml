@@ -10,40 +10,41 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
-        python-version:
-          - "3.6.7"
-          - "3.7"
-          - "3.8"
-          - "3.9"
-    runs-on: ${{ matrix.os }}
+        cfg:
+          - os: ubuntu-latest
+            python-version: "3.6"
+          - os: ubuntu-latest
+            python-version: "3.7"
+          - os: ubuntu-latest
+            python-version: "3.8"
+          - os: ubuntu-latest
+            python-version: "3.9"
+          - os: macos-latest
+            python-version: "3.6"
+          - os: macos-latest
+            python-version: "3.7"
+          - os: macos-latest
+            python-version: "3.8"
+          - os: macos-latest
+            python-version: "3.9"
+            publish-docs: true
+    runs-on: ${{ matrix.cfg.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
-      - run: git clone https://github.com/python/typeshed.git && cd typeshed && git checkout 9af49c0
-      - uses: pre-commit/action@v2.0.0
-      - name: Build Environment
-        run: |
-          pip install poetry && poetry config virtualenvs.create false && poetry install
-      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
-        name: Test
-        run: |
-          pytest --cov-report=xml --cov=src -n=auto tests
-      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
-        name: Build Docs
-        run: |
-          pytest --nbmake -n=auto --jbconfig=docs/_config.yml docs && jb build -W -n --keep-going --builder html docs
-      - if: "!startsWith(matrix.os, 'win') || matrix.python-version < '3.8'"
-        uses: codecov/codecov-action@v1
+          python-version: ${{ matrix.cfg.python-version }}
+      - name: Setup Python Env
+        run: pip install poetry pre-commit && pre-commit run --all-files --verbose
+      - run: poetry run pytest --cov-report=xml --cov=src
+      - run: poetry run jb build -W -n --keep-going --builder html docs
+
+      - uses: codecov/codecov-action@v1
         with:
           file: coverage.xml
+          
       - name: GitHub Pages action
-        if: github.ref == 'refs/heads/main' && startsWith(matrix.os, 'mac') && matrix.python-version == '3.8'
+        if: github.ref == 'refs/heads/main' && matrix.cfg.publish-docs
         uses: peaceiris/actions-gh-pages@v3.6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

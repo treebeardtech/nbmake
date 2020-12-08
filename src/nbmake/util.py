@@ -4,7 +4,7 @@ import sys
 # https://stackoverflow.com/questions/19078969/python-getting-appdata-folder-in-a-cross-platform-way
 
 
-def get_datadir() -> pathlib.Path:
+def get_datadir():
     if sys.platform == "win32":
         return "AppData/Roaming"
     elif sys.platform == "linux":

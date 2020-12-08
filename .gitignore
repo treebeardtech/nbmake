@@ -131,7 +131,5 @@ dmypy.json
 .DS_store
 typeshed
 
-**/.nbmake
 trash
 **/_build
-setup.py
