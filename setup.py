@@ -43,7 +43,7 @@ setup(
         "pyyaml==5.*,>=5.3.1",
     ],
     dependency_links=[
-        "git+https://github.com/alex-treebeard/jupyter-book.git@toc-run#egg=jupyter-book"
+        "git+https://github.com/executablebooks/jupyter-book.git@6c30f55#egg=jupyter-book"
     ],
     extras_require={
         "dev": [

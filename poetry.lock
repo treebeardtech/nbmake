@@ -756,7 +756,7 @@ sphinx-togglebutton = "*"
 sphinxcontrib-bibtex = "*"
 
 [package.extras]
-all = ["pre-commit (==1.17.0)", "pandas", "pytest-timeout", "coverage", "altair", "sphinx-tabs", "pytest-cov", "pyppeteer", "jupytext (>=1.6.0,<1.7.0)", "pytest-regressions", "sphinx-inline-tabs", "sphinx-click", "black", "sphinxext-rediraffe (>=0.2.3,<0.3.0)", "bokeh", "cookiecutter", "sympy", "nbclient", "pytest (>=3.6,<4)", "plotly", "beautifulsoup4", "pytest-xdist", "flake8 (>=3.7.0,<3.8.0)", "matplotlib", "numpy", "folium", "ipywidgets"]
+all = ["plotly", "jupytext (>=1.6.0,<1.7.0)", "pytest-regressions", "matplotlib", "nbclient", "bokeh", "numpy", "beautifulsoup4", "flake8 (>=3.7.0,<3.8.0)", "pytest-timeout", "cookiecutter", "pre-commit (==1.17.0)", "folium", "altair", "sphinx-tabs", "pytest-xdist", "coverage", "sphinx-click", "pytest-cov", "sympy", "pandas", "sphinxext-rediraffe (>=0.2.3,<0.3.0)", "ipywidgets", "sphinx-inline-tabs", "black", "pytest (>=3.6,<4)", "pyppeteer"]
 code_style = ["flake8 (>=3.7.0,<3.8.0)", "black", "pre-commit (==1.17.0)"]
 pdfhtml = ["pyppeteer"]
 sphinx = ["folium", "numpy", "matplotlib", "ipywidgets", "pandas", "nbclient", "sympy", "plotly", "bokeh", "altair", "sphinx-click", "sphinx-inline-tabs", "jupytext (>=1.6.0,<1.7.0)", "sphinxext-rediraffe (>=0.2.3,<0.3.0)"]
@@ -764,9 +764,9 @@ testing = ["coverage", "pytest (>=3.6,<4)", "pytest-cov", "pytest-xdist", "pytes
 
 [package.source]
 type = "git"
-url = "https://github.com/alex-treebeard/jupyter-book.git"
-reference = "toc-run"
-resolved_reference = "a566b0499b727cc66ffde30c7a99ff2a4eae0fda"
+url = "https://github.com/executablebooks/jupyter-book.git"
+reference = "6c30f55"
+resolved_reference = "6c30f554d86fe7d1a0e4ad05012a5de4133117d0"
 
 [[package]]
 name = "jupyter-cache"
@@ -1945,7 +1945,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.1"
-content-hash = "2de2921eba3a0ff6eb90c5aba58b42d7238c9b8b7b2497f681cca7ade6a6d1d3"
+content-hash = "064132b3b9f54fee07d111924dcae9a58273dd67a07ed4d0344470c08fef7fe4"
 
 [metadata.files]
 aiohttp = [
