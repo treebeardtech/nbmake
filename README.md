@@ -2,14 +2,15 @@
 [![codecov](https://codecov.io/gh/treebeardtech/nbmake/branch/main/graph/badge.svg?token=9GuDM35FuO)](https://codecov.io/gh/treebeardtech/nbmake)
 [![PyPI version](https://badge.fury.io/py/nbmake.svg)](https://badge.fury.io/py/nbmake)
 
-Pytest plugin for building notebooks
+Pytest plugin for testing notebooks
 
 ## Functionality
 
-1. Implements the pytest plugin API allowing parallel execution of notebooks via `pytest-xdist`
-2. Uses `jupyter-book` as a runtime, enabling caching for jupyter book builds and supporting the same presentation/execution options.
+1. Runs notebooks individually through [jupyter-book](https://github.com/executablebooks/jupyter-book), supporting the same config options.
+2. Works everywhere pytest does, allowing testing locally, on pre-commit, and in the cloud
+3. Builds an HTML report of each test run which can be uploaded to hosting providers such as Netlify.
 
-This facilitates building compute-intensive documentation. See [docs](https://treebeardtech.github.io/nbmake) to get started.
+See [docs](https://treebeardtech.github.io/nbmake) to get started.
 
 ## Developing
 
