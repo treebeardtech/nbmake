@@ -55,9 +55,10 @@ class NotebookRun:
         loaded: Dict[Any, Any] = {}
         if not user_config is None:
             loaded = user_config
+        loaded.get("exclude_patterns", [])
+        loaded["exclude_patterns"] = ["_build", ".*/**/*", "**/*"]
         loaded["execute"] = loaded.get("execute", {})
         loaded["execute"]["execute_notebooks"] = "force"
-        loaded["execute"]["cache"] = None
         return loaded
 
     def _get_executed_ipynb(self) -> Dict[Any, Any]:

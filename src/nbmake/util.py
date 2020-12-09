@@ -15,15 +15,10 @@ def get_datadir():
         raise Exception(f"Don't know how to get data dir for platform {sys.platform}")
 
 
-data_dir = pathlib.Path.home() / get_datadir() / "nbmake"
+default_path_output = pathlib.Path.home() / get_datadir() / "nbmake"
 try:
-    data_dir.mkdir(parents=True, exist_ok=True)
+    default_path_output.mkdir(parents=True, exist_ok=True)
 except:
-    try:
-        print(f"Failed to create data dir {data_dir}, trying another")
-        data_dir = pathlib.Path(f"/tmp/nbmake")
-        data_dir.mkdir(parents=True, exist_ok=True)
-    except:
-        print(f"Failed to create data dir {data_dir}, trying another")
-        data_dir = pathlib.Path(f".nbmake").absolute()
-        data_dir.mkdir(parents=True, exist_ok=True)
+    print(f"Failed to create data dir {default_path_output}, trying another")
+    default_path_output = pathlib.Path(f"/tmp/nbmake")
+    default_path_output.mkdir(parents=True, exist_ok=True)

@@ -91,4 +91,3 @@ class TestNotebookRun:
 
             assert config["execute"]["timeout"] == 20
             assert config["execute"]["execute_notebooks"] == "force"
-            assert config["execute"]["cache"] is None

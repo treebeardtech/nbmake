@@ -17,6 +17,6 @@ repository:
   branch: main
   path_to_book: docs
 
-launch_buttons: 
+launch_buttons:
   thebe: false
   binder: false

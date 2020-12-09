@@ -40,12 +40,11 @@ class NotebookItem(pytest.Item):
         self.filename = filename
 
     def runtest(self):
-        # config: Optional[str] = self.parent.config.option.jbc c onfig
         option = self.parent.config.option
         path_output: Path = Path(option.path_output)
         run = NotebookRun(
-            Path(self.filename),
-            path_output=path_output / Path(os.path.splitext(self.filename)[0]),
+            Path(self.config.rootdir) / self.filename,
+            path_output=path_output / "_build" / self.filename,
             cache=get_cache(path_output / "_build" / ".jupyter_cache"),
             verbose=bool(option.verbose),
         )
