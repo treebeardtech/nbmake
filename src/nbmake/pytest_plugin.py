@@ -78,18 +78,19 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
 
     config_path = path_output / "_build" / "report_config.yml"
 
-    terminalreporter.line(f"\n\n{_ts()} Nbmake building test report...")
+    url = f"file://{Path(path_output).absolute().as_posix()}/_build/html/index.html"
+    terminalreporter.line(f"\n\n{_ts()} Nbmake building test report at: \n\n  {url}\n")
     try:
-        build(Path(config.rootdir), path_output, config_path, toc_path)
-
-        url = (
-            f"  file://{Path(path_output).absolute().as_posix()}/_build/html/index.html"
+        build(
+            Path(config.rootdir),
+            path_output,
+            config_path,
+            toc_path,
+            verbose=bool(option.verbose),
         )
-        terminalreporter.line(
-            f"\n\n{_ts()} Built test report (Open in browser).\n\n{url}\n"
-        )
+        terminalreporter.line(f"{_ts()} done.")
     except:
-        terminalreporter.line(f"Non-fatal error building final test report")
+        terminalreporter.line(f"{_ts()} Non-fatal error building final test report")
 
 
 def _ts():

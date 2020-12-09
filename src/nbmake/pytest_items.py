@@ -48,6 +48,7 @@ class NotebookItem(pytest.Item):
             path_output=path_output / Path(os.path.splitext(self.filename)[0]),
             config_filename=jb_config,
             cache=get_cache(path_output / "_build" / ".jupyter_cache"),
+            verbose=bool(option.verbose),
         )
         res: NotebookResult = run.execute()
         if res.error != None:

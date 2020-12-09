@@ -61,7 +61,7 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     testdir.mkdir("sub dir")
     [write_nb(passing_nb, path) for path in nbs]
 
-    hook_recorder = testdir.inline_run("--nbmake")
+    hook_recorder = testdir.inline_run("--nbmake", "-vvv")
 
     assert hook_recorder.ret == ExitCode.OK
 
@@ -69,5 +69,5 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
 def test_when_failing_nb_then_fail(testdir: Testdir):
     write_nb(failing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
-    hook_recorder = testdir.inline_run("--nbmake")
+    hook_recorder = testdir.inline_run("--nbmake", "-v")
     assert hook_recorder.ret == ExitCode.TESTS_FAILED
