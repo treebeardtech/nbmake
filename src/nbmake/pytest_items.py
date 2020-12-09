@@ -33,6 +33,8 @@ class NotebookFailedException(Exception):
 
 
 class NotebookItem(pytest.Item):
+    nbmake = True
+
     def __init__(self, parent: Any, filename: str):
         super().__init__("", parent)
         self.filename = filename

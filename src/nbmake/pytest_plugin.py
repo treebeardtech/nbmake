@@ -9,7 +9,7 @@ from _pytest.config import Config
 from jupyter_cache import get_cache
 from jupyter_cache.cache.main import JupyterCacheBase
 
-from .pytest_items import NotebookFile, NotebookItem
+from .pytest_items import NotebookFile
 from .util import data_dir
 
 
@@ -52,13 +52,17 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
 def pytest_collection_finish(session: Any) -> None:
     path_output: str = session.config.option.path_output
     toc_path = Path(path_output) / "_build" / "_toc.yml"
-    nb_items = [Path(i.filename) for i in session.items if isinstance(i, NotebookItem)]
+    nb_items = [
+        Path(i.filename) for i in session.items if hasattr(session.items[0], "nbmake")
+    ]
     if len(nb_items) == 0:
         return
 
     toc = [{"file": str(f).replace(".ipynb", "")} for f in nb_items]
     toc[0]["title"] = "test results"
     toc_path.write_text(yaml.dump(toc))
+    if session.config.option.verbose > 0:
+        print(f"nbmake: Wrote toc to {toc_path}")
 
 
 def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Config):
@@ -78,7 +82,8 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
 
     config_path = path_output / "_build" / "report_config.yml"
 
-    url = f"file://{Path(path_output).absolute().as_posix()}/_build/html/index.html"
+    index_path = Path(path_output) / "_build" / "html" / "index.html"
+    url = f"file://{index_path.as_posix()}"
     terminalreporter.line(f"\n\n{_ts()} Nbmake building test report at: \n\n  {url}\n")
     try:
         build(
@@ -88,7 +93,10 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
             toc_path,
             verbose=bool(option.verbose),
         )
-        terminalreporter.line(f"{_ts()} done.")
+        if index_path.exists():
+            terminalreporter.line(f"{_ts()} done.")
+        else:
+            terminalreporter.line(f"{_ts()} Non-fatal error building final test report")
     except:
         terminalreporter.line(f"{_ts()} Non-fatal error building final test report")
 

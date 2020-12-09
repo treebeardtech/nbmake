@@ -26,7 +26,7 @@ def build(
         ]
 
     if toc:
-        args += ["--toc", str(toc)]
+        args += ["--toc", str(toc), "-q", "-n"]
 
     if verbose:
         args.append("-v")
