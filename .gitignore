@@ -133,3 +133,6 @@ typeshed
 
 trash
 **/_build
+
+# stop dephell...
+README.rst
