@@ -2,7 +2,6 @@
 authors = ["alex-treebeard <alex@treebeard.io>"]
 description = "Pytest plugin for releasing notebooks"
 homepage = "https://github.com/treebeardtech/nbmake"
-include = ["src/nbmake/version.txt"]
 license = "Apache-2.0"
 name = "nbmake"
 packages = [
