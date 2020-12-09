@@ -21,7 +21,7 @@ repos:
     hooks:
       - id: poetry
         name: sync with poetry
-        entry: bash -c 'mkdir dist && poetry run dephell deps convert --to-path dist/setup.py && diff dist/setup.py setup.py'
+        entry: bash -c 'V=$(poetry version -s); poetry build && tar -xvf dist/nbmake-$V.tar.gz -C dist && diff dist/nbmake-$V/setup.py setup.py'
         language: system
         pass_filenames: false
         files: pyproject.toml|poetry.lock
