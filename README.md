@@ -6,7 +6,7 @@ Pytest plugin for testing notebooks
 
 ## Functionality
 
-1. Runs notebooks individually through [jupyter-book](https://github.com/executablebooks/jupyter-book), supporting the same config options.
+1. Runs notebooks individually through [jupyter-book](https://github.com/executablebooks/jupyter-book), allowing the same options such as allowing exceptions on individual cell.
 2. Works everywhere pytest does, allowing testing locally, on pre-commit, and in the cloud
 3. Builds an HTML report of each test run which can be uploaded to hosting providers such as Netlify.
 

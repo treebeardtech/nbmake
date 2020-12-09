@@ -3,7 +3,6 @@ from __future__ import print_function
 from importlib import import_module, reload
 from pathlib import Path
 
-import yaml
 from _pytest.pytester import Testdir
 from pytest import ExitCode
 
@@ -40,17 +39,6 @@ def test_when_ignored_none_collected(testdir: Testdir):
     assert len(items) == 0
 
 
-def test_when_config_passed_then_forwarded(testdir: Testdir):
-    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
-
-    config = "x.yml"
-    Path(config).write_text(yaml.dump({"execute": {}}))
-
-    hook_recorder = testdir.inline_run("--nbmake", f"--jbconfig={config}")
-
-    assert hook_recorder.ret == ExitCode.OK
-
-
 def test_when_passing_nbs_then_ok(testdir: Testdir):
     nbs = [
         Path(testdir.tmpdir) / "a.ipynb",
@@ -61,7 +49,7 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     testdir.mkdir("sub dir")
     [write_nb(passing_nb, path) for path in nbs]
 
-    hook_recorder = testdir.inline_run("--nbmake")
+    hook_recorder = testdir.inline_run("--nbmake", "-vvv")
 
     assert hook_recorder.ret == ExitCode.OK
 
@@ -69,5 +57,5 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
 def test_when_failing_nb_then_fail(testdir: Testdir):
     write_nb(failing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
-    hook_recorder = testdir.inline_run("--nbmake")
+    hook_recorder = testdir.inline_run("--nbmake", "-v")
     assert hook_recorder.ret == ExitCode.TESTS_FAILED

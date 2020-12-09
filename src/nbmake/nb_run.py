@@ -17,6 +17,7 @@ class NotebookRun:
     config: Dict[Any, Any]
     cache: JupyterCacheBase
     path_output: Path
+    verbose: bool
 
     def __init__(
         self,
@@ -24,6 +25,7 @@ class NotebookRun:
         path_output: Path,
         cache: JupyterCacheBase,
         config_filename: Optional[Path] = None,
+        verbose: bool = False,
     ) -> None:
         self.filename = Path(filename)
         self.basename = Path(os.path.basename(self.filename))
@@ -36,6 +38,7 @@ class NotebookRun:
         user_config = self.get_user_config(config_filename)
         self.config = self.get_config(user_config)
         self.cache = cache
+        self.verbose = verbose
 
     def get_user_config(
         self, config_filename: Optional[Path]
@@ -85,7 +88,7 @@ class NotebookRun:
         config_filename = Path(self.path_output / "_build" / "_config.yml")
         config_filename.write_text(yaml.dump(self.config))
 
-        build(self.filename, self.path_output, config_filename)
+        build(self.filename, self.path_output, config_filename, verbose=self.verbose)
 
         self.cache.cache_notebook_file(
             self.built_ipynb, check_validity=False, overwrite=True
