@@ -38,17 +38,14 @@ class NotebookItem(pytest.Item):
     def __init__(self, parent: Any, filename: str):
         super().__init__("", parent)
         self.filename = filename
-        # self.config = parent.config.option.jbconfig
 
     def runtest(self):
         # config: Optional[str] = self.parent.config.option.jbc c onfig
         option = self.parent.config.option
         path_output: Path = Path(option.path_output)
-        jb_config = Path(option.jbconfig) if option.jbconfig else None
         run = NotebookRun(
             Path(self.filename),
             path_output=path_output / Path(os.path.splitext(self.filename)[0]),
-            config_filename=jb_config,
             cache=get_cache(path_output / "_build" / ".jupyter_cache"),
             verbose=bool(option.verbose),
         )

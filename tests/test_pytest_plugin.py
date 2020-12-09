@@ -3,7 +3,6 @@ from __future__ import print_function
 from importlib import import_module, reload
 from pathlib import Path
 
-import yaml
 from _pytest.pytester import Testdir
 from pytest import ExitCode
 
@@ -38,17 +37,6 @@ def test_when_ignored_none_collected(testdir: Testdir):
 
     assert hook_recorder.ret == ExitCode.NO_TESTS_COLLECTED
     assert len(items) == 0
-
-
-def test_when_config_passed_then_forwarded(testdir: Testdir):
-    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
-
-    config = "x.yml"
-    Path(config).write_text(yaml.dump({"execute": {}}))
-
-    hook_recorder = testdir.inline_run("--nbmake", f"--jbconfig={config}")
-
-    assert hook_recorder.ret == ExitCode.OK
 
 
 def test_when_passing_nbs_then_ok(testdir: Testdir):
