@@ -290,12 +290,12 @@ pytest --nbmake
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>notebook testing:
   --nbmake              Test notebooks
-  --jbconfig=JBCONFIG   Your jupyter-book config file
   --path-output=PATH_OUTPUT
 
 distributed and subprocess testing:
   -n numprocesses, --numprocesses=numprocesses
                         shortcut for &#39;--dist=load --tx=NUM*popen&#39;, you can use
+                        &#39;auto&#39; here for auto detection CPUs number on host
 </pre></div>
 </div>
 </div>
@@ -339,7 +339,7 @@ Website Draft URL: https://5fcf58ec72dc52a440dffcd7--festive-payne-ce084c.netlif
 </div>
 <div class="section" id="allow-errors">
 <h2>Allow errors<a class="headerlink" href="#allow-errors" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference external" href="https://jupyterbook.org/customize/config.html#configuration-defaults">Jupyter Book docs</a> on customising execution</p>
+<p>You can allow individual cells to throw exceptions, see <a class="reference external" href="https://jupyterbook.org/content/execute.html?highlight=allow_error#dealing-with-code-that-raises-errors">jupyter book docs</a></p>
 </div>
 <div class="section" id="parallelisation">
 <h2>Parallelisation<a class="headerlink" href="#parallelisation" title="Permalink to this headline">¶</a></h2>
