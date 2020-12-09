@@ -40,6 +40,17 @@ def test_when_ignored_none_collected(testdir: Testdir):
     assert len(items) == 0
 
 
+def test_when_in_build_dir_none_collected(testdir: Testdir):
+    build_dir = Path("_build")
+    build_dir.mkdir()
+    write_nb(passing_nb, build_dir / "a.ipynb")
+
+    items, hook_recorder = testdir.inline_genitems("--nbmake")
+
+    assert hook_recorder.ret == ExitCode.NO_TESTS_COLLECTED
+    assert len(items) == 0
+
+
 def test_when_passing_nbs_then_ok(testdir: Testdir):
     nbs = [
         Path(testdir.tmpdir) / "a.ipynb",

@@ -1,5 +1,4 @@
 from datetime import datetime
-from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, Optional
 
@@ -57,7 +56,8 @@ def pytest_configure(config: Config):
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     opt = parent.config.option
-    if opt.nbmake and fnmatch(path, "*.ipynb"):
+    p = Path(path)
+    if opt.nbmake and p.match("*ipynb") and "_build" not in p.parts:
         return NotebookFile.from_parent(parent, fspath=path)
 
     return None
