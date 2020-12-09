@@ -7,6 +7,7 @@ repos:
     rev: stable
     hooks:
       - id: black
+        args: ["src", "tests"]
   - repo: https://github.com/PyCQA/isort
     rev: 5.6.4
     hooks:
@@ -16,7 +17,7 @@ repos:
     hooks:
       - id: poetry
         name: sync with poetry
-        entry: poetry install
+        entry: bash -c 'poetry install && poetry run dephell deps convert'
         language: system
         pass_filenames: false
         files: pyproject.toml|poetry.lock
