@@ -28,22 +28,25 @@ jobs:
           - os: macos-latest
             python-version: "3.9"
             publish-docs: true
+
     runs-on: ${{ matrix.cfg.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.cfg.python-version }}
-      - name: Setup Python Env
-        run: pip install poetry && poetry install && pre-commit run --all-files --verbose
+      - run: pip install poetry pre-commit
+      - run: poetry install
+      - run: pre-commit run --all-files --verbose
       - run: poetry run pytest --cov-report=xml --cov=src
+
       - run: poetry run python -m ipykernel install --user --name nbmake
       - run: poetry run jb build -W -n --keep-going --builder html docs
 
       - uses: codecov/codecov-action@v1
         with:
           file: coverage.xml
-          
+
       - name: GitHub Pages action
         if: github.ref == 'refs/heads/main' && matrix.cfg.publish-docs
         uses: peaceiris/actions-gh-pages@v3.6.1
