@@ -4,7 +4,9 @@ import os
 from importlib import import_module, reload
 from pathlib import Path
 
+import pytest
 from _pytest.pytester import Testdir
+from jupyter_cache.cache.db import create_db  # init cache
 from pytest import ExitCode
 
 from .helper import failing_nb, passing_nb, write_nb
@@ -49,6 +51,18 @@ def test_when_in_build_dir_none_collected(testdir: Testdir):
 
     assert hook_recorder.ret == ExitCode.NO_TESTS_COLLECTED
     assert len(items) == 0
+
+
+@pytest.mark.xfail(reason="known issue")
+def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
+    p = Path("_build/.jupyter_cache")
+    p.mkdir(parents=True)
+    create_db(p)
+    [write_nb(passing_nb, Path(f"{i}.ipynb")) for i in range(10)]
+
+    hook_recorder = testdir.inline_run("--nbmake", "-n=auto", "--path-output=.")
+
+    assert hook_recorder.ret == ExitCode.OK
 
 
 def test_when_passing_nbs_then_ok(testdir: Testdir):
