@@ -67,7 +67,7 @@ jobs:
           ref: 91a7bb60b13ea01d7ee76da32f94b920b2ab3b73
       - uses: actions/checkout@v2
         with:
-          path: nbmake-action
+          path: nbmake
       - uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: 3.7
@@ -78,7 +78,7 @@ jobs:
       - name: Run tests
         shell: bash -l {0}
         run: |
-            pip install pytest .
+            pip install pytest ./nbmake
             pytest --nbmake --html \
               teachopencadd/talktorials/T000_template/talktorial.ipynb \
               teachopencadd/talktorials/T001_query_chembl/talktorial.ipynb \
