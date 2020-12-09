@@ -1,7 +1,10 @@
 import subprocess
+import sys
 from pathlib import Path
 from subprocess import CalledProcessError
 from typing import List, Optional
+
+JB = Path(sys.executable).parent / "jb"
 
 
 def build(
@@ -10,7 +13,7 @@ def build(
     config: Optional[Path] = None,
     toc: Optional[Path] = None,
 ):
-    args: List[str] = ["jb", "build", str(source)]
+    args: List[str] = [str(JB), "build", str(source)]
 
     if out:
         args += ["--path-output", str(out)]
