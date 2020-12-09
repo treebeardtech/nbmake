@@ -78,7 +78,7 @@ jobs:
       - name: Run tests
         shell: bash -l {0}
         run: |
-            pip install pytest "git+https://github.com/treebeardtech/nbmake.git@main"
+            pip install pytest .
             pytest --nbmake --html \
               teachopencadd/talktorials/T000_template/talktorial.ipynb \
               teachopencadd/talktorials/T001_query_chembl/talktorial.ipynb \
