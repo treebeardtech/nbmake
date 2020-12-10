@@ -15,7 +15,6 @@ nbmake = "nbmake.pytest_plugin"
 
 [tool.poetry.dependencies]
 PyYAML = "^5.3.1"
-jupyter-cache = {extras = ["cli"], version = "^0.4.1"}
 pathlib = "^1.0.1"
 pydantic = "^1.7.2"
 pytest = "^6.1.2"
