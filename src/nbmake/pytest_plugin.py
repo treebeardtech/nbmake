@@ -41,7 +41,10 @@ def pytest_configure(config: Config):
     if not option.path_output:
         return
 
-    pass
+    # import shutil
+    # staging_dir=str(Path('_build') /'nbmake')
+    # shutil.rmtree(staging_dir)
+    # shutil.copytree('.', staging_dir, ignore=shutil.ignore_patterns('_build'))
 
 
 def pytest_collection_finish(session: Any) -> None:
@@ -80,6 +83,7 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
                 {
                     "execute": {
                         "execute_notebooks": "off",
+                        "only_build_toc_files": True,
                     },
                 }
             )

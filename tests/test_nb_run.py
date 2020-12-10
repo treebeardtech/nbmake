@@ -5,7 +5,7 @@ from _pytest.pytester import Testdir
 from jupyter_cache import get_cache
 from jupyter_cache.cache.main import JupyterCacheBase
 from nbformat import write
-from nbformat.v4 import new_code_cell, new_notebook
+from nbformat.v4 import new_code_cell, new_notebook, new_output
 
 NB_VERSION = 4
 from nbmake.nb_result import NotebookResult
@@ -82,5 +82,21 @@ class TestNotebookRun:
         assert not Path("fail.txt").exists()
         assert res.error and res.error.failing_cell_index == 1
 
+    def test_when_executed_then_stripped_out(self, testdir: Testdir):
+        nb = new_notebook(metadata={})
+        nb.cells += [
+            new_code_cell(
+                ["raise Exception()"], metadata={}, outputs=[new_output("error")]
+            ),
+            new_code_cell(
+                ["raise Exception()"], metadata={}, outputs=[new_output("error")]
+            ),
+        ]
+        write(nb, filename)
 
-# test stripout
+        run = NotebookRun(filename)
+        res: NotebookResult = run.execute()
+
+        assert res.error and res.error.failing_cell_index == 0
+        assert res.nb.cells[0].outputs[0].ename == "Exception"
+        assert res.nb.cells[1].outputs == []

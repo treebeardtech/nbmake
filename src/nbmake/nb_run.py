@@ -31,6 +31,10 @@ class NotebookRun:
         self,
     ) -> NotebookResult:
         nb = nbformat.read(str(self.filename), NB_VERSION)
+
+        for cell in nb.cells:
+            if cell.cell_type == "code":
+                cell.outputs = []
         timeout = 300
         allow_errors = False
         if "execution" in nb.metadata:
@@ -38,7 +42,7 @@ class NotebookRun:
                 timeout = nb.metadata.execution.timeout
             if "allow_errors" in nb.metadata.execution:
                 allow_errors = nb.metadata.execution.allow_errors
-        # TODO stripout
+
         error: Optional[NotebookError] = None
         try:
             c = NotebookClient(
