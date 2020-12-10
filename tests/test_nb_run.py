@@ -7,6 +7,8 @@ import yaml
 from _pytest.pytester import Testdir
 from jupyter_cache import get_cache
 from jupyter_cache.cache.main import JupyterCacheBase
+from nbformat import write
+from nbformat.v4 import new_code_cell, new_notebook
 
 from nbmake.nb_result import NotebookResult
 from nbmake.nb_run import NotebookRun
@@ -71,23 +73,28 @@ class TestNotebookRun:
 
         assert res.error and res.error.failing_cell_index == 1
 
-    def test_when_config_supplied_then_partially_overriden(
+    def test_when_allow_errors_then_passing(
         self, testdir: Testdir, cache: JupyterCacheBase
     ):
-        write_nb(passing_nb, filename)
-        conf_path = write_config({"execute": {"timeout": 20}})
-        run = NotebookRun(filename, path_output, cache, conf_path)
+        nb = new_notebook()
+        nb.metadata.execution = {"allow_errors": True}
+        cell = new_code_cell("raise Exception()")
+        nb.cells.append(cell)
+        write(nb, filename)
 
-        real_check_output = subprocess.check_output
-        with patch("subprocess.check_output") as check_output:
-            check_output.side_effect = real_check_output
-            run.execute()
+        run = NotebookRun(filename, path_output, cache)
+        res: NotebookResult = run.execute()
 
-            check_output.call_args
+        assert not res.error
+        assert res.nb.cells[0].outputs[0].ename == "Exception"
 
-            jb_args = check_output.call_args[0][0]
-            config_path = jb_args[jb_args.index("--config") + 1]
-            config = yaml.load(Path(config_path).read_text())
+    def test_when_timeout_then_fails(self, testdir: Testdir, cache: JupyterCacheBase):
+        nb = new_notebook()
+        nb.metadata.execution = {"timeout": 1}
+        nb.cells += [new_code_cell("import time"), new_code_cell("time.sleep(2)")]
+        write(nb, filename)
 
-            assert config["execute"]["timeout"] == 20
-            assert config["execute"]["execute_notebooks"] == "force"
+        run = NotebookRun(filename, path_output, cache)
+        res: NotebookResult = run.execute()
+
+        assert res.error and res.error.failing_cell_index == 1
