@@ -29,7 +29,7 @@ class NotebookRun:
         self,
         filename: Path,
         path_output: Path,
-        cache: JupyterCacheBase,
+        cache: JupyterCacheBase = None,
         verbose: bool = False,
     ) -> None:
         self.filename = Path(filename)
@@ -57,7 +57,7 @@ class NotebookRun:
                 allow_errors=allow_errors,
                 record_timing=True,
             )
-            c.execute()
+            c.execute(cwd=self.filename.parent)
         except CellExecutionError:
             exc_string = "".join(traceback.format_exc())
             error = self._get_error(nb)
@@ -70,12 +70,13 @@ class NotebookRun:
                 failing_cell_index=self._get_timeout_cell(nb),
             )
 
-        self.path_output.mkdir(exist_ok=True, parents=True)
         built_ipynb = self.path_output / self.filename
+        built_ipynb.parent.mkdir(exist_ok=True, parents=True)
         nbformat.write(nb, str(built_ipynb))
-        self.cache.cache_notebook_file(
-            built_ipynb, check_validity=False, overwrite=True
-        )
+        if self.cache:
+            self.cache.cache_notebook_file(
+                built_ipynb, check_validity=False, overwrite=True
+            )
 
         return NotebookResult(nb=nb, error=error)
 

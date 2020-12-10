@@ -45,7 +45,9 @@ class NotebookItem(pytest.Item):
         run = NotebookRun(
             Path(self.config.rootdir) / self.filename,
             path_output=path_output / "_build" / self.filename,
-            cache=get_cache(path_output / "_build" / ".jupyter_cache"),
+            cache=get_cache(path_output / "_build" / ".jupyter_cache")
+            if option.html
+            else None,
             verbose=bool(option.verbose),
         )
         res: NotebookResult = run.execute()

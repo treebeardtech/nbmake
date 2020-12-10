@@ -30,7 +30,21 @@ class TestNotebookRun:
     ):
         write_nb(passing_nb, filename)
 
-        run = NotebookRun(filename, path_output, cache)
+        run = NotebookRun(filename, path_output)
+        res: NotebookResult = run.execute()
+
+        assert res.error == None
+
+    def test_when_runs_then_cwd_is_nb_location(
+        self, testdir: Testdir, cache: JupyterCacheBase
+    ):
+        subdir = Path("subdir")
+        subdir.mkdir()
+        write_nb(
+            ["import os; assert os.getcwd().endswith('subdir')"], subdir / filename
+        )
+
+        run = NotebookRun(subdir / filename, path_output)
         res: NotebookResult = run.execute()
 
         assert res.error == None
