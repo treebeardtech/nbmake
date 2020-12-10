@@ -78,18 +78,22 @@ jobs:
           channel-priority: true
           environment-file: environment.yml
           auto-activate-base: false
-      - name: Run tests
-        shell: bash -l {0}
+      - shell: bash -l {0}
         run: |
-            pip install pytest ./nbmake
-            pytest --nbmake --path-output=. \
-              teachopencadd/talktorials/T000_template/talktorial.ipynb \
-              teachopencadd/talktorials/T001_query_chembl/talktorial.ipynb \
-              teachopencadd/talktorials/T002_compound_adme/talktorial.ipynb \
-              teachopencadd/talktorials/T003_compound_unwanted_substructures/talktorial.ipynb \
-              teachopencadd/talktorials/T004_compound_similarity/talktorial.ipynb \
-              teachopencadd/talktorials/T005_compound_clustering/talktorial.ipynb \
-              teachopencadd/talktorials/T007_compound_activity_machine_learning/talktorial.ipynb \
-              teachopencadd/talktorials/T009_compound_ensemble_pharmacophores/talktorial.ipynb \
+          pip install pytest ./nbmake
+      - shell: bash -l {0}
+        run: |
+          pytest \
+            --nbmake \
+            --path-output=. \
+            --n=auto \
+            teachopencadd/talktorials/T000_template/talktorial.ipynb \
+            teachopencadd/talktorials/T001_query_chembl/talktorial.ipynb \
+            teachopencadd/talktorials/T002_compound_adme/talktorial.ipynb \
+            teachopencadd/talktorials/T003_compound_unwanted_substructures/talktorial.ipynb \
+            teachopencadd/talktorials/T004_compound_similarity/talktorial.ipynb \
+            teachopencadd/talktorials/T005_compound_clustering/talktorial.ipynb \
+            teachopencadd/talktorials/T007_compound_activity_machine_learning/talktorial.ipynb \
+            teachopencadd/talktorials/T009_compound_ensemble_pharmacophores/talktorial.ipynb \
       - if: always()
         run: netlify deploy --dir=_build/html --auth=${{ secrets.NETLIFY_TOKEN }} --site=${{ secrets.NETLIFY_SITE_API_ID }}
