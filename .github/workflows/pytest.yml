@@ -86,7 +86,7 @@ jobs:
           pytest \
             --nbmake \
             --path-output=. \
-            --n=auto \
+            -n=auto \
             teachopencadd/talktorials/T000_template/talktorial.ipynb \
             teachopencadd/talktorials/T001_query_chembl/talktorial.ipynb \
             teachopencadd/talktorials/T002_compound_adme/talktorial.ipynb \
