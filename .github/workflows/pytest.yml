@@ -88,7 +88,6 @@ jobs:
             --path-output=. \
             -n=auto \
             teachopencadd/talktorials/T000_template/talktorial.ipynb \
-            teachopencadd/talktorials/T001_query_chembl/talktorial.ipynb \
             teachopencadd/talktorials/T002_compound_adme/talktorial.ipynb \
             teachopencadd/talktorials/T003_compound_unwanted_substructures/talktorial.ipynb \
             teachopencadd/talktorials/T004_compound_similarity/talktorial.ipynb \
