@@ -102,10 +102,15 @@ class TestNotebookRun:
     def test_when_timeout_then_fails(self, testdir: Testdir, cache: JupyterCacheBase):
         nb = new_notebook()
         nb.metadata.execution = {"timeout": 1}
-        nb.cells += [new_code_cell("import time"), new_code_cell("time.sleep(2)")]
+        nb.cells += [
+            new_code_cell("import time"),
+            new_code_cell("time.sleep(2)"),
+            new_code_cell("from pathlib import Path;Path('fail.txt').write_text('')"),
+        ]
         write(nb, filename)
 
         run = NotebookRun(filename, path_output, cache)
         res: NotebookResult = run.execute()
 
+        assert not Path("fail.txt").exists()
         assert res.error and res.error.failing_cell_index == 1
