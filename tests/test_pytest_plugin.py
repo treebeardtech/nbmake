@@ -83,6 +83,24 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     assert hook_recorder.ret == ExitCode.OK
 
 
+def test_when_overwrite_then_overwritten(testdir: Testdir):
+    nbs = [
+        Path(testdir.tmpdir) / Path("sub dir/b.ipynb"),
+    ]
+    testdir.mkdir("sub dir")
+    [write_nb(["1+1"], path) for path in nbs]
+
+    hook_recorder = testdir.inline_run("--nbmake", "--overwrite")
+
+    for path in nbs:
+        nb = read(str(path), NB_VERSION)
+        for cell in nb.cells:
+            if "outputs" in cell:
+                assert cell.outputs != []
+
+    assert hook_recorder.ret == ExitCode.OK
+
+
 def test_when_run_from_non_root_then_ok(testdir: Testdir):
     nbs = [
         Path(testdir.tmpdir) / Path("sub dir/b.ipynb"),

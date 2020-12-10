@@ -33,6 +33,17 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     return None
 
 
+def pytest_configure(config: Config):
+    option = config.option
+    if not option.nbmake:
+        return
+
+    if not option.path_output:
+        return
+
+    pass
+
+
 def pytest_collection_finish(session: Any) -> None:
     option = session.config.option
     if not option.nbmake:
