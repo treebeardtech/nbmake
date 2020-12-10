@@ -13,7 +13,7 @@ def build(
     config: Optional[Path] = None,
     toc: Optional[Path] = None,
     verbose: Optional[bool] = False,
-):
+) -> Optional[str]:
     args: List[str] = [str(JB), "build", str(source)]
 
     if out:
@@ -37,4 +37,4 @@ def build(
         if verbose:
             print(output.decode())
     except CalledProcessError as err:
-        print(f"\nnbmake: the jupyter-book command failed.\n\n{err.output.decode()}")
+        return f"\nnbmake: the jupyter-book command failed.\n\n{err.output.decode()}"

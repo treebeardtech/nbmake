@@ -1,9 +1,8 @@
 import traceback
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Optional
 
 import nbformat
-from jupyter_cache.cache.main import JupyterCacheBase
 from nbclient.client import (
     CellExecutionError,
     CellTimeoutError,
@@ -18,23 +17,14 @@ NB_VERSION = 4
 
 class NotebookRun:
     filename: Path
-    basename: Path
-    built_ipynb: Path
-    config: Dict[Any, Any]
-    cache: JupyterCacheBase
-    path_output: Path
     verbose: bool
 
     def __init__(
         self,
         filename: Path,
-        path_output: Path,
-        cache: JupyterCacheBase = None,
         verbose: bool = False,
     ) -> None:
-        self.filename = Path(filename)
-        self.path_output = path_output
-        self.cache = cache
+        self.filename = filename
         self.verbose = verbose
 
     def execute(
@@ -48,7 +38,7 @@ class NotebookRun:
                 timeout = nb.metadata.execution.timeout
             if "allow_errors" in nb.metadata.execution:
                 allow_errors = nb.metadata.execution.allow_errors
-
+        # TODO stripout
         error: Optional[NotebookError] = None
         try:
             c = NotebookClient(
@@ -68,14 +58,6 @@ class NotebookRun:
                 summary=trace.split("\n")[0],
                 trace=trace,
                 failing_cell_index=self._get_timeout_cell(nb),
-            )
-
-        built_ipynb = self.path_output / self.filename
-        built_ipynb.parent.mkdir(exist_ok=True, parents=True)
-        nbformat.write(nb, str(built_ipynb))
-        if self.cache:
-            self.cache.cache_notebook_file(
-                built_ipynb, check_validity=False, overwrite=True
             )
 
         return NotebookResult(nb=nb, error=error)

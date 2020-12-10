@@ -5,11 +5,13 @@ from importlib import import_module, reload
 from pathlib import Path
 
 from _pytest.pytester import Testdir
+from nbformat import read
 from pytest import ExitCode
 
 from .helper import failing_nb, passing_nb, write_nb
 
 pytest_plugins = "pytester"
+NB_VERSION = 4
 
 
 def test_import():
@@ -57,6 +59,7 @@ def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
     hook_recorder = testdir.inline_run("--nbmake", "-n=auto", "--path-output=.")
 
     assert hook_recorder.ret == ExitCode.OK
+    assert Path("_build/html").exists()
 
 
 def test_when_passing_nbs_then_ok(testdir: Testdir):
@@ -70,6 +73,12 @@ def test_when_passing_nbs_then_ok(testdir: Testdir):
     [write_nb(passing_nb, path) for path in nbs]
 
     hook_recorder = testdir.inline_run("--nbmake", "-vvv")
+
+    for path in nbs:
+        nb = read(str(path), NB_VERSION)
+        for cell in nb.cells:
+            if "outputs" in cell:
+                assert cell.outputs == []
 
     assert hook_recorder.ret == ExitCode.OK
 
@@ -99,7 +108,7 @@ def test_when_failing_nb_then_fail(testdir: Testdir):
 def test_when_html_flag_then_report(testdir: Testdir):
     write_nb(failing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
-    hook_recorder = testdir.inline_run("--nbmake", "--html")
+    hook_recorder = testdir.inline_run("--nbmake", "--path-output=.")
     assert hook_recorder.ret == ExitCode.TESTS_FAILED
     assert Path("_build/html").exists()
 
@@ -117,4 +126,4 @@ def test_when_path_output_then_build_dir(testdir: Testdir):
 
     hook_recorder = testdir.inline_run("--nbmake", "--path-output=.")
     assert hook_recorder.ret == ExitCode.TESTS_FAILED
-    assert Path("_build").exists()
+    assert Path("_build/html").exists()
