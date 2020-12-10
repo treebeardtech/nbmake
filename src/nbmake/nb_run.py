@@ -4,7 +4,6 @@ from typing import Any, Dict, Optional
 
 import nbformat
 from jupyter_cache.cache.main import JupyterCacheBase
-from nbclient import execute as executenb
 from nbclient.client import (
     CellExecutionError,
     CellTimeoutError,
@@ -52,21 +51,13 @@ class NotebookRun:
 
         error: Optional[NotebookError] = None
         try:
-            import atexit
-
             c = NotebookClient(
                 nb,
                 timeout=timeout,
                 allow_errors=allow_errors,
                 record_timing=True,
-                shutdown_kernel="immediate",
             )
             c.execute()
-            # try:
-            #     atexit._clear()
-            #     c._cleanup_kernel()
-            # except:
-            #     pass
         except CellExecutionError:
             exc_string = "".join(traceback.format_exc())
             error = self._get_error(nb)

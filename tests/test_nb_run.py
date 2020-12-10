@@ -1,9 +1,6 @@
-import subprocess
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
-import yaml
 from _pytest.pytester import Testdir
 from jupyter_cache import get_cache
 from jupyter_cache.cache.main import JupyterCacheBase
@@ -13,7 +10,7 @@ from nbformat.v4 import new_code_cell, new_notebook
 from nbmake.nb_result import NotebookResult
 from nbmake.nb_run import NotebookRun
 
-from .helper import failing_nb, passing_nb, write_config, write_nb
+from .helper import failing_nb, passing_nb, write_nb
 
 pytest_plugins = "pytester"
 

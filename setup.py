@@ -15,6 +15,7 @@ install_requires = \
  'jupyter-book @ '
  'git+https://github.com/executablebooks/jupyter-book.git@6c30f55',
  'jupyter-cache[cli]>=0.4.1,<0.5.0',
+ 'nbclient<0.4',
  'pathlib>=1.0.1,<2.0.0',
  'pydantic>=1.7.2,<2.0.0',
  'pytest>=6.1.2,<7.0.0']
