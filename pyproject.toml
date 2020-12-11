@@ -1,8 +1,7 @@
 [tool.poetry]
 authors = ["alex-treebeard <alex@treebeard.io>"]
-description = "Pytest plugin for releasing notebooks"
+description = "Pytest plugin for testing notebooks"
 homepage = "https://github.com/treebeardtech/nbmake"
-include = ["src/nbmake/version.txt"]
 license = "Apache-2.0"
 name = "nbmake"
 packages = [
@@ -16,24 +15,22 @@ nbmake = "nbmake.pytest_plugin"
 
 [tool.poetry.dependencies]
 PyYAML = "^5.3.1"
-jupyter-cache = {extras = ["cli"], version = "^0.4.1"}
 pathlib = "^1.0.1"
 pydantic = "^1.7.2"
 pytest = "^6.1.2"
 python = "^3.6.1"
-jupyter-book = {git = "https://github.com/executablebooks/jupyter-book.git", rev = "6c30f55"}
+nbclient = "<0.4"
+jupyter-book = {version = "^0.8.3", optional= true}
+nbformat = "^5.0.8"
+
+[tool.poetry.extras]
+html = ["jupyter-book"]
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.8.2"
 pytest-cov = "^2.10.1"
 pytest-xdist = "^2.1.0"
 virtualenv = "^20.1.0"
-dephell = "^0.8.3"
-
-
-[tool.dephell.main]
-from = {format = "poetry", path = "pyproject.toml"}
-to = {format = "setuppy", path = "setup.py"}
 
 [build-system]
 build-backend = "poetry.core.masonry.api"

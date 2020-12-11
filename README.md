@@ -6,17 +6,22 @@ Pytest plugin for testing notebooks
 
 ## Functionality
 
-1. Runs notebooks individually through [jupyter-book](https://github.com/executablebooks/jupyter-book), allowing the same options such as allowing exceptions on individual cell.
-2. Works everywhere pytest does, allowing testing locally, on pre-commit, and in the cloud
-3. Builds an HTML report of each test run which can be uploaded to hosting providers such as Netlify.
+1. Executes notebooks using pytest and nbclient, allowing parallel notebook testing
+2. Lets you automate release processes from your laptop or in the cloud
+3. Optionally builds an HTML report using [jupyter-book](https://github.com/executablebooks/jupyter-book) of the test run which can be uploaded to hosting providers such as Netlify.
 
 See [docs](https://treebeardtech.github.io/nbmake) to get started.
+
+### HTML Report Example
+
+![HTML Report](docs/screen.png)
+
 
 ## Developing
 
 ### Install local package
 ```
-poetry install
+poetry install -E html
 ```
 
 ### Activate shell

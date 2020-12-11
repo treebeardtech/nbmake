@@ -1,70 +1,97 @@
-import json
-import os
+import traceback
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Optional
 
-import yaml
-from jupyter_cache.cache.main import JupyterCacheBase
+import nbformat
+from nbclient.client import (
+    CellExecutionError,
+    CellTimeoutError,
+    NotebookClient,
+)
+from nbformat import NotebookNode
 
-from .jupyter_book_adapter import build
 from .nb_result import NotebookError, NotebookResult
+
+NB_VERSION = 4
 
 
 class NotebookRun:
     filename: Path
-    basename: Path
-    built_ipynb: Path
-    config: Dict[Any, Any]
-    cache: JupyterCacheBase
-    path_output: Path
     verbose: bool
 
     def __init__(
         self,
         filename: Path,
-        path_output: Path,
-        cache: JupyterCacheBase,
-        config_filename: Optional[Path] = None,
         verbose: bool = False,
     ) -> None:
-        self.filename = Path(filename)
-        self.basename = Path(os.path.basename(self.filename))
-        self.path_output = path_output
-        self.built_ipynb = (
-            self.path_output
-            / f"_build/_page/{str(self.basename).replace('.ipynb','')}/jupyter_execute/{self.basename}"
-        )
-
-        user_config = self.get_user_config(config_filename)
-        self.config = self.get_config(user_config)
-        self.cache = cache
+        self.filename = filename
         self.verbose = verbose
 
-    def get_user_config(
-        self, config_filename: Optional[Path]
-    ) -> Optional[Dict[Any, Any]]:
-        if not config_filename:
-            return None
+    def execute(
+        self,
+    ) -> NotebookResult:
+        nb = nbformat.read(str(self.filename), NB_VERSION)
 
-        loaded: Dict[Any, Any] = yaml.load(config_filename.read_text())
-        if not loaded:
-            raise Exception("Failed to read jb config")
-        return loaded
+        for cell in nb.cells:
+            if cell.cell_type == "code":
+                cell.outputs = []
+        timeout = 300
+        allow_errors = False
+        if "execution" in nb.metadata:
+            if "timeout" in nb.metadata.execution:
+                timeout = nb.metadata.execution.timeout
+            if "allow_errors" in nb.metadata.execution:
+                allow_errors = nb.metadata.execution.allow_errors
 
-    def get_config(self, user_config: Optional[Dict[Any, Any]]) -> Dict[Any, Any]:
-        loaded: Dict[Any, Any] = {}
-        if not user_config is None:
-            loaded = user_config
-        loaded["execute"] = loaded.get("execute", {})
-        loaded["execute"]["execute_notebooks"] = "force"
-        loaded["execute"]["cache"] = None
-        return loaded
+        error: Optional[NotebookError] = None
 
-    def _get_executed_ipynb(self) -> Dict[Any, Any]:
-        return json.loads(self.built_ipynb.read_text())
+        try:
+            c = NotebookClient(
+                nb,
+                timeout=timeout,
+                allow_errors=allow_errors,
+                record_timing=True,
+            )
+            c.execute(cwd=self.filename.parent)
+        except CellExecutionError:
+            exc_string = "".join(traceback.format_exc())
+            error = self._get_error(nb)
+            print(exc_string)
+        except CellTimeoutError as err:
+            trace = err.args[0]
+            error = NotebookError(
+                summary=trace.split("\n")[0],
+                trace=trace,
+                failing_cell_index=self._get_timeout_cell(nb),
+            )
+        except Exception as err:
+            # if at top causes https://github.com/jupyter/nbclient/issues/128
+            # from jupyter_client.kernelspec import KernelSpecManager, NoSuchKernel
+            # trace=f"{summary}\n\nInstalled Kernels: {str(KernelSpecManager().find_kernel_specs())}",
+            # https://github.com/treebeardtech/nbmake/runs/1536896858?check_suite_focus=true
+            if str(type(err)) != "<class 'jupyter_client.kernelspec.NoSuchKernel'>":
+                raise err
 
-    def _get_error(self, doc: Dict[Any, Any]) -> Optional[NotebookError]:
-        for i, cell in enumerate(doc["cells"]):
+            summary = f"Error - No such kernel: '{err.name}'"  # type: ignore
+            error = NotebookError(
+                summary=summary,
+                trace=f"{summary}",
+                failing_cell_index=0,
+            )
+
+        return NotebookResult(nb=nb, error=error)
+
+    def _get_timeout_cell(self, nb: NotebookNode) -> int:
+        for i, cell in enumerate(nb.cells):
+            if cell.cell_type != "code":
+                continue
+            if "shell.execute_reply" not in cell.metadata.execution:
+                return i
+
+        return -1
+
+    def _get_error(self, nb: NotebookNode) -> Optional[NotebookError]:
+        for i, cell in reversed(list(enumerate(nb["cells"]))):  # get LAST error
             if cell["cell_type"] != "code":
                 continue
             errors = [
@@ -74,7 +101,7 @@ class NotebookRun:
             ]
 
             if errors:
-                num_cells = len(doc["cells"])
+                num_cells = len(nb["cells"])
                 tb = "\n".join(errors[0].get("traceback", ""))
                 last_trace = tb.split("\n")[-1]
                 summary = f"cell {i + 1} of {num_cells}: {last_trace}"
@@ -82,18 +109,3 @@ class NotebookRun:
                 return NotebookError(summary=summary, trace=trace, failing_cell_index=i)
 
         return None
-
-    def execute(self) -> NotebookResult:
-        (self.path_output / "_build").mkdir(exist_ok=True, parents=True)
-        config_filename = Path(self.path_output / "_build" / "_config.yml")
-        config_filename.write_text(yaml.dump(self.config))
-
-        build(self.filename, self.path_output, config_filename, verbose=self.verbose)
-
-        self.cache.cache_notebook_file(
-            self.built_ipynb, check_validity=False, overwrite=True
-        )
-
-        doc = self._get_executed_ipynb()
-        err = self._get_error(doc)
-        return NotebookResult(document=doc, error=err)

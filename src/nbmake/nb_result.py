@@ -1,5 +1,6 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
+from nbformat import NotebookNode
 from pydantic import BaseModel
 
 
@@ -10,5 +11,5 @@ class NotebookError(BaseModel):
 
 
 class NotebookResult(BaseModel):
-    document: Dict[Any, Any]
+    nb: NotebookNode
     error: Optional[NotebookError]

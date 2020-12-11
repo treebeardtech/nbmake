@@ -1,6 +1,6 @@
 {
   "include": ["src", "tests"],
-  
+
   "typeCheckingMode": "strict",
   "reportUnusedImport": true,
   "pythonVersion": "3.7",

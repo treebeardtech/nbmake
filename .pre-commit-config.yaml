@@ -1,4 +1,8 @@
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.3.0
+    hooks:
+    -   id: trailing-whitespace
   - repo: https://github.com/kynan/nbstripout
     rev: master
     hooks:
@@ -7,6 +11,7 @@ repos:
     rev: stable
     hooks:
       - id: black
+        files: '(src|tests).*py'
   - repo: https://github.com/PyCQA/isort
     rev: 5.6.4
     hooks:
@@ -15,8 +20,13 @@ repos:
   - repo: local
     hooks:
       - id: poetry
-        name: sync with poetry
-        entry: poetry install
+        name: sync setup.py with poetry
+        entry: |
+          bash -c ' \
+            V=$(poetry version -s);
+            poetry build && tar -xvf dist/nbmake-$V.tar.gz -C dist && diff dist/nbmake-$V/setup.py setup.py \
+              || cp dist/nbmake-$V/setup.py setup.py \
+          '
         language: system
         pass_filenames: false
         files: pyproject.toml|poetry.lock
@@ -24,7 +34,7 @@ repos:
     hooks:
       - id: install typeshed
         name: typeshed
-        entry: bash -c 'git clone https://github.com/python/typeshed.git || true; pushd typeshed && git checkout 9af49c0 || popd'
+        entry: bash -c 'git clone -q https://github.com/python/typeshed.git || (cd typeshed && git checkout 9af49c0)'
         language: system
         pass_filenames: false
   - repo: local

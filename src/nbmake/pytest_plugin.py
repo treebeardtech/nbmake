@@ -1,56 +1,65 @@
-import uuid
-from datetime import datetime
-from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, Optional
 
 import yaml
 from _pytest.config import Config
-from jupyter_cache import get_cache
-from jupyter_cache.cache.main import JupyterCacheBase
 
+from .jupyter_book_adapter import create_report
 from .pytest_items import NotebookFile
-from .util import data_dir
 
 
 def pytest_addoption(parser: Any):
     group = parser.getgroup("nbmake", "notebook testing")
-    group.addoption("--nbmake", action="store_true", help="Test notebooks")
-
-    default_path_output = data_dir / str(uuid.uuid4())
-
-    group.addoption("--path-output", action="store", default=str(default_path_output))
-
-
-def pytest_configure(config: Config):
-    path_out: Path = Path(config.option.path_output)
-    (path_out / "_build").mkdir(exist_ok=True, parents=True)
-
-    (path_out / "_build" / "report_config.yml").write_text(
-        yaml.dump(
-            {
-                "exclude_patterns": [".*/*", ".*/**/*"],
-                "only_build_toc_files": True,
-                "execute": {
-                    "execute_notebooks": "cache",
-                    "cache": str(path_out / "_build" / ".jupyter_cache"),
-                },
-            }
-        )
+    group.addoption(
+        "--nbmake", action="store_true", help="Test notebooks", default=False
+    )
+    group.addoption(
+        "--overwrite",
+        action="store_true",
+        help="Overwrite the source ipynbs",
+        default=False,
+    )
+    group.addoption(
+        "--path-output",
+        action="store",
+        help="Create a test report in {path-output}/_build/html. Requires pip install 'nbmake[html]'",
     )
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     opt = parent.config.option
-    if opt.nbmake and fnmatch(path, "*.ipynb"):
+    p = Path(path)
+    if opt.nbmake and p.match("*ipynb") and "_build" not in p.parts:
         return NotebookFile.from_parent(parent, fspath=path)
 
     return None
 
 
+def pytest_configure(config: Config):
+    option = config.option
+    if not option.nbmake:
+        return
+
+    if not option.path_output:
+        return
+
+    # import shutil
+    # staging_dir=str(Path('_build') /'nbmake')
+    # shutil.rmtree(staging_dir)
+    # shutil.copytree('.', staging_dir, ignore=shutil.ignore_patterns('_build'))
+
+
 def pytest_collection_finish(session: Any) -> None:
+    option = session.config.option
+    if not option.nbmake:
+        return
     path_output: str = session.config.option.path_output
+
+    if not path_output:
+        return
+
     toc_path = Path(path_output) / "_build" / "_toc.yml"
+    toc_path.parent.mkdir(parents=True, exist_ok=True)
     nb_items = [
         Path(i.filename) for i in session.items if hasattr(session.items[0], "nbmake")
     ]
@@ -65,40 +74,8 @@ def pytest_collection_finish(session: Any) -> None:
 
 
 def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Config):
-    option: Any = config.option
-    if not hasattr(option, "path_output"):
+    option = config.option
+    if not option.nbmake or not option.path_output:
         return
 
-    path_output = Path(config.option.path_output)
-    toc_path = Path(path_output) / "_build" / "_toc.yml"
-
-    cache: JupyterCacheBase = get_cache(path_output / "_build" / ".jupyter_cache")
-
-    if len(cache.list_cache_records()) == 0:
-        return
-
-    from .jupyter_book_adapter import build
-
-    config_path = path_output / "_build" / "report_config.yml"
-
-    index_path = Path(path_output) / "_build" / "html" / "index.html"
-    url = f"file://{index_path.as_posix()}"
-    terminalreporter.line(f"\n\n{_ts()} Nbmake building test report at: \n\n  {url}\n")
-    try:
-        build(
-            Path(config.rootdir),
-            path_output,
-            config_path,
-            toc_path,
-            verbose=bool(option.verbose),
-        )
-        if index_path.exists():
-            terminalreporter.line(f"{_ts()} done.")
-        else:
-            terminalreporter.line(f"{_ts()} Non-fatal error building final test report")
-    except:
-        terminalreporter.line(f"{_ts()} Non-fatal error building final test report")
-
-
-def _ts():
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    create_report(terminalreporter, Path(option.path_output), option.verbose)

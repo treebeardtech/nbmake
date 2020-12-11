@@ -3,9 +3,9 @@ import traceback
 from pathlib import Path
 from typing import Any, Generator, Optional
 
+import nbformat
 import pytest
 from _pytest._code.code import ReprFileLocation, TerminalRepr, TerminalWriter
-from jupyter_cache import get_cache
 from pygments import highlight
 from pygments.formatters import TerminalTrueColorFormatter
 from pygments.lexers import Python3TracebackLexer
@@ -40,16 +40,23 @@ class NotebookItem(pytest.Item):
         self.filename = filename
 
     def runtest(self):
-        # config: Optional[str] = self.parent.config.option.jbc c onfig
         option = self.parent.config.option
-        path_output: Path = Path(option.path_output)
+        source = Path(self.config.rootdir) / self.filename
         run = NotebookRun(
-            Path(self.filename),
-            path_output=path_output / Path(os.path.splitext(self.filename)[0]),
-            cache=get_cache(path_output / "_build" / ".jupyter_cache"),
+            source,
             verbose=bool(option.verbose),
         )
+
         res: NotebookResult = run.execute()
+
+        if option.overwrite:
+            nbformat.write(res.nb, str(source))
+
+        if option.path_output:
+            out = Path(option.path_output) / "_build" / "nbmake" / self.filename
+            out.parent.mkdir(parents=True, exist_ok=True)
+            nbformat.write(res.nb, str(out))
+
         if res.error != None:
             raise NotebookFailedException(res)
 
