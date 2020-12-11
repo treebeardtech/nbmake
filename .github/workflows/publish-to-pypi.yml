@@ -1,0 +1,15 @@
+name: Publish to PYPI
+on:
+  release:
+    types: [published]
+jobs:
+  build-n-publish:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v2
+      - run: pip install poetry
+      - run: poetry build
+      - uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_PASSWORD }}
