@@ -1,11 +1,10 @@
-from datetime import datetime
 from pathlib import Path
-from traceback import print_exc
 from typing import Any, Optional
 
 import yaml
 from _pytest.config import Config
 
+from .jupyter_book_adapter import create_report
 from .pytest_items import NotebookFile
 
 
@@ -76,48 +75,4 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Conf
     if not option.nbmake or not option.path_output:
         return
 
-    try:
-        path_output = Path(option.path_output)
-        (path_output / "_build" / "report_config.yml").write_text(
-            yaml.dump(
-                {
-                    "execute": {
-                        "execute_notebooks": "off",
-                        "only_build_toc_files": True,
-                    },
-                }
-            )
-        )
-        toc_path = Path(path_output) / "_build" / "_toc.yml"
-
-        from .jupyter_book_adapter import build
-
-        config_path = path_output / "_build" / "report_config.yml"
-
-        index_path = Path(path_output) / "_build" / "html" / "index.html"
-        url = f"file://{index_path.absolute().as_posix()}"
-        terminalreporter.line(
-            f"\n\n{_ts()} nbmake building test report at: \n\n  {url}\n"
-        )
-        msg = build(
-            path_output / "_build" / "nbmake",
-            path_output,
-            config_path,
-            toc_path,
-            verbose=bool(option.verbose),
-        )
-
-        if index_path.exists() and msg is None:
-            terminalreporter.line(f"{_ts()} done.")
-        else:
-            terminalreporter.line(
-                f"{_ts()} Non-fatal error building final test report: {msg}"
-            )
-    except:
-        terminalreporter.line(
-            f"{_ts()} Non-fatal error building final test report: {print_exc()}"
-        )
-
-
-def _ts():
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    create_report(terminalreporter, Path(option.path_output), option.verbose)

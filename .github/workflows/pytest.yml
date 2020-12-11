@@ -35,7 +35,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.cfg.python-version }}
-      - run: pip install poetry
+      - run: pip install poetry -E html
       - run: poetry install
       - uses: pre-commit/action@v2.0.0
         with:
@@ -81,6 +81,12 @@ jobs:
       - shell: bash -l {0}
         run: |
           pip install pytest ./nbmake
+      - shell: bash -l {0}
+        run: |
+          pytest --nbmake  teachopencadd/talktorials/T000_template/talktorial.ipynb \
+      - shell: bash -l {0}
+        run: |
+          pip install './nbmake[html]'
       - shell: bash -l {0}
         run: |
           pytest \

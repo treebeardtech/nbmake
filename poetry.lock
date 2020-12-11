@@ -3,7 +3,7 @@ name = "alabaster"
 version = "0.7.12"
 description = "A configurable sidebar-enabled Sphinx theme"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -27,7 +27,7 @@ name = "appnope"
 version = "0.1.2"
 description = "Disable App Nap on macOS >= 10.9"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -35,7 +35,7 @@ name = "argon2-cffi"
 version = "20.1.0"
 description = "The secure Argon2 password hashing algorithm."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -82,7 +82,7 @@ name = "babel"
 version = "2.9.0"
 description = "Internationalization utilities"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
@@ -93,7 +93,7 @@ name = "backcall"
 version = "0.2.0"
 description = "Specifications for callback functions passed in to an API"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -101,7 +101,7 @@ name = "beautifulsoup4"
 version = "4.9.3"
 description = "Screen-scraping library"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -116,7 +116,7 @@ name = "bleach"
 version = "3.2.1"
 description = "An easy safelist-based HTML-sanitizing tool."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
@@ -129,7 +129,7 @@ name = "certifi"
 version = "2020.12.5"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -156,7 +156,7 @@ name = "chardet"
 version = "3.0.4"
 description = "Universal encoding detector for Python 2 and 3"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -164,7 +164,7 @@ name = "click"
 version = "7.1.2"
 description = "Composable command line interface toolkit"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
@@ -207,7 +207,7 @@ name = "defusedxml"
 version = "0.6.0"
 description = "XML bomb protection for Python stdlib modules"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
@@ -223,7 +223,7 @@ name = "docutils"
 version = "0.16"
 description = "Docutils -- Python Documentation Utilities"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
@@ -231,7 +231,7 @@ name = "entrypoints"
 version = "0.3"
 description = "Discover and load entry points from installed packages."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7"
 
 [[package]]
@@ -261,7 +261,7 @@ name = "gitdb"
 version = "4.0.5"
 description = "Git Object Database"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.4"
 
 [package.dependencies]
@@ -272,7 +272,7 @@ name = "gitpython"
 version = "3.1.11"
 description = "Python Git Library"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.4"
 
 [package.dependencies]
@@ -294,7 +294,7 @@ name = "idna"
 version = "2.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
@@ -302,7 +302,7 @@ name = "imagesize"
 version = "1.2.0"
 description = "Getting image size from png/jpeg/jpeg2000/gif file"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
@@ -344,10 +344,10 @@ python-versions = "*"
 
 [[package]]
 name = "ipykernel"
-version = "5.3.4"
+version = "5.4.0"
 description = "IPython Kernel for Jupyter"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.dependencies]
@@ -365,7 +365,7 @@ name = "ipython"
 version = "7.16.1"
 description = "IPython: Productive Interactive Computing"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -404,7 +404,7 @@ name = "ipywidgets"
 version = "7.5.1"
 description = "IPython HTML widgets for Jupyter"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -422,7 +422,7 @@ name = "jedi"
 version = "0.17.2"
 description = "An autocompletion tool for Python that can be used for text editors."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
@@ -437,7 +437,7 @@ name = "jinja2"
 version = "2.11.2"
 description = "A very fast and expressive template engine."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
@@ -469,9 +469,8 @@ name = "jupyter-book"
 version = "0.8.3"
 description = "Jupyter Book: Create an online book with Jupyter Notebooks"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
-develop = false
 
 [package.dependencies]
 click = "*"
@@ -480,10 +479,9 @@ jsonschema = "*"
 myst-nb = ">=0.10.1,<0.11.0"
 nbconvert = "<6"
 nbformat = "*"
-nested-lookup = ">=0.2.21,<0.3.0"
 pyyaml = "*"
 sphinx = ">=2,<4"
-sphinx-book-theme = ">=0.0.39"
+sphinx-book-theme = ">=0.0.38"
 sphinx-comments = "*"
 sphinx-copybutton = "*"
 sphinx-panels = ">=0.5.2,<0.6.0"
@@ -492,24 +490,18 @@ sphinx-togglebutton = "*"
 sphinxcontrib-bibtex = "*"
 
 [package.extras]
-all = ["pytest-cov", "altair", "coverage", "pytest-xdist", "matplotlib", "cookiecutter", "sphinx-click", "bokeh", "ipywidgets", "black", "numpy", "pre-commit (==1.17.0)", "pytest (>=3.6,<4)", "pyppeteer", "sphinxext-rediraffe (>=0.2.3,<0.3.0)", "pytest-timeout", "pandas", "sphinx-tabs", "folium", "plotly", "sympy", "sphinx-inline-tabs", "nbclient", "pytest-regressions", "jupytext (>=1.6.0,<1.7.0)", "flake8 (>=3.7.0,<3.8.0)", "beautifulsoup4"]
+all = ["pytest-cov", "black", "nbclient", "pre-commit (==1.17.0)", "matplotlib", "ipywidgets", "pytest-regressions", "sphinx-click", "pytest (>=3.6,<4)", "pandas", "sphinxext-rediraffe (>=0.2.3,<0.3.0)", "pyppeteer", "bokeh", "pytest-timeout", "jupytext (>=1.6.0,<1.7.0)", "cookiecutter", "plotly", "coverage", "pytest-xdist", "sphinx-tabs", "folium", "sympy", "beautifulsoup4", "numpy", "altair", "flake8 (>=3.7.0,<3.8.0)"]
 code_style = ["flake8 (>=3.7.0,<3.8.0)", "black", "pre-commit (==1.17.0)"]
 pdfhtml = ["pyppeteer"]
-sphinx = ["folium", "numpy", "matplotlib", "ipywidgets", "pandas", "nbclient", "sympy", "plotly", "bokeh", "altair", "sphinx-click", "sphinx-inline-tabs", "jupytext (>=1.6.0,<1.7.0)", "sphinxext-rediraffe (>=0.2.3,<0.3.0)"]
+sphinx = ["folium", "numpy", "matplotlib", "ipywidgets", "pandas", "nbclient", "sympy", "plotly", "bokeh", "altair", "sphinx-click", "sphinx-tabs", "jupytext (>=1.6.0,<1.7.0)", "sphinxext-rediraffe (>=0.2.3,<0.3.0)"]
 testing = ["coverage", "pytest (>=3.6,<4)", "pytest-cov", "pytest-xdist", "pytest-timeout", "beautifulsoup4", "matplotlib", "pytest-regressions", "jupytext (>=1.6.0,<1.7.0)", "altair", "sphinx-click", "sphinx-tabs", "pyppeteer", "cookiecutter"]
-
-[package.source]
-type = "git"
-url = "https://github.com/executablebooks/jupyter-book.git"
-reference = "6c30f55"
-resolved_reference = "6c30f554d86fe7d1a0e4ad05012a5de4133117d0"
 
 [[package]]
 name = "jupyter-cache"
 version = "0.4.1"
 description = "A defined interface for working with a cache of jupyter notebooks."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -560,7 +552,7 @@ name = "jupyter-sphinx"
 version = "0.3.2"
 description = "Jupyter Sphinx Extensions"
 category = "main"
-optional = false
+optional = true
 python-versions = ">= 3.6"
 
 [package.dependencies]
@@ -575,7 +567,7 @@ name = "latexcodec"
 version = "2.0.1"
 description = "A lexer and codec to work with LaTeX code in Python."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
@@ -586,7 +578,7 @@ name = "markdown-it-py"
 version = "0.5.6"
 description = "Python port of markdown-it. Markdown parsing, done right!"
 category = "main"
-optional = false
+optional = true
 python-versions = "~=3.6"
 
 [package.dependencies]
@@ -603,7 +595,7 @@ name = "markupsafe"
 version = "1.1.1"
 description = "Safely add untrusted strings to HTML/XML markup."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
 
 [[package]]
@@ -611,7 +603,7 @@ name = "mistune"
 version = "0.8.4"
 description = "The fastest markdown parser in pure Python"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -619,7 +611,7 @@ name = "myst-nb"
 version = "0.10.1"
 description = "A Jupyter Notebook Sphinx reader built on top of the MyST markdown parser."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -646,7 +638,7 @@ name = "myst-parser"
 version = "0.12.10"
 description = "An extended commonmark compliant parser, with bridges to docutils & sphinx."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -685,7 +677,7 @@ name = "nbconvert"
 version = "5.6.1"
 description = "Converting Jupyter Notebooks"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
@@ -713,7 +705,7 @@ name = "nbdime"
 version = "2.1.0"
 description = "Diff and merge of Jupyter Notebooks"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -758,17 +750,6 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
-name = "nested-lookup"
-version = "0.2.21"
-description = "Python functions for working with deeply nested documents (lists and dicts)"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-six = "*"
-
-[[package]]
 name = "nodeenv"
 version = "1.5.0"
 description = "Node.js virtual environment builder"
@@ -781,7 +762,7 @@ name = "notebook"
 version = "6.1.5"
 description = "A web-based notebook environment for interactive computing"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.dependencies]
@@ -809,7 +790,7 @@ name = "oset"
 version = "0.1.3"
 description = "Ordered Set."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -828,7 +809,7 @@ name = "pandocfilters"
 version = "1.4.3"
 description = "Utilities for writing pandoc filters in python"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
@@ -836,7 +817,7 @@ name = "parso"
 version = "0.7.1"
 description = "A Python Parser"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.extras]
@@ -855,7 +836,7 @@ name = "pexpect"
 version = "4.8.0"
 description = "Pexpect allows easy control of interactive console applications."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -866,7 +847,7 @@ name = "pickleshare"
 version = "0.7.5"
 description = "Tiny 'shelve'-like database with concurrency support"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -906,7 +887,7 @@ name = "prometheus-client"
 version = "0.9.0"
 description = "Python client for the Prometheus monitoring system."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.extras]
@@ -917,7 +898,7 @@ name = "prompt-toolkit"
 version = "3.0.8"
 description = "Library for building powerful interactive command lines in Python"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6.1"
 
 [package.dependencies]
@@ -928,7 +909,7 @@ name = "ptyprocess"
 version = "0.6.0"
 description = "Run a subprocess in a pseudo terminal"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -944,7 +925,7 @@ name = "pybtex"
 version = "0.23.0"
 description = "A BibTeX-compatible bibliography processor in Python"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*"
 
 [package.dependencies]
@@ -960,7 +941,7 @@ name = "pybtex-docutils"
 version = "0.2.2"
 description = "A docutils backend for pybtex."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
@@ -997,7 +978,7 @@ name = "pydata-sphinx-theme"
 version = "0.4.1"
 description = "Bootstrap-based Sphinx theme from the PyData community"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.dependencies]
@@ -1008,7 +989,7 @@ name = "pygments"
 version = "2.7.3"
 description = "Pygments is a syntax highlighting package written in Python."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [[package]]
@@ -1110,7 +1091,7 @@ name = "pytz"
 version = "2020.4"
 description = "World timezone definitions, modern and historical"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -1126,7 +1107,7 @@ name = "pywinpty"
 version = "0.5.7"
 description = "Python bindings for the winpty library"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -1154,7 +1135,7 @@ name = "requests"
 version = "2.25.0"
 description = "Python HTTP for Humans."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
@@ -1172,7 +1153,7 @@ name = "send2trash"
 version = "1.5.0"
 description = "Send file to trash natively under Mac OS X, Windows and Linux."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -1188,7 +1169,7 @@ name = "smmap"
 version = "3.0.4"
 description = "A pure Python implementation of a sliding window memory map manager"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
@@ -1196,15 +1177,15 @@ name = "snowballstemmer"
 version = "2.0.0"
 description = "This package provides 26 stemmers for 25 languages generated from Snowball algorithms."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
 name = "soupsieve"
-version = "2.0.1"
+version = "2.1"
 description = "A modern CSS selector implementation for Beautiful Soup."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [[package]]
@@ -1212,7 +1193,7 @@ name = "sphinx"
 version = "3.3.1"
 description = "Python documentation generator"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.dependencies]
@@ -1243,7 +1224,7 @@ name = "sphinx-book-theme"
 version = "0.0.39"
 description = "Jupyter Book: Create an online book with Jupyter Notebooks"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -1266,7 +1247,7 @@ name = "sphinx-comments"
 version = "0.0.3"
 description = "Add comments and annotation to your documentation."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -1282,7 +1263,7 @@ name = "sphinx-copybutton"
 version = "0.3.1"
 description = "Add a copy button to each of your code cells."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -1296,7 +1277,7 @@ name = "sphinx-panels"
 version = "0.5.2"
 description = "A sphinx extension for creating panels in a grid layout."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -1315,7 +1296,7 @@ name = "sphinx-thebe"
 version = "0.0.8"
 description = "Integrate interactive code blocks into your documentation with Thebe and Binder."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -1330,7 +1311,7 @@ name = "sphinx-togglebutton"
 version = "0.2.3"
 description = "Toggle page content and collapse admonitions in Sphinx."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -1345,7 +1326,7 @@ name = "sphinxcontrib-applehelp"
 version = "1.0.2"
 description = "sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.extras]
@@ -1357,7 +1338,7 @@ name = "sphinxcontrib-bibtex"
 version = "1.0.0"
 description = "A Sphinx extension for BibTeX style citations."
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -1371,7 +1352,7 @@ name = "sphinxcontrib-devhelp"
 version = "1.0.2"
 description = "sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp document."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.extras]
@@ -1383,7 +1364,7 @@ name = "sphinxcontrib-htmlhelp"
 version = "1.0.3"
 description = "sphinxcontrib-htmlhelp is a sphinx extension which renders HTML help files"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.extras]
@@ -1395,7 +1376,7 @@ name = "sphinxcontrib-jsmath"
 version = "1.0.1"
 description = "A sphinx extension which renders display math in HTML via JavaScript"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.extras]
@@ -1406,7 +1387,7 @@ name = "sphinxcontrib-qthelp"
 version = "1.0.3"
 description = "sphinxcontrib-qthelp is a sphinx extension which outputs QtHelp document."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.extras]
@@ -1418,7 +1399,7 @@ name = "sphinxcontrib-serializinghtml"
 version = "1.1.4"
 description = "sphinxcontrib-serializinghtml is a sphinx extension which outputs \"serialized\" HTML files (json and pickle)."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.5"
 
 [package.extras]
@@ -1430,7 +1411,7 @@ name = "sqlalchemy"
 version = "1.3.20"
 description = "Database Abstraction Library"
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.extras]
@@ -1450,7 +1431,7 @@ name = "terminado"
 version = "0.9.1"
 description = "Tornado websocket backend for the Xterm.js Javascript terminal emulator library."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -1463,7 +1444,7 @@ name = "testpath"
 version = "0.4.4"
 description = "Test utilities for code working with files and commands"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.extras]
@@ -1506,7 +1487,7 @@ name = "urllib3"
 version = "1.26.2"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 category = "main"
-optional = false
+optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
 
 [package.extras]
@@ -1539,7 +1520,7 @@ name = "wcwidth"
 version = "0.2.5"
 description = "Measures the displayed width of unicode strings in a terminal"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -1547,7 +1528,7 @@ name = "webencodings"
 version = "0.5.1"
 description = "Character encoding aliases for legacy web content"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [[package]]
@@ -1555,7 +1536,7 @@ name = "widgetsnbextension"
 version = "3.5.1"
 description = "IPython HTML widgets for Jupyter"
 category = "main"
-optional = false
+optional = true
 python-versions = "*"
 
 [package.dependencies]
@@ -1573,10 +1554,13 @@ python-versions = ">=3.6"
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
+[extras]
+html = ["jupyter-book"]
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.1"
-content-hash = "ccd37589d321a08599096bacb7bc8c2307f4a042197ac87cab71eaf39ce5998d"
+content-hash = "cc2790a5cba4309a859e3c591d9987d57f0421c7c9851f6f2fbb0e1fadcee7aa"
 
 [metadata.files]
 alabaster = [
@@ -1801,8 +1785,8 @@ iniconfig = [
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
 ipykernel = [
-    {file = "ipykernel-5.3.4-py3-none-any.whl", hash = "sha256:d6fbba26dba3cebd411382bc484f7bc2caa98427ae0ddb4ab37fe8bfeb5c7dd3"},
-    {file = "ipykernel-5.3.4.tar.gz", hash = "sha256:9b2652af1607986a1b231c62302d070bc0534f564c393a5d9d130db9abbbe89d"},
+    {file = "ipykernel-5.4.0-py3-none-any.whl", hash = "sha256:496c27cd9922724d2847d3e7085390123e5210b58aff6fed767e67a9b2800ae3"},
+    {file = "ipykernel-5.4.0.tar.gz", hash = "sha256:ddd4247ab83d18ae79b05f5e2d6cc58ca29a8034425d5ee6922e5a98b7cbdbe6"},
 ]
 ipython = [
     {file = "ipython-7.16.1-py3-none-any.whl", hash = "sha256:2dbcc8c27ca7d3cfe4fcdff7f45b27f9a8d3edfa70ff8024a71c7a8eb5f09d64"},
@@ -1828,7 +1812,10 @@ jsonschema = [
     {file = "jsonschema-3.2.0-py2.py3-none-any.whl", hash = "sha256:4e5b3cf8216f577bee9ce139cbe72eca3ea4f292ec60928ff24758ce626cd163"},
     {file = "jsonschema-3.2.0.tar.gz", hash = "sha256:c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a"},
 ]
-jupyter-book = []
+jupyter-book = [
+    {file = "jupyter-book-0.8.3.tar.gz", hash = "sha256:5a09311101e0cb2712ee97748f0bead732c7f6128831f68a0751700cd8467f41"},
+    {file = "jupyter_book-0.8.3-py3-none-any.whl", hash = "sha256:90fdea11b2a150ee7bed6229381edaad625ae962e3275727c653191eafd251c3"},
+]
 jupyter-cache = [
     {file = "jupyter-cache-0.4.1.tar.gz", hash = "sha256:cbcac451af61f94703d8630a10356b0d8a169c04c794045c8b0af11777b217fe"},
     {file = "jupyter_cache-0.4.1-py3-none-any.whl", hash = "sha256:8bbcee9fcd26adaba971b07920cbd5d14c61220bc6b96e3ab3d56d24b7831261"},
@@ -1919,9 +1906,6 @@ nbformat = [
 nest-asyncio = [
     {file = "nest_asyncio-1.4.3-py3-none-any.whl", hash = "sha256:dbe032f3e9ff7f120e76be22bf6e7958e867aed1743e6894b8a9585fe8495cc9"},
     {file = "nest_asyncio-1.4.3.tar.gz", hash = "sha256:eaa09ef1353ebefae19162ad423eef7a12166bcc63866f8bff8f3635353cd9fa"},
-]
-nested-lookup = [
-    {file = "nested-lookup-0.2.21.tar.gz", hash = "sha256:23789e328bd1d0b3f9db93cf51b7103a978dd0d8a834770d2c19b365e934ab96"},
 ]
 nodeenv = [
     {file = "nodeenv-1.5.0-py2.py3-none-any.whl", hash = "sha256:5304d424c529c997bc888453aeaa6362d242b6b4631e90f3d4bf1b290f1c84a9"},
@@ -2144,8 +2128,8 @@ snowballstemmer = [
     {file = "snowballstemmer-2.0.0.tar.gz", hash = "sha256:df3bac3df4c2c01363f3dd2cfa78cce2840a79b9f1c2d2de9ce8d31683992f52"},
 ]
 soupsieve = [
-    {file = "soupsieve-2.0.1-py3-none-any.whl", hash = "sha256:1634eea42ab371d3d346309b93df7870a88610f0725d47528be902a0d95ecc55"},
-    {file = "soupsieve-2.0.1.tar.gz", hash = "sha256:a59dc181727e95d25f781f0eb4fd1825ff45590ec8ff49eadfd7f1a537cc0232"},
+    {file = "soupsieve-2.1-py3-none-any.whl", hash = "sha256:4bb21a6ee4707bf43b61230e80740e71bfe56e55d1f1f50924b087bb2975c851"},
+    {file = "soupsieve-2.1.tar.gz", hash = "sha256:6dc52924dc0bc710a5d16794e6b3480b2c7c08b07729505feab2b2c16661ff6e"},
 ]
 sphinx = [
     {file = "Sphinx-3.3.1-py3-none-any.whl", hash = "sha256:d4e59ad4ea55efbb3c05cde3bfc83bfc14f0c95aa95c3d75346fcce186a47960"},

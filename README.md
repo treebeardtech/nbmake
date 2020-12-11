@@ -22,7 +22,7 @@ See [docs](https://treebeardtech.github.io/nbmake) to get started.
 
 ### Install local package
 ```
-poetry install
+poetry install -E html
 ```
 
 ### Activate shell
