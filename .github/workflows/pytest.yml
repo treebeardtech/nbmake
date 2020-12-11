@@ -41,7 +41,7 @@ jobs:
         with:
           extra_args: --verbose --all-files
 
-      - run: poetry run pytest pytest tests/test_nb_run.py # run without extras
+      - run: poetry run pytest tests/test_nb_run.py # run without extras
       - run: poetry install -E html
       - run: poetry run pytest --cov-report=xml --cov=src
 
