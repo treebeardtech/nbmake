@@ -44,6 +44,10 @@ class NotebookRun:
                 allow_errors = nb.metadata.execution.allow_errors
 
         error: Optional[NotebookError] = None
+
+        # if at top causes https://github.com/jupyter/nbclient/issues/128
+        from jupyter_client.kernelspec import KernelSpecManager, NoSuchKernel
+
         try:
             c = NotebookClient(
                 nb,
@@ -62,6 +66,14 @@ class NotebookRun:
                 summary=trace.split("\n")[0],
                 trace=trace,
                 failing_cell_index=self._get_timeout_cell(nb),
+            )
+        except NoSuchKernel as err:
+
+            summary = f"Error - No such kernel: '{err.name}'"
+            error = NotebookError(
+                summary=summary,
+                trace=f"{summary}\n\nInstalled Kernels: {str(KernelSpecManager().find_kernel_specs())}",
+                failing_cell_index=0,
             )
 
         return NotebookResult(nb=nb, error=error)

@@ -100,3 +100,14 @@ class TestNotebookRun:
         assert res.error and res.error.failing_cell_index == 0
         assert res.nb.cells[0].outputs[0].ename == "Exception"
         assert res.nb.cells[1].outputs == []
+
+    def test_when_unknown_kernel_then_error(self, testdir: Testdir):
+        nb = new_notebook(
+            metadata={"kernelspec": {"display_name": "asdf", "name": "asdf"}}
+        )
+
+        write(nb, filename)
+
+        run = NotebookRun(filename)
+        res: NotebookResult = run.execute()
+        assert res.error and "No such kernel" in res.error.summary
