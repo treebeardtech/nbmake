@@ -13,6 +13,7 @@ package_data = \
 install_requires = \
 ['PyYAML>=5.3.1,<6.0.0',
  'Pygments>=2.7.3,<3.0.0',
+ 'ipykernel>=5.4.0,<6.0.0',
  'nbclient<0.4',
  'nbformat>=5.0.8,<6.0.0',
  'pathlib>=1.0.1,<2.0.0',
