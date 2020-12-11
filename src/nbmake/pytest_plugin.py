@@ -14,12 +14,15 @@ def pytest_addoption(parser: Any):
         "--nbmake", action="store_true", help="Test notebooks", default=False
     )
     group.addoption(
-        "--overwrite", action="store_true", help="Create HTML report", default=False
+        "--overwrite",
+        action="store_true",
+        help="Overwrite the source ipynbs",
+        default=False,
     )
     group.addoption(
         "--path-output",
         action="store",
-        help="Location for _build/html and _build/.jupyter_cache dirs, default is root directory.",
+        help="Create a test report in {path-output}/_build/html. Requires pip install 'nbmake[html]'",
     )
 
 
