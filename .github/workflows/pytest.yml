@@ -36,11 +36,13 @@ jobs:
         with:
           python-version: ${{ matrix.cfg.python-version }}
       - run: pip install poetry
-      - run: poetry install -E html
+      - run: poetry install
       - uses: pre-commit/action@v2.0.0
         with:
           extra_args: --verbose --all-files
 
+      - run: poetry run pytest tests/test_nb_run.py # run without extras
+      - run: poetry install -E html
       - run: poetry run pytest --cov-report=xml --cov=src
 
       - run: poetry run python -m ipykernel install --user --name nbmake
@@ -80,7 +82,7 @@ jobs:
           auto-activate-base: false
       - shell: bash -l {0}
         run: |
-          pip install pytest ./nbmake
+          pip install ./nbmake
       - shell: bash -l {0}
         run: |
           pytest --nbmake  teachopencadd/talktorials/T000_template/talktorial.ipynb \

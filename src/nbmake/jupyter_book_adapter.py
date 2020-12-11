@@ -34,7 +34,7 @@ def create_report(terminalreporter, path_output: Path, verbose: int):
 
     if not JB.exists():
         print(
-            f"Non-fatal error: Cannot build test report as jupyter-book not found at {JB}.\n\nDo you need to `pip install 'nbmake[html]'`?"
+            f"Non-fatal error: Cannot build test report as jupyter-book executable not found at {JB}.\n\nDo you need to `pip install 'nbmake[html]'`?\n"
         )
         return
 
