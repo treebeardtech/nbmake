@@ -20,3 +20,6 @@ repository:
 launch_buttons:
   thebe: false
   binder: false
+
+execute:
+  execute_notebooks: force

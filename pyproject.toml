@@ -1,6 +1,6 @@
 [tool.poetry]
 authors = ["alex-treebeard <alex@treebeard.io>"]
-description = "Pytest plugin for releasing notebooks"
+description = "Pytest plugin for testing notebooks"
 homepage = "https://github.com/treebeardtech/nbmake"
 license = "Apache-2.0"
 name = "nbmake"
