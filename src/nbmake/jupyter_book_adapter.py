@@ -36,6 +36,8 @@ def create_report(terminalreporter, path_output: Path, verbose: int):
         print(
             f"Non-fatal error: Cannot build test report as jupyter-book not found at {JB}.\n\nDo you need to `pip install 'nbmake[html]'`?"
         )
+        return
+
     msg = build(
         path_output / "_build" / "nbmake",
         path_output,

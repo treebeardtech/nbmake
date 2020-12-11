@@ -35,8 +35,8 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.cfg.python-version }}
-      - run: pip install poetry -E html
-      - run: poetry install
+      - run: pip install poetry
+      - run: poetry install -E html
       - uses: pre-commit/action@v2.0.0
         with:
           extra_args: --verbose --all-files

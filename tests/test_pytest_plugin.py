@@ -3,6 +3,8 @@ from __future__ import print_function
 import os
 from importlib import import_module, reload
 from pathlib import Path
+from subprocess import CalledProcessError
+from unittest.mock import patch
 
 from _pytest.pytester import Testdir
 from nbformat import read
@@ -145,3 +147,25 @@ def test_when_path_output_then_build_dir(testdir: Testdir):
     hook_recorder = testdir.inline_run("--nbmake", "--path-output=.")
     assert hook_recorder.ret == ExitCode.TESTS_FAILED
     assert Path("_build/html").exists()
+
+
+def test_when_jb_exception_then_still_passes(testdir: Testdir):
+    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
+
+    with patch("subprocess.check_output") as mock:
+        mock.side_effect = CalledProcessError(1, "", "blah".encode())
+        hook_recorder = testdir.inline_run("--nbmake", "--path-output=.")
+        assert hook_recorder.ret == ExitCode.OK
+        assert not Path("_build/html").exists()
+
+
+def test_when_jb_not_installed_then_still_passes(testdir: Testdir):
+    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
+
+    import nbmake.jupyter_book_adapter
+
+    nbmake.jupyter_book_adapter.JB = Path("asdf")
+
+    hook_recorder = testdir.inline_run("--nbmake", "--path-output=.")
+    assert hook_recorder.ret == ExitCode.OK
+    assert not Path("_build/html").exists()
