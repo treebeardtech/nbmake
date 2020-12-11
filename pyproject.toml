@@ -22,6 +22,7 @@ python = "^3.6.1"
 nbclient = "<0.4"
 jupyter-book = {version = "^0.8.3", optional= true}
 nbformat = "^5.0.8"
+Pygments = "^2.7.3"
 
 [tool.poetry.extras]
 html = ["jupyter-book"]

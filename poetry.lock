@@ -989,7 +989,7 @@ name = "pygments"
 version = "2.7.3"
 description = "Pygments is a syntax highlighting package written in Python."
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.5"
 
 [[package]]
@@ -1560,7 +1560,7 @@ html = ["jupyter-book"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.1"
-content-hash = "cc2790a5cba4309a859e3c591d9987d57f0421c7c9851f6f2fbb0e1fadcee7aa"
+content-hash = "867c783aafc7c39e8e5a324bb1f5b9bdbb19c53f676894711781855ae427ecdb"
 
 [metadata.files]
 alabaster = [

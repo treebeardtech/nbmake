@@ -1,9 +1,6 @@
 from pathlib import Path
 
-import pytest
 from _pytest.pytester import Testdir
-from jupyter_cache import get_cache
-from jupyter_cache.cache.main import JupyterCacheBase
 from nbformat import write
 from nbformat.v4 import new_code_cell, new_notebook, new_output
 
@@ -18,11 +15,6 @@ pytest_plugins = "pytester"
 filename = Path("x.ipynb")
 
 path_output = Path("_build")
-
-
-@pytest.fixture
-def cache(request) -> JupyterCacheBase:
-    return get_cache(path_output / request.node.name / "_build" / ".jupyter_cache")
 
 
 class TestNotebookRun:
