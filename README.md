@@ -9,6 +9,10 @@
 
 **Who is this for?** Research/Machine Learning Software Engineers who maintain packages/teaching materials with documentation written in notebooks.
 
+## See Also
+
+* [nbmake-action](https://github.com/treebeardtech/nbmake-action)
+
 ## Functionality
 
 1. Executes notebooks using pytest and nbclient, allowing parallel notebook testing
