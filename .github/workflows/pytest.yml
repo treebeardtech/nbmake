@@ -102,5 +102,3 @@ jobs:
             teachopencadd/talktorials/T005_compound_clustering/talktorial.ipynb \
             teachopencadd/talktorials/T007_compound_activity_machine_learning/talktorial.ipynb \
             teachopencadd/talktorials/T009_compound_ensemble_pharmacophores/talktorial.ipynb \
-      - if: always()
-        run: netlify deploy --dir=_build/html --auth=${{ secrets.NETLIFY_TOKEN }} --site=${{ secrets.NETLIFY_SITE_API_ID }}

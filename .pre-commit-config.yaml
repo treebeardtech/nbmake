@@ -34,7 +34,12 @@ repos:
     hooks:
       - id: install typeshed
         name: typeshed
-        entry: bash -c 'git clone -q https://github.com/python/typeshed.git || (cd typeshed && git checkout 9af49c0)'
+        entry: |
+          bash -c '
+            git clone -q https://github.com/python/typeshed.git || true
+            cd typeshed
+            git checkout 9af49c0
+          '
         language: system
         pass_filenames: false
   - repo: local
