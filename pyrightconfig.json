@@ -4,7 +4,6 @@
   "typeCheckingMode": "strict",
   "reportUnusedImport": true,
   "pythonVersion": "3.7",
-  "typeshedPath": "typeshed",
   "enableTypeIgnoreComments": true,
   "reportUnknownMemberType": "warning",
   "reportUnknownParameterType": "warning",
