@@ -15,7 +15,15 @@
 2. Optionally writes back to the repo, allowing faster building of [nbsphinx](https://github.com/spatialaudio/nbsphinx) or [jupyter book](https://github.com/executablebooks/jupyter-book) docs
 3. Optionally builds an HTML report using [jupyter-book](https://github.com/executablebooks/jupyter-book) of the test run which can be uploaded to hosting providers such as Netlify.
 
-**See [docs](https://treebeardtech.github.io/nbmake) to get started.**
+
+## Quick Start
+
+```
+pip install pytest nbmake
+pytest --nbmake **/*ipynb
+```
+
+**See [docs](https://treebeardtech.github.io/nbmake) for more.**
 <br/>
 <br/>
 
