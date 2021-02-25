@@ -52,19 +52,14 @@ class NotebookItem(pytest.Item):
         if option.overwrite:
             nbformat.write(res.nb, str(source))
 
-        if option.path_output:
-            out = Path(option.path_output) / "_build" / "nbmake" / self.filename
-            out.parent.mkdir(parents=True, exist_ok=True)
-            nbformat.write(res.nb, str(out))
-
         if res.error != None:
             raise NotebookFailedException(res)
 
     def repr_failure(self, excinfo: Any, style: Optional[Any] = None) -> TerminalRepr:
-        def create_internal_err() -> str:
+        def create_internal_err() -> Any:
             tb = "".join(traceback.format_tb(excinfo.tb))
             err = f"{excinfo.value}\n{tb}"
-            err_str: str = (
+            err_str: Any = (
                 err
                 if os.name == "nt"
                 else highlight(

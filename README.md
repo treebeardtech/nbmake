@@ -23,39 +23,66 @@ pip install pytest nbmake
 pytest --nbmake **/*ipynb
 ```
 
-**See [docs](https://treebeardtech.github.io/nbmake) for more.**
-<br/>
-<br/>
+## Allow errors and Configure Cell Timeouts
 
-## See Also
+nbmake is built on top of [nbclient](https://github.com/jupyter/nbclient) and designed to compatible with nbsphinx and jupyter-book.
 
-* [nbmake-action](https://github.com/treebeardtech/nbmake-action)
+The [jupyter book docs](https://jupyterbook.org/content/execute.html?highlight=allow_error#dealing-with-code-that-raises-errors) have a good description of how to ignore errors -- note that nbmake does not work with the external `_config.yml` configuration file. You must use the notebook JSON metadata field.
 
-### HTML Report Example
+## Parallelisation
 
-![HTML Report](docs/screen.png)
-
-
-## Developing
-
-### Install local package
+Parallelisation with xdist is experimental upon initial release, but you can try it out:
 ```
-poetry install -E html
+pip install pytest-xdist
+
+pytest --nbmake -n=auto
 ```
 
-### Activate shell
+It is also possible to parallelise at a CI-level using strategies, see [example](https://github.com/LabForComputationalVision/plenoptic/blob/master/.github/workflows/treebeard.yml)
+
+### Build Jupyter Books Faster
+
+Using xdist and the `--overwrite` flag let you build a large jupyter book repo faster:
+
 ```
-poetry shell
+pytest --nbmake --overwrite -n=auto examples
+jb build examples
+```
+## Advice on Usage
+
+nbmake is best used in a scenario where you use the ipynb files only for development. Consumption of notebooks is primarily done via a docs site, built through jupyter book, nbsphinx, or some other means. If using one of these tools, you are able to write assertion code in cells which will be [hidden from readers](https://jupyterbook.org/interactive/hiding.html).
+
+### Pre-commit
+
+Treating notebooks like source files lets you keep your repo minimal. Some tools, such as plotly may drop several megabytes of javascript in your output cells, as a result, stripping out notebooks on pre-commit is advisable:
+
+```
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/kynan/nbstripout
+    rev: master
+    hooks:
+      - id: nbstripout
 ```
 
-### Run static checks
-```
-pre-commit run --all-files
-pre-commit install
-```
+See https://pre-commit.com/ for more...
 
-### Run tests
+## Disable Nbmake
+
+Implicitly:
 ```
 pytest
 ```
 
+Explicitly:
+```
+pytest -p no:nbmake
+```
+
+## See Also:
+
+* [nbmake action](https://github.com/treebeardtech/treebeard)
+* [pytest](https://pytest.org/)
+* [jupyter book](https://github.com/executablebooks/jupyter-book)
+* [jupyter cache](https://github.com/executablebooks/jupyter-cache)
+* [MyST-NB](https://github.com/executablebooks/MyST-NB)

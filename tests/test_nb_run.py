@@ -14,8 +14,6 @@ pytest_plugins = "pytester"
 
 filename = Path("x.ipynb")
 
-path_output = Path("_build")
-
 
 class TestNotebookRun:
     def test_when_passing_then_no_failing_cell(self, testdir: Testdir):

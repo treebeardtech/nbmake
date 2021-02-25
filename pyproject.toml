@@ -14,19 +14,14 @@ version = "0.2"
 nbmake = "nbmake.pytest_plugin"
 
 [tool.poetry.dependencies]
-PyYAML = "^5.3.1"
 pathlib = "^1.0.1"
 pydantic = "^1.7.2"
 pytest = "^6.1.2"
 python = "^3.6.1"
 nbclient = ">=0.3, <1.0"
-jupyter-book = {version = "^0.8.3", optional= true}
 nbformat = "^5.0.8"
 Pygments = "^2.7.3"
 ipykernel = "^5.4.0"
-
-[tool.poetry.extras]
-html = ["jupyter-book"]
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.8.2"
@@ -34,6 +29,7 @@ pytest-cov = "^2.10.1"
 pytest-xdist = "^2.1.0"
 virtualenv = "^20.1.0"
 nbclient = "<0.4"
+jupyter-book = "^0.10.0"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
