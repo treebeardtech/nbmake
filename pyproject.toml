@@ -8,7 +8,7 @@ packages = [
   {include = "nbmake", from = "src"},
 ]
 readme = "README.md"
-version = "0.2"
+version = "0.3"
 
 [tool.poetry.plugins."pytest11"]
 nbmake = "nbmake.pytest_plugin"
