@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nbmake &#8212; nbmake</title>
     
-  <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+  <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
     
   <link rel="stylesheet"
@@ -34,13 +34,12 @@
     <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="_static/js/index.3da636dd464baa7582d2.js">
+  <link rel="preload" as="script" href="_static/js/index.d3f166471bb80abb5163.js">
 
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <script src="_static/togglebutton.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
@@ -184,98 +183,6 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
-        </div>
-        <nav id="bd-toc-nav">
-            <ul class="nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#quickstart">
-   Quickstart
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#output">
-     Output
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#command-line-options">
-   Command Line Options
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#run-only-against-ipynb-files">
-   Run Only Against IPYNB Files
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#create-an-html-report">
-   Create an HTML Report
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id1">
-     Output
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#run-and-upload-report-on-github-actions-using-netlify">
-   Run and upload report on GitHub Actions using Netlify
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#disable-nbmake">
-   Disable Nbmake
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#allow-errors-and-configure-cell-timeouts">
-   Allow errors and Configure Cell Timeouts
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#parallelisation">
-   Parallelisation
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#build-jupyter-books-faster">
-     Build Jupyter Books Faster
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#advice-on-usage">
-   Advice on Usage
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#pre-commit">
-     Pre-commit
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#contributing">
-   Contributing
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#see-also">
-   See Also:
-  </a>
- </li>
-</ul>
-
-        </nav>
-        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -285,176 +192,8 @@
                 
   <div class="section" id="nbmake">
 <h1>nbmake<a class="headerlink" href="#nbmake" title="Permalink to this headline">¶</a></h1>
-<p>nbmake tests notebook documentation and is designed for notebooks which are non-deterministic.</p>
-<p>Despite being a pytest plugin, nbmake is kernel agnostic. It supports any language.</p>
-<div class="section" id="quickstart">
-<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pytest nbmake
-pytest --nbmake
-</pre></div>
-</div>
-<div class="section" id="output">
-<h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">==========================================================================================</span> <span class="n">test</span> <span class="n">session</span> <span class="n">starts</span> <span class="o">==========================================================================================</span>
-<span class="n">platform</span> <span class="n">darwin</span> <span class="o">--</span> <span class="n">Python</span> <span class="mf">3.7</span><span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="n">pytest</span><span class="o">-</span><span class="mf">6.1</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span> <span class="n">py</span><span class="o">-</span><span class="mf">1.9</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">pluggy</span><span class="o">-</span><span class="mf">0.13</span><span class="o">.</span><span class="mi">1</span>
-<span class="n">rootdir</span><span class="p">:</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">asdf</span><span class="o">/</span><span class="n">git</span><span class="o">/</span><span class="n">treebeardtech</span><span class="o">/</span><span class="n">nbmake</span><span class="p">,</span> <span class="n">configfile</span><span class="p">:</span> <span class="n">pytest</span><span class="o">.</span><span class="n">ini</span>
-<span class="n">plugins</span><span class="p">:</span> <span class="n">nbmake</span><span class="o">-</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">xdist</span><span class="o">-</span><span class="mf">2.1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">cov</span><span class="o">-</span><span class="mf">2.10</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">forked</span><span class="o">-</span><span class="mf">1.3</span><span class="o">.</span><span class="mi">0</span>
-<span class="n">collected</span> <span class="mi">1</span> <span class="n">item</span>                                                                                                                                                                                        
-
-<span class="n">landing</span><span class="o">-</span><span class="n">page</span><span class="o">.</span><span class="n">ipynb</span> <span class="o">.</span>                                                                                                                                                                              <span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span>
-
-<span class="o">===========================================================================================</span> <span class="mi">1</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">1.56</span><span class="n">s</span> <span class="o">===========================================================================================</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="command-line-options">
-<h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
-<p>Using the following options you can control how notebooks are executed, and configure CI pipelines</p>
-<div class="cell tag_hide-input docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pytest -h <span class="p">|</span> grep -A6 <span class="s1">&#39;notebook testing&#39;</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>notebook testing:
-  --nbmake              Test notebooks
-  --overwrite           Overwrite the source ipynbs
-  --path-output=PATH_OUTPUT
-                        Create a test report in {path-output}/_build/html.
-                        Requires pip install &#39;nbmake[html]&#39;
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="section" id="run-only-against-ipynb-files">
-<h2>Run Only Against IPYNB Files<a class="headerlink" href="#run-only-against-ipynb-files" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="o">--</span><span class="n">nbmake</span> <span class="o">**/*</span><span class="n">ipynb</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="create-an-html-report">
-<h2>Create an HTML Report<a class="headerlink" href="#create-an-html-report" title="Permalink to this headline">¶</a></h2>
-<p>To view outputs executed remotely, install jupyter-book:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pytest</span> <span class="s1">&#39;nbmake[html]&#39;</span>
-</pre></div>
-</div>
-<p>Then specify a path:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="o">--</span><span class="n">nbmake</span> <span class="o">--</span><span class="n">path</span><span class="o">-</span><span class="n">output</span><span class="o">=.</span>
-</pre></div>
-</div>
-<div class="section" id="id1">
-<h3>Output<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">==========================================================================================</span> <span class="n">test</span> <span class="n">session</span> <span class="n">starts</span> <span class="o">==========================================================================================</span>
-<span class="n">platform</span> <span class="n">darwin</span> <span class="o">--</span> <span class="n">Python</span> <span class="mf">3.7</span><span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="n">pytest</span><span class="o">-</span><span class="mf">6.1</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span> <span class="n">py</span><span class="o">-</span><span class="mf">1.9</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">pluggy</span><span class="o">-</span><span class="mf">0.13</span><span class="o">.</span><span class="mi">1</span>
-<span class="n">rootdir</span><span class="p">:</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">asdf</span><span class="o">/</span><span class="n">git</span><span class="o">/</span><span class="n">treebeardtech</span><span class="o">/</span><span class="n">nbmake</span><span class="p">,</span> <span class="n">configfile</span><span class="p">:</span> <span class="n">pytest</span><span class="o">.</span><span class="n">ini</span>
-<span class="n">plugins</span><span class="p">:</span> <span class="n">nbmake</span><span class="o">-</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">xdist</span><span class="o">-</span><span class="mf">2.1</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">cov</span><span class="o">-</span><span class="mf">2.10</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">forked</span><span class="o">-</span><span class="mf">1.3</span><span class="o">.</span><span class="mi">0</span>
-<span class="n">collected</span> <span class="mi">1</span> <span class="n">item</span>                                                                                                                                                                                        
-
-<span class="n">landing</span><span class="o">-</span><span class="n">page</span><span class="o">.</span><span class="n">ipynb</span> <span class="o">.</span>                                                                                                                                                                              <span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span>
-
-
-<span class="mi">2020</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">11</span> <span class="mi">11</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">48</span> <span class="n">nbmake</span> <span class="n">building</span> <span class="n">test</span> <span class="n">report</span> <span class="n">at</span><span class="p">:</span> 
-
-  <span class="n">file</span><span class="p">:</span><span class="o">///</span><span class="n">Users</span><span class="o">/</span><span class="n">asdf</span><span class="o">/</span><span class="n">git</span><span class="o">/</span><span class="n">treebeardtech</span><span class="o">/</span><span class="n">nbmake</span><span class="o">/</span><span class="n">docs</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">html</span>
-
-<span class="mi">2020</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">11</span> <span class="mi">11</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">50</span> <span class="n">done</span><span class="o">.</span>
-
-<span class="o">===========================================================================================</span> <span class="mi">1</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">4.26</span><span class="n">s</span> <span class="o">===========================================================================================</span>
-</pre></div>
-</div>
-<p>The report contains only the stripped out and executed notebooks
-<img alt="HTML report" src="_images/screen.png" /></p>
-</div>
-</div>
-<div class="section" id="run-and-upload-report-on-github-actions-using-netlify">
-<h2>Run and upload report on GitHub Actions using Netlify<a class="headerlink" href="#run-and-upload-report-on-github-actions-using-netlify" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>    <span class="p p-Indicator">-</span> <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pip install pytest &#39;nbmake[html]&#39;</span>
-    <span class="p p-Indicator">-</span> <span class="nt">run</span><span class="p">:</span> <span class="p p-Indicator">|</span>
-        <span class="no">pytest --nbmake --path-output=.</span>
-    <span class="p p-Indicator">-</span> <span class="nt">if</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">failure()</span>
-      <span class="nt">run</span><span class="p">:</span> <span class="p p-Indicator">|</span>
-        <span class="no">netlify deploy --dir=_build/html --auth=${{ secrets.NETLIFY_TOKEN }} --site=${{ secrets.NETLIFY_SITE_API_ID }}</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>...
-- Waiting for deploy to go live...
-✔ Deploy is live!
-
-Logs:              https://app.netlify.com/sites/festive-payne-ce084c/deploys/5fcf58ec72dc52a440dffcd7
-Website Draft URL: https://5fcf58ec72dc52a440dffcd7--festive-payne-ce084c.netlify.app
-</pre></div>
-</div>
-<p>Note you can also run the tests using <a class="reference external" href="https://github.com/treebeardtech/treebeard">nbmake-action</a> for this.</p>
-</div>
-<div class="section" id="disable-nbmake">
-<h2>Disable Nbmake<a class="headerlink" href="#disable-nbmake" title="Permalink to this headline">¶</a></h2>
-<p>Implicitly:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span>
-</pre></div>
-</div>
-<p>Explicitly:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="o">-</span><span class="n">p</span> <span class="n">no</span><span class="p">:</span><span class="n">nbmake</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="allow-errors-and-configure-cell-timeouts">
-<h2>Allow errors and Configure Cell Timeouts<a class="headerlink" href="#allow-errors-and-configure-cell-timeouts" title="Permalink to this headline">¶</a></h2>
-<p>nbmake is designed to compatible with jupyter book config (placed in notebook <code class="docutils literal notranslate"><span class="pre">metadata</span></code>, not the global config.yml)</p>
-<p>See <a class="reference external" href="https://jupyterbook.org/content/execute.html?highlight=allow_error#dealing-with-code-that-raises-errors">jupyter book docs</a></p>
-</div>
-<div class="section" id="parallelisation">
-<h2>Parallelisation<a class="headerlink" href="#parallelisation" title="Permalink to this headline">¶</a></h2>
-<p>Parallelisation with xdist is experimental upon initial release, but you can try it out:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pytest</span><span class="o">-</span><span class="n">xdist</span>
-
-<span class="n">pytest</span> <span class="o">--</span><span class="n">nbmake</span> <span class="o">-</span><span class="n">n</span><span class="o">=</span><span class="n">auto</span>
-</pre></div>
-</div>
-<p>It is also possible to parallelise at a CI-level using strategies, see <a class="reference external" href="https://github.com/LabForComputationalVision/plenoptic/blob/master/.github/workflows/treebeard.yml">example</a></p>
-<div class="section" id="build-jupyter-books-faster">
-<h3>Build Jupyter Books Faster<a class="headerlink" href="#build-jupyter-books-faster" title="Permalink to this headline">¶</a></h3>
-<p>Using xdist and the <code class="docutils literal notranslate"><span class="pre">--overwrite</span></code> flag let you build a large jupyter book repo faster:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="o">--</span><span class="n">nbmake</span> <span class="o">--</span><span class="n">overwrite</span> <span class="o">-</span><span class="n">n</span><span class="o">=</span><span class="n">auto</span> <span class="n">examples</span>
-<span class="n">jb</span> <span class="n">build</span> <span class="n">examples</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="advice-on-usage">
-<h2>Advice on Usage<a class="headerlink" href="#advice-on-usage" title="Permalink to this headline">¶</a></h2>
-<p>nbmake is best used in a scenario where you use the ipynb files only for development. Consumption of notebooks is primarily done via a docs site, built through jupyter book, nbsphinx, or some other means. If using one of these tools, you are able to write assertion code in cells which will be <a class="reference external" href="https://jupyterbook.org/interactive/hiding.html">hidden from readers</a>.</p>
-<div class="section" id="pre-commit">
-<h3>Pre-commit<a class="headerlink" href="#pre-commit" title="Permalink to this headline">¶</a></h3>
-<p>Treating notebooks like source files lets you keep your repo minimal. Some tools, such as plotly may drop several megabytes of javascript in your output cells, as a result, stripping out notebooks on pre-commit is advisable:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># .pre-commit-config.yaml</span>
-<span class="n">repos</span><span class="p">:</span>
-  <span class="o">-</span> <span class="n">repo</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">kynan</span><span class="o">/</span><span class="n">nbstripout</span>
-    <span class="n">rev</span><span class="p">:</span> <span class="n">master</span>
-    <span class="n">hooks</span><span class="p">:</span>
-      <span class="o">-</span> <span class="nb">id</span><span class="p">:</span> <span class="n">nbstripout</span>
-</pre></div>
-</div>
-<p>See https://pre-commit.com/ for more…</p>
-</div>
-</div>
-<div class="section" id="contributing">
-<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
-<p>Feedback is the best contribution you can make as a user of this tool. Join the <a class="reference external" href="https://join.slack.com/t/treebeard-entmoot/shared_invite/zt-jyvuqted-xBjnbvlfcu5P2ltBvn1~mg">Slack channel</a> and bug me (Alex), and raise an <a class="reference external" href="https://github.com/treebeardtech/nbmake/issues">issue</a>, even if you think you are the only person with this problem.</p>
-</div>
-<div class="section" id="see-also">
-<h2>See Also:<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/treebeardtech/treebeard">nbmake action</a></p></li>
-<li><p><a class="reference external" href="https://pytest.org/">pytest</a></p></li>
-<li><p><a class="reference external" href="https://github.com/executablebooks/jupyter-book">jupyter book</a></p></li>
-<li><p><a class="reference external" href="https://github.com/executablebooks/jupyter-cache">jupyter cache</a></p></li>
-<li><p><a class="reference external" href="https://github.com/executablebooks/MyST-NB">MyST-NB</a></p></li>
-</ul>
-</div>
+<p>See the README for details:</p>
+<p><a class="reference external" href="https://github.com/treebeardtech/nbmake">https://github.com/treebeardtech/nbmake</a></p>
 </div>
 
     <script type="text/x-thebe-config">
@@ -504,7 +243,7 @@ Website Draft URL: https://5fcf58ec72dc52a440dffcd7--festive-payne-ce084c.netlif
     </div>
 
     
-  <script src="_static/js/index.3da636dd464baa7582d2.js"></script>
+  <script src="_static/js/index.d3f166471bb80abb5163.js"></script>
 
 
     
