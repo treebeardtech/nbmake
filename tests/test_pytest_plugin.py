@@ -3,8 +3,6 @@ from __future__ import print_function
 import os
 from importlib import import_module, reload
 from pathlib import Path
-from subprocess import CalledProcessError
-from unittest.mock import patch
 
 from _pytest.pytester import Testdir
 from nbformat import read
@@ -17,7 +15,6 @@ NB_VERSION = 4
 
 
 def test_import():
-    reload(import_module("nbmake.jupyter_book_adapter"))
     reload(import_module("nbmake.nb_result"))
     reload(import_module("nbmake.nb_run"))
     reload(import_module("nbmake.pytest_plugin"))
@@ -58,10 +55,9 @@ def test_when_in_build_dir_none_collected(testdir: Testdir):
 def test_when_parallel_passing_nbs_then_ok(testdir: Testdir):
     [write_nb(passing_nb, Path(f"{i}.ipynb")) for i in range(20)]
 
-    hook_recorder = testdir.inline_run("--nbmake", "-n=auto", "--path-output=.")
+    hook_recorder = testdir.inline_run("--nbmake", "-n=auto")
 
     assert hook_recorder.ret == ExitCode.OK
-    assert Path("_build/html").exists()
 
 
 def test_when_passing_nbs_then_ok(testdir: Testdir):
@@ -125,47 +121,9 @@ def test_when_failing_nb_then_fail(testdir: Testdir):
     assert hook_recorder.ret == ExitCode.TESTS_FAILED
 
 
-def test_when_html_flag_then_report(testdir: Testdir):
-    write_nb(failing_nb, Path(testdir.tmpdir) / "a.ipynb")
-
-    hook_recorder = testdir.inline_run("--nbmake", "--path-output=.")
-    assert hook_recorder.ret == ExitCode.TESTS_FAILED
-    assert Path("_build/html").exists()
-
-
 def test_when_no_html_flag_then_no_build_dir(testdir: Testdir):
     write_nb(failing_nb, Path(testdir.tmpdir) / "a.ipynb")
 
     hook_recorder = testdir.inline_run("--nbmake")
     assert hook_recorder.ret == ExitCode.TESTS_FAILED
     assert not Path("_build").exists()
-
-
-def test_when_path_output_then_build_dir(testdir: Testdir):
-    write_nb(failing_nb, Path(testdir.tmpdir) / "a.ipynb")
-
-    hook_recorder = testdir.inline_run("--nbmake", "--path-output=.")
-    assert hook_recorder.ret == ExitCode.TESTS_FAILED
-    assert Path("_build/html").exists()
-
-
-def test_when_jb_exception_then_still_passes(testdir: Testdir):
-    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
-
-    with patch("subprocess.check_output") as mock:
-        mock.side_effect = CalledProcessError(1, "", "blah".encode())
-        hook_recorder = testdir.inline_run("--nbmake", "--path-output=.")
-        assert hook_recorder.ret == ExitCode.OK
-        assert not Path("_build/html").exists()
-
-
-def test_when_jb_not_installed_then_still_passes(testdir: Testdir):
-    write_nb(passing_nb, Path(testdir.tmpdir) / "a.ipynb")
-
-    import nbmake.jupyter_book_adapter
-
-    nbmake.jupyter_book_adapter.JB = Path("asdf")
-
-    hook_recorder = testdir.inline_run("--nbmake", "--path-output=.")
-    assert hook_recorder.ret == ExitCode.OK
-    assert not Path("_build/html").exists()

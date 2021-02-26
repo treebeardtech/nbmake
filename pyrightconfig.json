@@ -11,5 +11,6 @@
   "reportUnknownArgumentType": "warning",
   "reportPrivateUsage": "warning",
   "reportUntypedFunctionDecorator": "warning",
-  "reportMissingTypeStubs": false
+  "reportMissingTypeStubs": false,
+  "reportGeneralTypeIssues": "warning"
 }
