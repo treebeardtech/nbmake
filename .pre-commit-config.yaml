@@ -19,19 +19,6 @@ repos:
         args: ["-m", "3", "--tc"]
   - repo: local
     hooks:
-      - id: poetry
-        name: sync setup.py with poetry
-        entry: |
-          bash -c ' \
-            V=$(poetry version -s);
-            poetry build && tar -xvf dist/nbmake-$V.tar.gz -C dist && diff dist/nbmake-$V/setup.py setup.py \
-              || cp dist/nbmake-$V/setup.py setup.py \
-          '
-        language: system
-        pass_filenames: false
-        files: pyproject.toml|poetry.lock
-  - repo: local
-    hooks:
       - id: pyright
         name: pyright
         entry: poetry run pyright
