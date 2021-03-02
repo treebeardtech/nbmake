@@ -1,20 +1,9 @@
 from pathlib import Path
-from typing import Any, Callable, Dict, List, TypeVar
+from typing import Any, Dict, List
 
 import yaml
 from nbformat import write
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
-
-T = TypeVar("T")
-
-
-class MockValidator(object):
-    def __init__(self, validator: Callable[[T], bool]):
-        self.validator = validator
-
-    def __eq__(self, other: T):
-        return bool(self.validator(other))
-
 
 passing_nb = [
     # In [1]:

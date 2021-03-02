@@ -1,4 +1,3 @@
-import traceback
 from pathlib import Path
 from typing import Optional
 
@@ -54,9 +53,7 @@ class NotebookRun:
             )
             c.execute(cwd=self.filename.parent)
         except CellExecutionError:
-            exc_string = "".join(traceback.format_exc())
             error = self._get_error(nb)
-            print(exc_string)
         except CellTimeoutError as err:
             trace = err.args[0]
             error = NotebookError(
@@ -101,11 +98,13 @@ class NotebookRun:
             ]
 
             if errors:
-                num_cells = len(nb["cells"])
                 tb = "\n".join(errors[0].get("traceback", ""))
+                src = "".join(cell["source"])
                 last_trace = tb.split("\n")[-1]
-                summary = f"cell {i + 1} of {num_cells}: {last_trace}"
-                trace = f"{summary}:\n{tb}"
-                return NotebookError(summary=summary, trace=trace, failing_cell_index=i)
+                line = 75 * "-"
+                trace = f"{line}\n{src}\n{tb}"
+                return NotebookError(
+                    summary=last_trace, trace=trace, failing_cell_index=i
+                )
 
         return None
