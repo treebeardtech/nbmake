@@ -23,9 +23,24 @@ pytest --nbmake **/*ipynb
 
 ## Allow errors and Configure Cell Timeouts
 
-nbmake is built on top of [nbclient](https://github.com/jupyter/nbclient) and designed to compatible with nbsphinx and jupyter-book.
+Each notebook can be configured to allow errors and fail if running exceeds a timeout.
 
-The [jupyter book docs](https://jupyterbook.org/content/execute.html?highlight=allow_error#dealing-with-code-that-raises-errors) have a good description of how to ignore errors -- note that nbmake does not work with the external `_config.yml` configuration file. You must use the notebook JSON metadata field.
+This configuration must be placed in the notebook's top-level metadata (not cell-level metadata).
+
+Your notebook should look like this:
+
+```json
+{
+  "cells": [ ... ],
+  "metadata": {
+    "kernelspec": { ... },
+    "execution": {
+      "allow_errors": true,
+      "timeout": 300
+    }
+  }
+}
+```
 
 ## Parallelisation
 
