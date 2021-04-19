@@ -27,11 +27,11 @@ Each notebook can be configured to allow errors and fail if running exceeds a ti
 
 This configuration must be placed in the notebook's top-level metadata (not cell-level metadata).
 
-An example config is:
+Your notebook should looke like this:
 
 ```json
 {
-  "cells": [ ... ] // not in here
+  "cells": [ ... ],
   "metadata": {
     "kernelspec": { ... },
     "execution": {
