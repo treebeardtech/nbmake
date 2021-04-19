@@ -13,12 +13,12 @@ jobs:
         cfg:
           - os: windows-latest
             python-version: "3.6"
-          # - os: ubuntu-latest
-          #   python-version: "3.7"
-          # - os: ubuntu-latest
-          #   python-version: "3.8"
-          # - os: ubuntu-latest
-          #   python-version: "3.9"
+          - os: windows-latest
+            python-version: "3.7"
+          - os: windows-latest
+            python-version: "3.8"
+          - os: windows-latest
+            python-version: "3.9"
           # - os: macos-latest
           #   python-version: "3.6"
           # - os: macos-latest
@@ -61,7 +61,7 @@ jobs:
 
 
   # test-teachopencadd:
-  #   runs-on: ubuntu-latest
+  #   runs-on: windows-latest
   #   env:
   #     PYVER: 3.7
   #     PACKAGE: teachopencadd
