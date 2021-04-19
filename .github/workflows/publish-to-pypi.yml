@@ -9,7 +9,15 @@ jobs:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v2
       - run: pip install poetry
+      - run: poetry version ${GITHUB_REF:10}
       - run: poetry build
       - uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_PASSWORD }}
+      - uses: EndBug/add-and-commit@v7.0.0
+        with:
+            author_name: github-actions
+            author_email: 41898282+github-actions[bot]@users.noreply.github.com
+            add: pyproject.toml
+            branch: main
+            message: Published new version
