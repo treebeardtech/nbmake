@@ -104,7 +104,6 @@ jobs:
             -n=auto \
             teachopencadd/talktorials/T000_template/talktorial.ipynb \
             teachopencadd/talktorials/T002_compound_adme/talktorial.ipynb \
-            teachopencadd/talktorials/T003_compound_unwanted_substructures/talktorial.ipynb \
             teachopencadd/talktorials/T004_compound_similarity/talktorial.ipynb \
             teachopencadd/talktorials/T005_compound_clustering/talktorial.ipynb \
             teachopencadd/talktorials/T007_compound_activity_machine_learning/talktorial.ipynb \
