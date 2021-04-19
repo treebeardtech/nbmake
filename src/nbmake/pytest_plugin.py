@@ -1,3 +1,5 @@
+import asyncio
+import sys
 from pathlib import Path
 from typing import Any, Optional
 
@@ -5,6 +7,15 @@ from .pytest_items import NotebookFile
 
 
 def pytest_addoption(parser: Any):
+    # See https://bugs.python.org/issue37373 and
+    # https://github.com/nteract/papermill/issues/515
+    if (
+        sys.version_info[0] == 3
+        and sys.version_info[1] >= 8
+        and sys.platform.startswith("win")
+    ):
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
     group = parser.getgroup("nbmake", "notebook testing")
     group.addoption(
         "--nbmake", action="store_true", help="Test notebooks", default=False
