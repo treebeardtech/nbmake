@@ -94,6 +94,7 @@ pytest -p no:nbmake
 
 ## See Also:
 
+* A more in-depth [intro to nbmake](https://semaphoreci.com/blog/test-jupyter-notebooks-with-pytest-and-nbmake) running on Semaphore CI
 * [nbmake action](https://github.com/treebeardtech/treebeard)
 * [pytest](https://pytest.org/)
 * [jupyter book](https://github.com/executablebooks/jupyter-book)
