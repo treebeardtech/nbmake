@@ -13,6 +13,12 @@ from .nb_result import NotebookError, NotebookResult
 
 NB_VERSION = 4
 
+a = True
+if a:
+    print("1")
+elif a:
+    print("2")
+
 
 class NotebookRun:
     filename: Path
