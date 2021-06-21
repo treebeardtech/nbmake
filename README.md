@@ -42,6 +42,19 @@ Your notebook should look like this:
 }
 ```
 
+
+## Add Missing Jupyter Kernel to Your CI Environment
+
+If you are using a kernel name other than the default ‘python3’. You will see an error message when executing your notebooks in a fresh CI environment: `Error - No such kernel: 'mycustomkernel'`
+
+Use ipykernel to install the custom kernel:
+
+```sh
+python -m ipykernel install --user --name mycustomkernel
+```
+
+If you are using another language such as c++ in your notebooks, you may have a different process for installing your kernel.
+
 ## Parallelisation
 
 Parallelisation with xdist is experimental upon initial release, but you can try it out:
@@ -61,6 +74,7 @@ Using xdist and the `--overwrite` flag let you build a large jupyter book repo f
 pytest --nbmake --overwrite -n=auto examples
 jb build examples
 ```
+
 ## Advice on Usage
 
 nbmake is best used in a scenario where you use the ipynb files only for development. Consumption of notebooks is primarily done via a docs site, built through jupyter book, nbsphinx, or some other means. If using one of these tools, you are able to write assertion code in cells which will be [hidden from readers](https://jupyterbook.org/interactive/hiding.html).
