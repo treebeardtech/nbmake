@@ -1,0 +1,10 @@
+# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
+tasks:
+  - init: bash -c 'pip install poetry && poetry install && pytest'
+    command: echo 'start script'
+github:
+  prebuilds:
+    addCheck: true
+    addComment: true
+    pullRequestsFromForks: true
+
