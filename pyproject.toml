@@ -21,6 +21,7 @@ python = "^3.6.1"
 nbclient = ">=0.3, <1.0"
 nbformat = "^5.0.8"
 Pygments = "^2.7.3"
+ipykernel = ">=5.4.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.8.2"
