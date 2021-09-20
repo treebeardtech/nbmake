@@ -127,3 +127,14 @@ def test_when_no_html_flag_then_no_build_dir(testdir: Testdir):
     hook_recorder = testdir.inline_run("--nbmake")
     assert hook_recorder.ret == ExitCode.TESTS_FAILED
     assert not Path("_build").exists()
+
+
+def test_when_init_then_passes(testdir: Testdir):
+    example_dir = Path(testdir.tmpdir) / "example"
+    example_dir.mkdir()
+    write_nb(passing_nb, example_dir / "a.ipynb")
+    (example_dir / "__init__.py").write_text("")
+
+    hook_recorder = testdir.inline_run("--nbmake")
+
+    assert hook_recorder.ret == ExitCode.OK
