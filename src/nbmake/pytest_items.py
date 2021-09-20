@@ -25,7 +25,7 @@ class NbMakeFailureRepr(TerminalRepr):
 
 class NotebookFile(pytest.File):
     def collect(self) -> Generator[Any, Any, Any]:
-        yield NotebookItem.from_parent(self, filename=self.name)
+        yield NotebookItem.from_parent(self, filename=str(Path(self.fspath)))
 
 
 class NotebookFailedException(Exception):
