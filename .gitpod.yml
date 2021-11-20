@@ -4,3 +4,4 @@ image:
 vscode:
   extensions:
     - ms-python.python
+    - k--kato.intellij-idea-keybindings
