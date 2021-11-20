@@ -2,26 +2,14 @@ image:
   file: .gitpod.dockerfile
 
 tasks:
-  - init: |
-      zsh -c '
-        set -e
-        set +x
-        . ~/.zshrc
+  - init: scripts/init
 
-        printenv
-
-        which python
-
-        export PIP_USER=no
-
-        pip install poetry
-        
-        poetry install
-        poetry run pre-commit run -a
-        poetry run pre-commit install
-      '
+github:
+  prebuilds:
+    branches: true
 
 vscode:
   extensions:
     - ms-python.python
     - k--kato.intellij-idea-keybindings
+    - timonwong.shellcheck
