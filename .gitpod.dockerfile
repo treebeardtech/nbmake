@@ -23,5 +23,6 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUS
 
 RUN echo '\neval "$(starship init zsh)"' >> ~/.zshrc
 RUN echo '\nexport PIP_USER=no' >> ~/.zshrc
+RUN echo '\neval "$(pyenv init -)"' >> ~/.zshrc
 
 CMD [ "zsh" ]
