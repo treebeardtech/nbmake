@@ -23,4 +23,5 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUS
 
 RUN echo '\neval "$(starship init zsh)"' >> ~/.zshrc
 
+ENV PIP_USER no
 CMD [ "zsh" ]
