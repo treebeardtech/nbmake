@@ -2,7 +2,24 @@ image:
   file: .gitpod.dockerfile
 
 tasks:
-  - init: zsh -c '. ~/.zshrc; pip install poetry && PIP_USER=no poetry install && PIP_USER=no pre-commit run -a && pre-commit install'
+  - init: |
+      zsh -c '
+        set -e
+        set +x
+        . ~/.zshrc
+
+        printenv
+
+        which python
+
+        export PIP_USER=no
+
+        pip install poetry
+        
+        poetry install
+        poetry run pre-commit run -a
+        poetry run pre-commit install
+      '
 
 vscode:
   extensions:
