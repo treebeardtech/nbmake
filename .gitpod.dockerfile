@@ -20,7 +20,7 @@ ENV ZSH_THEME cloud
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 
 RUN sh -c "FORCE=1 $(curl -fsSL https://starship.rs/install.sh)"
-RUN eval "$(starship init zsh)"
+RUN zsh -c 'eval "$(starship init zsh)"'
 
 
 RUN curl -fsSL https://raw.githubusercontent.com/alex-treebeard/devtools/0f3f01615a9d7d73d398a739580845864108efe9/.zshrc > ~/.zshrc
