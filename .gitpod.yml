@@ -1,7 +1,11 @@
-
+image:
+  file: .gitpod.dockerfile
+  
 tasks:
   - init: bash -c 'pip install poetry && poetry install && pytest'
     command: echo 'start script'
+  - command: zsh
+    
 github:
   prebuilds:
     addCheck: true
