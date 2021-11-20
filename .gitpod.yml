@@ -3,7 +3,8 @@ image:
 
 tasks:
   - init: bash -c 'pip install poetry && poetry install && pytest'
-  - command: PIP_USER=no pre-commit install
+    command: PIP_USER=no pre-commit install
+
 
 vscode:
   extensions:
