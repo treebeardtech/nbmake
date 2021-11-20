@@ -17,7 +17,7 @@ ENV ZSH_THEME cloud
 
 # Install Oh-My-Zsh
 
-RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 RUN sh -c "FORCE=1 $(curl -fsSL https://starship.rs/install.sh)"
 RUN zsh -c 'eval "$(starship init zsh)"'
