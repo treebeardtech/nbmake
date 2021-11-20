@@ -15,10 +15,15 @@ USER gitpod
 
 ENV ZSH_THEME cloud
 
+# RUN pip install poetry && poetry install && pytest
+
 # Install Oh-My-Zsh
 
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
-    -t robbyrussell
+    -t robbyrussell \
+    -p zsh-autosuggestions \
+    -p zsh-syntax-highlighting
+
 
 RUN sh -c "FORCE=1 $(curl -fsSL https://starship.rs/install.sh)"
 RUN zsh -c 'eval "$(starship init zsh)"'
