@@ -3,10 +3,6 @@
 set -e
 set +x
 
-printenv
-
-which python
-
 export PIP_USER=no
 
 pip install poetry
