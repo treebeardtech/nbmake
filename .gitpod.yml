@@ -2,7 +2,7 @@ image:
   file: .gitpod.dockerfile
 
 tasks:
-  - init: scripts/init
+  - init: scripts/init.sh || exit 1
 
 github:
   prebuilds:
