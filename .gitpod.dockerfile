@@ -22,6 +22,6 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.
 RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
 RUN echo '\neval "$(starship init zsh)"' >> ~/.zshrc
-RUN pip install poetry && poetry install && pytest
+RUN zsh -c 'pip install poetry && poetry install && pytest'
 
 CMD [ "zsh" ]
