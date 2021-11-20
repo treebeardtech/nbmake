@@ -7,7 +7,7 @@ RUN ["apt-get", "install", "-y", "zsh"]
 RUN chsh -s $(which zsh)
 
 USER gitpod
-RUN git config pull.rebase false
+RUN git config --global pull.rebase false
 
 ENV ZSH_THEME cloud
 
