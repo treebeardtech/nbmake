@@ -1,0 +1,7 @@
+{
+    "workbench.preferredLightColorTheme": "Quiet Light",
+    "workbench.preferredDarkColorTheme": "Tomorrow Night Blue",
+    "window.autoDetectColorScheme": true,
+    "workbench.colorTheme": "Tomorrow Night Blue",
+    "diffEditor.renderSideBySide": false,
+}

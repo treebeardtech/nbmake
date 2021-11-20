@@ -1,14 +1,10 @@
+image:
+  file: .gitpod.dockerfile
 
 tasks:
-  - init: bash -c 'pip install poetry && poetry install && pytest'
-    command: echo 'start script'
-github:
-  prebuilds:
-    addCheck: true
-    addComment: true
-    pullRequestsFromForks: true
-
+  - init: zsh -c 'pip install poetry && poetry install && pytest && PIP_USER=no pre-commit run -a && pre-commit install'
 
 vscode:
   extensions:
     - ms-python.python
+    - k--kato.intellij-idea-keybindings
