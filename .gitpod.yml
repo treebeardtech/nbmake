@@ -1,6 +1,9 @@
 image:
   file: .gitpod.dockerfile
 
+tasks:
+  - init: bash -c 'pip install poetry && poetry install && pytest'
+  
 vscode:
   extensions:
     - ms-python.python
