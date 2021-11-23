@@ -138,3 +138,28 @@ def test_when_init_then_passes(testdir: Testdir):
     hook_recorder = testdir.inline_run("--nbmake")
 
     assert hook_recorder.ret == ExitCode.OK
+
+
+def test_when_timeout_flag_then_uses_as_default(testdir: Testdir):
+    example_dir = Path(testdir.tmpdir) / "example"
+    example_dir.mkdir()
+    write_nb(["import time; time.sleep(2)"], example_dir / "a.ipynb")
+
+    hook_recorder = testdir.inline_run("--nbmake", "--nbmake-timeout=3")
+    assert hook_recorder.ret == ExitCode.OK
+
+    hook_recorder = testdir.inline_run("--nbmake", "--nbmake-timeout=1")
+    assert hook_recorder.ret == ExitCode.TESTS_FAILED
+
+
+def test_when_explicit_metadata_then_ignore_timeout(testdir: Testdir):
+    example_dir = Path(testdir.tmpdir) / "example"
+    example_dir.mkdir()
+    write_nb(
+        ["import time; time.sleep(2)"],
+        example_dir / "a.ipynb",
+        metadata={"execution": {"timeout": 10}},
+    )
+
+    hook_recorder = testdir.inline_run("--nbmake", "--nbmake-timeout=1")
+    assert hook_recorder.ret == ExitCode.OK

@@ -21,10 +21,12 @@ class NotebookRun:
     def __init__(
         self,
         filename: Path,
+        default_timeout: int,
         verbose: bool = False,
     ) -> None:
         self.filename = filename
         self.verbose = verbose
+        self.default_timeout = default_timeout
 
     def execute(
         self,
@@ -34,7 +36,7 @@ class NotebookRun:
         for cell in nb.cells:
             if cell.cell_type == "code":
                 cell.outputs = []
-        timeout = 300
+        timeout = self.default_timeout
         allow_errors = False
         if "execution" in nb.metadata:
             if "timeout" in nb.metadata.execution:

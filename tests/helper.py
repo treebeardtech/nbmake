@@ -29,8 +29,14 @@ failing_nb = [
 #     return nb
 
 
-def write_nb(sources: List[str], path: Path, title: str = "default-title"):
+def write_nb(
+    sources: List[str],
+    path: Path,
+    title: str = "default-title",
+    metadata: Dict[str, Any] = {},
+):
     nb = new_notebook()
+    nb.metadata = metadata
     nb.cells.append(new_markdown_cell(f"# {title}"))
     for src in sources:
         nb.cells.append(new_code_cell(src))

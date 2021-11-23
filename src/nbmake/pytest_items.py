@@ -44,6 +44,7 @@ class NotebookItem(pytest.Item):
         source = Path(self.config.rootdir) / self.filename
         run = NotebookRun(
             source,
+            option.nbmake_timeout,
             verbose=bool(option.verbose),
         )
 

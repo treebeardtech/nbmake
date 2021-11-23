@@ -25,7 +25,13 @@ pytest --nbmake **/*ipynb
 
 ## Allow errors and Configure Cell Timeouts
 
-Each notebook can be configured to allow errors and fail if running exceeds a timeout.
+You can configure the notebook run timeout with a the following pytest flag:
+
+```sh
+pytest --nbmake --nbmake-timeout=3000 # allows each notebook 3000 seconds to finish
+```
+
+Each notebook can also be separately overidden to allow errors and fail if running exceeds a timeout.
 
 This configuration must be placed in the notebook's top-level metadata (not cell-level metadata).
 
