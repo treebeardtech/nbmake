@@ -19,7 +19,7 @@ class TestNotebookRun:
     def test_when_passing_then_no_failing_cell(self, testdir: Testdir):
         write_nb(passing_nb, filename)
 
-        run = NotebookRun(filename)
+        run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
 
         assert res.error == None
@@ -31,14 +31,14 @@ class TestNotebookRun:
             ["import os; assert os.getcwd().endswith('subdir')"], subdir / filename
         )
 
-        run = NotebookRun(subdir / filename)
+        run = NotebookRun(subdir / filename, 300)
         res: NotebookResult = run.execute()
 
         assert res.error == None
 
     def test_failing(self, testdir: Testdir):
         write_nb(failing_nb, filename)
-        run = NotebookRun(filename)
+        run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
 
         assert res.error and res.error.failing_cell_index == 1
@@ -50,7 +50,7 @@ class TestNotebookRun:
         nb.cells.append(cell)
         write(nb, filename)
 
-        run = NotebookRun(filename)
+        run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
 
         assert not res.error
@@ -66,7 +66,7 @@ class TestNotebookRun:
         ]
         write(nb, filename)
 
-        run = NotebookRun(filename)
+        run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
 
         assert not Path("fail.txt").exists()
@@ -84,7 +84,7 @@ class TestNotebookRun:
         ]
         write(nb, filename)
 
-        run = NotebookRun(filename)
+        run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
 
         assert res.error and res.error.failing_cell_index == 0
@@ -98,6 +98,6 @@ class TestNotebookRun:
 
         write(nb, filename)
 
-        run = NotebookRun(filename)
+        run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
         assert res.error and "No such kernel" in res.error.summary

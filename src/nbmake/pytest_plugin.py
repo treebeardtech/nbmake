@@ -26,6 +26,13 @@ def pytest_addoption(parser: Any):
         help="Overwrite the source ipynbs",
         default=False,
     )
+    group.addoption(
+        "--nbmake-timeout",
+        action="store",
+        help="Sets the default timeout for a notebook (seconds)",
+        default=300,
+        type=int,
+    )
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
