@@ -29,9 +29,15 @@ def pytest_addoption(parser: Any):
     group.addoption(
         "--nbmake-timeout",
         action="store",
-        help="Sets the default timeout for a notebook (seconds)",
+        help="Sets the default cell timeout (seconds)",
         default=300,
         type=int,
+    )
+    group.addoption(
+        "--nbmake-kernel",
+        action="store",
+        help="Overrides the kernel used for all notebooks",
+        type=str,
     )
 
 

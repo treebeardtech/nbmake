@@ -23,10 +23,12 @@ class NotebookRun:
         filename: Path,
         default_timeout: int,
         verbose: bool = False,
+        kernel: Optional[str] = None,
     ) -> None:
         self.filename = filename
         self.verbose = verbose
         self.default_timeout = default_timeout
+        self.kernel = kernel
 
     def execute(
         self,
@@ -46,12 +48,17 @@ class NotebookRun:
 
         error: Optional[NotebookError] = None
 
+        extra_kwargs = {}
+        if self.kernel:
+            extra_kwargs["kernel_name"] = self.kernel
+
         try:
             c = NotebookClient(
                 nb,
                 timeout=timeout,
                 allow_errors=allow_errors,
                 record_timing=True,
+                **extra_kwargs,
             )
             c.execute(cwd=self.filename.parent)
         except CellExecutionError:

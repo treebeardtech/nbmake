@@ -25,15 +25,15 @@ pytest --nbmake **/*ipynb
 
 ## Allow errors and Configure Cell Timeouts
 
-You can configure the notebook run timeout with a the following pytest flag:
+You can configure the cell timeout with the following pytest flag:
 
 ```sh
-pytest --nbmake --nbmake-timeout=3000 # allows each notebook 3000 seconds to finish
+pytest --nbmake --nbmake-timeout=3000 # allows each cell 3000 seconds to finish
 ```
 
 Each notebook can also be separately overidden to allow errors and fail if running exceeds a timeout.
 
-This configuration must be placed in the notebook's top-level metadata (not cell-level metadata).
+This configuration must be placed in the notebook's **top-level metadata** (not cell-level metadata).
 
 Your notebook should look like this:
 
@@ -50,10 +50,17 @@ Your notebook should look like this:
 }
 ```
 
+## Override Notebook Kernels when Testing
+
+Regardless of the kernel configured in the notebook JSON, you can force nbmake to use a specific kernel when testing:
+
+```
+pytest --nbmake --nbmake-kernel=mycustomkernel
+```
 
 ## Add Missing Jupyter Kernel to Your CI Environment
 
-If you are using a kernel name other than the default ‘python3’. You will see an error message when executing your notebooks in a fresh CI environment: `Error - No such kernel: 'mycustomkernel'`
+If you are not using the flag above and are using a kernel name other than the default ‘python3’, you will see an error message when executing your notebooks in a fresh CI environment: `Error - No such kernel: 'mycustomkernel'`
 
 Use ipykernel to install the custom kernel:
 
