@@ -163,3 +163,21 @@ def test_when_explicit_metadata_then_ignore_timeout(testdir: Testdir):
 
     hook_recorder = testdir.inline_run("--nbmake", "--nbmake-timeout=1")
     assert hook_recorder.ret == ExitCode.OK
+
+
+def test_when_kernel_passed_then_override(testdir: Testdir):
+    write_nb(
+        passing_nb,
+        Path(f"x.ipynb"),
+        metadata={
+            "kernelspec": {
+                "display_name": "Python 3",
+                "language": "python",
+                "name": "blah",
+            }
+        },
+    )
+
+    hook_recorder = testdir.inline_run("--nbmake", "--nbmake-kernel=python3")
+
+    assert hook_recorder.ret == ExitCode.OK
