@@ -9,6 +9,7 @@ repos:
     - id: remove-crlf
     - id: remove-tabs
       args: [ '--whitespaces-count', '2' ]
+      files: "README.md"
   - repo: https://github.com/kynan/nbstripout
     rev: master
     hooks:
