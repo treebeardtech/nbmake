@@ -101,3 +101,15 @@ class TestNotebookRun:
         run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
         assert res.error and "No such kernel" in res.error.summary
+
+    def test_when_cell_ignored_then_does_not_run(self, testdir: Testdir):
+        nb = Path(__file__).parent / "resources" / "ignore_tag.ipynb"
+        run = NotebookRun(nb, 300)
+        res: NotebookResult = run.execute()
+        assert res.error == None
+
+    def test_when_raises_exc_tag_then_succeeds(self, testdir: Testdir):
+        nb = Path(__file__).parent / "resources" / "raises_tag.ipynb"
+        run = NotebookRun(nb, 300)
+        res: NotebookResult = run.execute()
+        assert res.error == None
