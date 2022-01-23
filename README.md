@@ -23,7 +23,7 @@ pip install pytest nbmake
 pytest --nbmake **/*ipynb
 ```
 
-## Allow errors and Configure Cell Timeouts
+## Configure Cell Timeouts
 
 You can configure the cell timeout with the following pytest flag:
 
@@ -31,7 +31,7 @@ You can configure the cell timeout with the following pytest flag:
 pytest --nbmake --nbmake-timeout=3000 # allows each cell 3000 seconds to finish
 ```
 
-Each notebook can also be separately overidden to allow errors and fail if running exceeds a timeout.
+## Allow Errors For a Whole Notebook
 
 This configuration must be placed in the notebook's **top-level metadata** (not cell-level metadata).
 
@@ -45,6 +45,40 @@ Your notebook should look like this:
     "execution": {
       "allow_errors": true,
       "timeout": 300
+    }
+  }
+}
+```
+
+## Allow a Cell to Throw an Exception
+
+A cell with the following metadata can throw an exception without failing the test:
+
+```json
+{
+  "language": "python",
+  "custom": {
+    "metadata": {
+      "tags": [
+        "raises-exception"
+      ]
+    }
+  }
+}
+```
+
+## Ignore a Code Cell
+
+A cell with the following metadata will not be executed by nbmake
+
+```json
+{
+  "language": "python",
+  "custom": {
+    "metadata": {
+      "tags": [
+        "skip-execution"
+      ]
     }
   }
 }
