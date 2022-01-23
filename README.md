@@ -56,14 +56,14 @@ A cell with the following metadata can throw an exception without failing the te
 
 ```json
 {
-	"language": "python",
-	"custom": {
-		"metadata": {
-			"tags": [
-				"raises-exception"
-			]
-		}
-	}
+  "language": "python",
+  "custom": {
+    "metadata": {
+      "tags": [
+        "raises-exception"
+      ]
+    }
+  }
 }
 ```
 
@@ -73,14 +73,14 @@ A cell with the following metadata will not be executed by nbmake
 
 ```json
 {
-	"language": "python",
-	"custom": {
-		"metadata": {
-			"tags": [
-				"skip-execution"
-			]
-		}
-	}
+  "language": "python",
+  "custom": {
+    "metadata": {
+      "tags": [
+        "skip-execution"
+      ]
+    }
+  }
 }
 ```
 
