@@ -16,8 +16,6 @@ jobs:
             python-version: "3.9"
           - os: ubuntu-latest
             python-version: "3.10"
-
-
     runs-on: ${{ matrix.cfg.os }}
     steps:
       - uses: actions/checkout@v2
@@ -26,13 +24,9 @@ jobs:
           python-version: ${{ matrix.cfg.python-version }}
       - run: pip install poetry
       - run: poetry install
-      - if: matrix.cfg.os != 'windows-latest'
-        uses: pre-commit/action@v2.0.0
+      - uses: pre-commit/action@v2.0.0
         with:
           extra_args: --verbose --all-files
-
-      - run: poetry run pytest tests/test_nb_run.py # run without extras
-      - run: poetry install
       - run: poetry run pytest --cov-report=xml --cov=src
       - uses: codecov/codecov-action@v1
         with:
