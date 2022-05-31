@@ -12,9 +12,10 @@ jobs:
           build_version="$(poetry version -s).dev$(date +%s)"
           poetry version $build_version
       - run: poetry build
-      - run: pip install 'pytest==7.1' dist/*gz --force-reinstall
+      - run: pip install 'pytest==7.1'
+      - run: pip install dist/*gz --force-reinstall
       - run: pytest --nbmake tests/resources
-      - run: pip install 'pytest==7.1' dist/*whl --force-reinstall
+      - run: pip install dist/*whl --force-reinstall
       - run: pytest --nbmake tests/resources
       - name: Publish distribution to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
