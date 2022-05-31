@@ -1,16 +1,9 @@
 {
-    "workbench.preferredLightColorTheme": "Quiet Light",
-    "workbench.preferredDarkColorTheme": "Tomorrow Night Blue",
-    "window.autoDetectColorScheme": true,
-    "workbench.colorTheme": "Tomorrow Night Blue",
-    "diffEditor.renderSideBySide": false,
     "python.testing.pytestArgs": [
         "tests"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.pythonPath": "/home/gitpod/.pyenv/versions/3.8.12/bin/python",
     "python.terminal.activateEnvironment": false,
     "python.languageServer": "Pylance",
-
 }
