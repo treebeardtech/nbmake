@@ -1,9 +1,14 @@
 from pathlib import Path
 from typing import Any, Dict, List
+from _pytest.pytester import Testdir
 
 import yaml
 from nbformat import write
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
+from pytest import fixture
+import os
+
+HOME: str = os.environ['HOME']
 
 passing_nb = [
     # In [1]:
@@ -23,12 +28,6 @@ failing_nb = [
     "raise Exception('something went wrong')"
 ]
 
-
-# def build_nb(sources: List[str]) -> NotebookNode:
-
-#     return nb
-
-
 def write_nb(
     sources: List[str],
     path: Path,
@@ -46,3 +45,8 @@ def write_nb(
 def write_config(conf: Dict[Any, Any], filename: Path = Path("_config.yml")) -> Path:
     Path(filename).write_text(yaml.dump(conf))
     return filename
+
+@fixture
+def testdir2(testdir: Testdir) -> Testdir:
+    os.environ['HOME'] = HOME # ensures jupyter client can start the ipykernel subprocess without module location issues
+    return testdir
