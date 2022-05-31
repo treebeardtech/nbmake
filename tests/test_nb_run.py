@@ -8,7 +8,7 @@ NB_VERSION = 4
 from nbmake.nb_result import NotebookResult
 from nbmake.nb_run import NotebookRun
 
-from .helper import failing_nb, passing_nb, write_nb
+from .helper import failing_nb, passing_nb, testdir2, write_nb
 
 pytest_plugins = "pytester"
 
@@ -16,7 +16,7 @@ filename = Path("x.ipynb")
 
 
 class TestNotebookRun:
-    def test_when_passing_then_no_failing_cell(self, testdir: Testdir):
+    def test_when_passing_then_no_failing_cell(self, testdir2: Testdir):
         write_nb(passing_nb, filename)
 
         run = NotebookRun(filename, 300)
@@ -24,7 +24,7 @@ class TestNotebookRun:
 
         assert res.error == None
 
-    def test_when_runs_then_cwd_is_nb_location(self, testdir: Testdir):
+    def test_when_runs_then_cwd_is_nb_location(self, testdir2: Testdir):
         subdir = Path("subdir")
         subdir.mkdir()
         write_nb(
@@ -36,14 +36,14 @@ class TestNotebookRun:
 
         assert res.error == None
 
-    def test_failing(self, testdir: Testdir):
+    def test_failing(self, testdir2: Testdir):
         write_nb(failing_nb, filename)
         run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
 
         assert res.error and res.error.failing_cell_index == 1
 
-    def test_when_allow_errors_then_passing(self, testdir: Testdir):
+    def test_when_allow_errors_then_passing(self, testdir2: Testdir):
         nb = new_notebook()
         nb.metadata.execution = {"allow_errors": True}
         cell = new_code_cell("raise Exception()")
@@ -56,7 +56,7 @@ class TestNotebookRun:
         assert not res.error
         assert res.nb.cells[0].outputs[0].ename == "Exception"
 
-    def test_when_timeout_then_fails(self, testdir: Testdir):
+    def test_when_timeout_then_fails(self, testdir2: Testdir):
         nb = new_notebook()
         nb.metadata.execution = {"timeout": 1}
         nb.cells += [
@@ -72,7 +72,7 @@ class TestNotebookRun:
         assert not Path("fail.txt").exists()
         assert res.error and res.error.failing_cell_index == 1
 
-    def test_when_executed_then_stripped_out(self, testdir: Testdir):
+    def test_when_executed_then_stripped_out(self, testdir2: Testdir):
         nb = new_notebook(metadata={})
         nb.cells += [
             new_code_cell(
@@ -91,7 +91,7 @@ class TestNotebookRun:
         assert res.nb.cells[0].outputs[0].ename == "Exception"
         assert res.nb.cells[1].outputs == []
 
-    def test_when_unknown_kernel_then_error(self, testdir: Testdir):
+    def test_when_unknown_kernel_then_error(self, testdir2: Testdir):
         nb = new_notebook(
             metadata={"kernelspec": {"display_name": "asdf", "name": "asdf"}}
         )
@@ -102,13 +102,13 @@ class TestNotebookRun:
         res: NotebookResult = run.execute()
         assert res.error and "No such kernel" in res.error.summary
 
-    def test_when_cell_ignored_then_does_not_run(self, testdir: Testdir):
+    def test_when_cell_ignored_then_does_not_run(self, testdir2: Testdir):
         nb = Path(__file__).parent / "resources" / "ignore_tag.ipynb"
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
         assert res.error == None
 
-    def test_when_raises_exc_tag_then_succeeds(self, testdir: Testdir):
+    def test_when_raises_exc_tag_then_succeeds(self, testdir2: Testdir):
         nb = Path(__file__).parent / "resources" / "raises_tag.ipynb"
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()

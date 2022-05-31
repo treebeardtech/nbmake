@@ -2,19 +2,19 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.3.0
     hooks:
-    -   id: trailing-whitespace
+      - id: trailing-whitespace
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.1.10
     hooks:
-    - id: remove-crlf
-    - id: remove-tabs
-      args: [ '--whitespaces-count', '2' ]
+      - id: remove-crlf
+      - id: remove-tabs
+        args: [ '--whitespaces-count', '2' ]
   - repo: https://github.com/kynan/nbstripout
-    rev: master
+    rev: 0.5.0
     hooks:
       - id: nbstripout
   - repo: https://github.com/ambv/black
-    rev: stable
+    rev: 22.3.0
     hooks:
       - id: black
         files: '(src|tests).*py'
@@ -32,10 +32,10 @@ repos:
         pass_filenames: false
         types: [python]
         additional_dependencies: ["pyright@1.1.91"]
-  - repo: local
-    hooks:
-      - id: smoketest
-        name: smoketest
-        entry: poetry run pytest -k test_when_nb_present_then_collected
-        language: system
-        pass_filenames: false
+  # - repo: local
+  #   hooks:
+  #     - id: smoketest
+  #       name: smoketest
+  #       entry: poetry run pytest -k test_when_nb_present_then_collected
+  #       language: system
+  #       pass_filenames: false

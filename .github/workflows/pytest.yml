@@ -16,8 +16,6 @@ jobs:
             python-version: "3.9"
           - os: ubuntu-latest
             python-version: "3.10"
-
-
     runs-on: ${{ matrix.cfg.os }}
     steps:
       - uses: actions/checkout@v2
@@ -26,66 +24,10 @@ jobs:
           python-version: ${{ matrix.cfg.python-version }}
       - run: pip install poetry
       - run: poetry install
-      - if: matrix.cfg.os != 'windows-latest'
-        uses: pre-commit/action@v2.0.0
+      - uses: pre-commit/action@v2.0.0
         with:
           extra_args: --verbose --all-files
-
-      - run: poetry run pytest tests/test_nb_run.py # run without extras
-      - run: poetry install
       - run: poetry run pytest --cov-report=xml --cov=src
       - uses: codecov/codecov-action@v1
         with:
           file: coverage.xml
-
-      - if: github.ref == 'refs/heads/main' && matrix.cfg.publish-docs
-        run: |
-          poetry run python -m ipykernel install --user --name nbmake
-          poetry run jb build -W -n --keep-going --builder html docs
-      - if: github.ref == 'refs/heads/main' && matrix.cfg.publish-docs
-        uses: peaceiris/actions-gh-pages@v3.6.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/_build/html
-
-
-  test-teachopencadd:
-    runs-on: ubuntu-latest
-    env:
-      PYVER: 3.7
-      PACKAGE: teachopencadd
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: volkamerlab/teachopencadd
-          ref: 91a7bb60b13ea01d7ee76da32f94b920b2ab3b73
-      - uses: actions/checkout@v2
-        with:
-          path: nbmake
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          python-version: 3.7
-          activate-environment: teachopencadd
-          channel-priority: true
-          environment-file: environment.yml
-          auto-activate-base: false
-      - shell: bash -l {0}
-        run: |
-          pip install ./nbmake
-      - shell: bash -l {0}
-        run: |
-          pytest --nbmake  teachopencadd/talktorials/T000_template/talktorial.ipynb \
-      - shell: bash -l {0}
-        run: |
-          pip install './nbmake'
-      - shell: bash -l {0}
-        run: |
-          pytest \
-            --nbmake \
-            -n=auto \
-            teachopencadd/talktorials/T000_template/talktorial.ipynb \
-            teachopencadd/talktorials/T002_compound_adme/talktorial.ipynb \
-            teachopencadd/talktorials/T004_compound_similarity/talktorial.ipynb \
-            teachopencadd/talktorials/T005_compound_clustering/talktorial.ipynb \
-            teachopencadd/talktorials/T007_compound_activity_machine_learning/talktorial.ipynb \
-            teachopencadd/talktorials/T009_compound_ensemble_pharmacophores/talktorial.ipynb \
