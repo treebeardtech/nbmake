@@ -8,10 +8,11 @@ from _pytest.pytester import Testdir
 from nbformat import read
 from pytest import ExitCode
 
-from .helper import failing_nb, passing_nb, write_nb, testdir2
+from .helper import failing_nb, passing_nb, testdir2, write_nb
 
 pytest_plugins = "pytester"
 NB_VERSION = 4
+
 
 def test_import():
     reload(import_module("nbmake.nb_result"))

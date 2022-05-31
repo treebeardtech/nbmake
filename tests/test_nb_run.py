@@ -8,7 +8,7 @@ NB_VERSION = 4
 from nbmake.nb_result import NotebookResult
 from nbmake.nb_run import NotebookRun
 
-from .helper import failing_nb, passing_nb, write_nb, testdir2
+from .helper import failing_nb, passing_nb, testdir2, write_nb
 
 pytest_plugins = "pytester"
 
