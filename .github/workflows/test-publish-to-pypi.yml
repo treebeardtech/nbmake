@@ -12,10 +12,10 @@ jobs:
           build_version="$(poetry version -s).dev$(date +%s)"
           poetry version $build_version
       - run: poetry build
-      - run: pip install 'pytest==7.1'
-      - run: pip install dist/*gz --force-reinstall
-      - run: pytest --nbmake tests/resources
-      - run: pip install dist/*whl --force-reinstall
-      - run: pytest --nbmake tests/resources
+      # - run: pip install 'pytest==7.1'
+      # - run: pip install dist/*gz --force-reinstall
+      # - run: pytest --nbmake tests/resources
+      # - run: pip install dist/*whl --force-reinstall
+      # - run: pytest --nbmake tests/resources
       - run: pip install twine==4.0.1
-      - run: twine upload -r testpypi dist/* -u alex-treebeard-test -p '${{ secrets.TEST_PYPI_PASSWORD }}'
+      - run: twine upload -r testpypi dist/* -u alex-treebeard-test -p ${{ secrets.TEST_PYPI_PASSWORD }}
