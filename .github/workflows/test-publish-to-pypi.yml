@@ -18,7 +18,4 @@ jobs:
       - run: pip install dist/*whl --force-reinstall
       - run: pytest --nbmake tests/resources
       - run: pip install twine==4.0.1
-      - run: twine upload -r testpypi dist/*
-        env:
-          TWINE_USERNAME: alex-treebeard-test
-          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_PASSWORD }}
+      - run: twine upload -r testpypi dist/* -u alex-treebeard-test -p '${{ secrets.TEST_PYPI_PASSWORD }}'
