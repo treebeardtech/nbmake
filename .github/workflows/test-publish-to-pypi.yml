@@ -17,6 +17,7 @@ jobs:
       - run: pytest --nbmake tests/resources
       - run: pip install dist/*whl --force-reinstall
       - run: pytest --nbmake tests/resources
+      - run: pip install typing-extensions==4.3.0
       - name: Publish distribution to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
