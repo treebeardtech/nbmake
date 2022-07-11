@@ -4,7 +4,7 @@
     "dockerfile": "Dockerfile",
     "context": "..",
     "args": {
-      "VARIANT": "3.8",
+      "VARIANT": "3.10",
       "INSTALL_NODE": "true",
       "NODE_VERSION": "lts/*"
     }
