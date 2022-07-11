@@ -12,10 +12,7 @@ jobs:
       - run: poetry version ${GITHUB_REF:10}
       - run: poetry build
       - run: pip install twine==4.0.1
-      - run: twine upload dist/*
-        env:
-          TWINE_USERNAME: alex-treebeard
-          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_PASSWORD }}
+      - run: twine upload dist/* -u alex-treebeard -p ${{ secrets.PYPI_PASSWORD }}
       - uses: EndBug/add-and-commit@v7.0.0
         with:
             author_name: github-actions
