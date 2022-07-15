@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import nbformat
 from nbclient.client import (
@@ -60,6 +60,26 @@ class NotebookRun:
                 record_timing=True,
                 **extra_kwargs,
             )
+
+            async def apply_mocks(
+                cell: NotebookNode, cell_index: int, execute_reply: Dict[str, Any]
+            ):
+                if c.kc is None:
+                    raise Exception("there is no kernelclient")
+                mocks: Dict[str, Any] = (
+                    cell.get("metadata", {}).get("nbmake", {}).get("mock", {})
+                )
+                for v in mocks:
+                    if isinstance(mocks[v], str):
+                        out = await c.kc.execute_interactive(f"{v} = '{mocks[v]}'")
+                    else:
+                        out = await c.kc.execute_interactive(f"{v} = {mocks[v]}")
+
+                    if out["content"]["status"] != "ok":
+                        raise Exception(f"Failed to apply mock {v}\n\n{str(out)}")
+
+            c.on_cell_executed = apply_mocks
+
             c.execute(cwd=self.filename.parent)
         except CellExecutionError:
             error = self._get_error(nb)
