@@ -113,3 +113,9 @@ class TestNotebookRun:
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
         assert res.error == None
+
+    def test_when_mock_then_succeeds(self, testdir2: Testdir):
+        nb = Path(__file__).parent / "resources" / "mock.ipynb"
+        run = NotebookRun(nb, 300)
+        res: NotebookResult = run.execute()
+        assert res.error == None
