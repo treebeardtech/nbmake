@@ -47,7 +47,7 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     opt = parent.config.option
     p = Path(path)
     if opt.nbmake and p.match("*ipynb") and "_build" not in p.parts:
-        ver: int = pkg_resources.get_distribution("pytest").parsed_version.release[0]
+        ver: int = int(pkg_resources.get_distribution("pytest").version[0])
 
         if ver < 7:
             return NotebookFile.from_parent(parent, fspath=path)
