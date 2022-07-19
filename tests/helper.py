@@ -3,10 +3,9 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import yaml
-from _pytest.pytester import Testdir
 from nbformat import write
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
-from pytest import fixture
+from pytest import Pytester, fixture
 
 HOME: str = os.environ["HOME"]
 
@@ -49,8 +48,7 @@ def write_config(conf: Dict[Any, Any], filename: Path = Path("_config.yml")) -> 
 
 
 @fixture
-def testdir2(testdir: Testdir) -> Testdir:
+def testdir2(pytester: Pytester):
     os.environ[
         "HOME"
     ] = HOME  # ensures jupyter client can start the ipykernel subprocess without module location issues
-    return testdir
