@@ -17,7 +17,10 @@
 
 ## Quick Start
 
-```
+If you have a notebook that runs interactively using an ipython kernel,
+you can try testing it automatically as follows:
+
+```sh
 pip install pytest nbmake
 pytest --nbmake **/*ipynb
 ```
@@ -105,8 +108,10 @@ If you are using another language such as c++ in your notebooks, you may have a 
 
 ## Parallelisation
 
-Parallelisation with xdist is experimental upon initial release, but you can try it out:
-```
+For repos containing a large number of notebooks that run slowly, you can run each notebook
+in parallel using `pytest-xdist`.
+
+```sh
 pip install pytest-xdist
 
 pytest --nbmake -n=auto
@@ -118,10 +123,47 @@ It is also possible to parallelise at a CI-level using strategies, see [example]
 
 Using xdist and the `--overwrite` flag let you build a large jupyter book repo faster:
 
-```
+```sh
 pytest --nbmake --overwrite -n=auto examples
 jb build examples
 ```
+
+## Mock out variables to simplify testing (experimental 🧪)
+
+If your notebook runs a training process that takes a long time to run, you can use nbmake's
+mocking feature to overwrite variables after a cell runs:
+
+```json
+{
+  "cells": [
+    ...,
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "nbmake": {
+          "mock": {
+            // these keys will override global variables after this cell runs
+            "epochs": 2,
+            "config": "/test/config.json",
+            "args": {
+              "env": "test"
+            }
+          }
+        }
+      },
+      "outputs": [],
+      "source": [
+        "epochs = 10\n",
+        "..."
+      ]
+    },
+    ...
+  ],
+  ...
+}
+```
+
 
 ## Advice on Usage
 
