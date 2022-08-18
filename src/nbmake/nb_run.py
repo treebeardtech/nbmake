@@ -64,6 +64,10 @@ class NotebookRun:
             async def apply_mocks(
                 cell: NotebookNode, cell_index: int, execute_reply: Dict[str, Any]
             ):
+                # https://github.com/treebeardtech/nbmake/issues/77
+                if any(o["output_type"] == "error" for o in cell["outputs"]):
+                    execute_reply["content"]["status"] = "error"
+
                 if c.kc is None:
                     raise Exception("there is no kernelclient")
                 mocks: Dict[str, Any] = (
