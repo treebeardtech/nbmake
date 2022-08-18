@@ -121,3 +121,15 @@ class TestNotebookRun:
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
         assert res.error == None
+
+    def test_when_magic_error_then_fails(self, testdir2: Never):
+        nb = Path(__file__).parent / "resources" / "magic_error.ipynb"
+        run = NotebookRun(nb, 300)
+        res: NotebookResult = run.execute()
+        assert res.error != None
+
+    def test_when_empty_then_succeeds(self, testdir2: Never):
+        nb = Path(__file__).parent / "resources" / "empty.ipynb"
+        run = NotebookRun(nb, 300)
+        res: NotebookResult = run.execute()
+        assert res.error is None
