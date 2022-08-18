@@ -14,7 +14,7 @@ jobs:
       - run: poetry build
       - run: pip install 'pytest==7.1'
       - run: pip install dist/*gz --force-reinstall
-      - run: pytest --nbmake tests/resources
+      - run: pytest --nbmake tests/resources mock.ipynb
       - run: pip install dist/*whl --force-reinstall
       - run: pytest --nbmake tests/resources mock.ipynb
       - run: pip install twine==4.0.1
