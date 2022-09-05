@@ -86,7 +86,11 @@ class NotebookRun:
 
             c.execute(cwd=self.filename.parent)
         except CellExecutionError:
-            error = self._get_error(nb)
+            error = self._get_error(nb) or NotebookError(
+                summary="An untraced error occurred. This likely was a cell magic (%<command>) usage error",
+                trace="",
+                failing_cell_index=-1,
+            )
         except CellTimeoutError as err:
             trace = err.args[0]
             error = NotebookError(
