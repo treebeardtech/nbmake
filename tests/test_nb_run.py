@@ -133,3 +133,9 @@ class TestNotebookRun:
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
         assert res.error is None
+
+    def test_when_usage_error_then_fails(self, testdir2: Never):
+        nb = Path(__file__).parent / "resources" / "usageerror.ipynb"
+        run = NotebookRun(nb, 300)
+        res: NotebookResult = run.execute()
+        assert res.error != None
