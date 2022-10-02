@@ -33,7 +33,7 @@ def find_sections(nb: nbformat.NotebookNode) -> List[List[Tuple[int, Any]]]:
     section = []
     for index, cell in enumerate(nb.cells):
         cell_type = cell["cell_type"]
-        if cell_type == "markdown":
+        if cell_type == "markdown" and re.match("^#+ ", cell["source"]):
             if section:
                 sections.append(section)
             section = []
