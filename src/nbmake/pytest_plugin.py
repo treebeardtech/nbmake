@@ -46,9 +46,8 @@ def pytest_addoption(parser: Any):
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     opt = parent.config.option
     p = Path(path)
-    ## p.match("*notebook.py")
     if (opt.nbmake and
-        (p.match("*ipynb") ) and
+        (p.match("*ipynb") or p.match("*.py")) and
         "_build" not in p.parts):
         ver: int = int(pkg_resources.get_distribution("pytest").version[0])
 

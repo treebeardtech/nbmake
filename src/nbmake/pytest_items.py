@@ -1,4 +1,5 @@
 import os
+from os import path
 import re
 import traceback
 from pathlib import Path
@@ -12,7 +13,10 @@ from pygments.formatters import TerminalTrueColorFormatter
 from pygments.lexers import Python3TracebackLexer
 
 from .nb_result import NotebookError, NotebookResult
-from .nb_run import NotebookRun
+from .nb_run import NotebookRun, convert_and_read_notebook
+
+import jupytext.formats
+import jupytext.jupytext
 
 
 class NbMakeFailureRepr(TerminalRepr):
@@ -24,7 +28,11 @@ class NbMakeFailureRepr(TerminalRepr):
         tw.write(f"{self.term}\n")
 
 
-def find_sections(nb: nbformat.NotebookNode) -> List[List[Tuple[int, Any]]]:
+# A list of lists of (index, cell).
+Sections = List[List[Tuple[int, Any]]]
+
+
+def find_sections(nb: nbformat.NotebookNode) -> Sections:
     """Return a list of cells sectioned off by markdown cells.
 
     Each of the (index, cell) output groups starts with a new markdown cell.
@@ -56,11 +64,30 @@ class NotebookFile(pytest.File):
 
         Other cell groups are simply ignored.
         """
-
-        NB_VERSION = 4
-        nb = nbformat.read(str(Path(self.fspath)), NB_VERSION)
+        nb = convert_and_read_notebook(self.fspath)
 
         sections = find_sections(nb)
+        yield from self.tests_from_sections_simple(sections)
+
+    def tests_from_sections_simple(self, sections: Sections):
+        init_cells = []
+        for section in sections:
+            index, cell = next(iter(section))
+            assert cell["cell_type"] == "markdown"
+
+            match = re.match(r"#+ (.*)", cell["source"])
+            if not match:
+                # Cumulate the init cells based on the position.
+                init_cells.extend(index for index, _ in section)
+            else:
+                code_cells = [index for index, _ in section]
+                yield NotebookItem.from_parent(
+                    self,
+                    name=match.group(1).strip(),
+                    filename=str(Path(self.fspath)),
+                    cell_indices=(init_cells + code_cells))
+
+    def tests_from_sections_explicit(self, sections: Sections):
         init_cells = []
         for section in sections:
             index, cell = next(iter(section))

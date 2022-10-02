@@ -14,17 +14,15 @@
 # ---
 
 # %% [markdown]
-# # init
-
-# %% [markdown]
-# This is an initialization cell that will be run for all tests below.
+# The initialization cell above that will be run for all tests below.
 
 # %%
-import csv
+import pytest
+import hashlib
 print("initialized")
 
 # %% [markdown]
-# # test: first thing
+# # first test
 #
 
 # %% [markdown]
@@ -38,25 +36,7 @@ assert h.hexdigest() == '20d9cd024d4fb086aae819a1432dd2466de12947831b75c5a30cf26
 
 
 # %% [markdown]
-# # init
-
-# %% [markdown]
-# This is a second initialization block. All the tests under it will also benefit from it being run before them, and it includes prior init blocks too.
-
-# %%
-import hashlib
-
-# %% [markdown]
-# # something else
-
-# %% [markdown]
-# This is not an init nor a test section. It is ignored.
-
-# %%
-raise TypeError
-
-# %% [markdown]
-# # test: second thing
+# # second test
 
 # %% [markdown]
 # This is the second test being run. The second initialization block is run before it and so hashlib is found.

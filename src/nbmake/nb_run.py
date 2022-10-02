@@ -10,10 +10,22 @@ from nbclient.client import (
 )
 from nbclient.util import run_sync
 from nbformat import NotebookNode
+import jupytext
+
 
 from .nb_result import NotebookError, NotebookResult
 
 NB_VERSION = 4
+
+
+def convert_and_read_notebook(filename: str):
+    """Potentially convert jupytext formats and read a notebook."""
+    ext = Path(filename).suffix
+    if ext == ".ipynb":
+        nb = nbformat.read(filename, NB_VERSION)
+    else:
+        nb = jupytext.read(filename)
+    return nb
 
 
 class NotebookRun:
@@ -35,7 +47,7 @@ class NotebookRun:
     def execute(
         self, cell_indices: List[int]
     ) -> NotebookResult:
-        nb = nbformat.read(str(self.filename), NB_VERSION)
+        nb = convert_and_read_notebook(str(self.filename))
 
         for cell in nb.cells:
             if cell.cell_type == "code":
