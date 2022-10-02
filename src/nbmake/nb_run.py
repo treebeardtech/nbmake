@@ -1,5 +1,6 @@
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Tuple
+from contextlib import asynccontextmanager
 
 import nbformat
 from nbclient.client import (
@@ -7,6 +8,7 @@ from nbclient.client import (
     CellTimeoutError,
     NotebookClient,
 )
+from nbclient.util import run_sync
 from nbformat import NotebookNode
 
 from .nb_result import NotebookError, NotebookResult
@@ -31,7 +33,7 @@ class NotebookRun:
         self.kernel = kernel
 
     def execute(
-        self,
+        self, cell_indices: List[int]
     ) -> NotebookResult:
         nb = nbformat.read(str(self.filename), NB_VERSION)
 
@@ -84,9 +86,20 @@ class NotebookRun:
 
             c.on_cell_executed = apply_mocks
 
-            c.execute(cwd=self.filename.parent)
-        except CellExecutionError:
-            error = self._get_error(nb)
+            # c.execute(cwd=self.filename.parent)
+            async def execute_cells():
+                async with c.async_setup_kernel(cwd=self.filename.parent):
+                    for cell_index in cell_indices:
+                        cell = nb.cells[cell_index]
+                        try:
+                            res = c.execute_cell(cell=cell, cell_index=cell_index)
+                        except Exception as exc:
+                            exc.cell_index = cell_index
+                            raise exc
+
+            run_sync(execute_cells)()
+        except CellExecutionError as exc:
+            error = self._get_error_for_cell(nb, exc.cell_index)
         except CellTimeoutError as err:
             trace = err.args[0]
             error = NotebookError(
@@ -139,5 +152,27 @@ class NotebookRun:
                 return NotebookError(
                     summary=last_trace, trace=trace, failing_cell_index=i
                 )
+
+        return None
+
+    def _get_error_for_cell(self, nb: NotebookNode, cell_index: int) -> Optional[NotebookError]:
+        cell = nb.cells[cell_index]
+        assert cell["cell_type"] == "code"
+
+        errors = [
+            output
+            for output in cell["outputs"]
+            if output["output_type"] == "error" or "ename" in output
+        ]
+
+        if errors:
+            tb = "\n".join(errors[0].get("traceback", ""))
+            src = "".join(cell["source"])
+            last_trace = tb.split("\n")[-1]
+            line = 75 * "-"
+            trace = f"{line}\n{src}\n{tb}"
+            return NotebookError(
+                summary=last_trace, trace=trace, failing_cell_index=cell_index
+            )
 
         return None
