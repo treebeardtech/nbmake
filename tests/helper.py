@@ -30,22 +30,21 @@ failing_nb = [
 
 bycell_nb = [
     # In [1]:
-    ("md", "# The initialization cell above that will be run for all tests below."),
+    ("md", "The initialization cell above that will be run for all tests below."),
     # In [2]:
     ("co", "import hashlib"),
     # In [3]:
     ("md", "# first test"),
     # In [4]:
-    ("co", "hashlib.blake2b(digest_size=32, person=b'Joe'"),
+    ("co", "h = hashlib.blake2b(digest_size=32, person=b'Joe')"),
     # In [5]:
     ("md", "# a heading, not a test"),
     # In [6]:
     ("md", "## second test"),
     # In [7]:
-    ("md", ("This is the second test being run. The second initialization block is "
-            "run before it and so hashlib is found.")),
+    ("md", "This is the second test being run. [4] should not have been run."),
     # In [8]:
-    ("co", "hashlib.blake2b(digest_size=32, person=b'Smith'"),
+    ("co", "assert 'h' not in globals()"),
 ]
 
 
@@ -53,12 +52,10 @@ bycell_nb = [
 def write_nb(
     sources: List[Tuple[str, str]],
     path: Path,
-    title: str = "default-title",
     metadata: Dict[str, Any] = {},
 ):
     nb = new_notebook()
     nb.metadata = metadata
-    nb.cells.append(new_markdown_cell(f"# {title}"))
     for celltype, src in sources:
         new_cell = new_code_cell if celltype == "co" else new_markdown_cell
         nb.cells.append(new_cell(src))

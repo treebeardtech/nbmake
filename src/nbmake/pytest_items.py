@@ -81,14 +81,13 @@ class NotebookFileByCell(pytest.File):
                 # Cumulate the init cells based on the position.
                 init_cells.extend(index for index, _ in section)
             else:
-                code_cells = [index for index, cell in section
-                              if cell["cell_type"] == "code"]
-                if code_cells:
+                if any(((cell["cell_type"] == "code") for _, cell in section)):
+                    test_cells = [index for index, _ in section]
                     yield NotebookItem.from_parent(
                         self,
                         filename=str(Path(self.fspath)),
                         name=match.group(1).strip(),
-                        cell_indices=(init_cells + code_cells),
+                        cell_indices=(init_cells + test_cells),
                     )
 
 

@@ -10,7 +10,7 @@ NB_VERSION = 4
 from nbmake.nb_result import NotebookResult
 from nbmake.nb_run import NotebookRun
 
-from .helper import failing_nb, passing_nb, testdir2, write_nb
+from .helper import failing_nb, passing_nb, bycell_nb, testdir2, write_nb
 
 pytest_plugins = "pytester"
 
@@ -44,7 +44,7 @@ class TestNotebookRun:
         run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
 
-        assert res.error and res.error.failing_cell_index == 1
+        assert res.error and res.error.failing_cell_index == 0
 
     def test_when_allow_errors_then_passing(self, testdir2: Never):
         nb = new_notebook()
@@ -134,3 +134,15 @@ class TestNotebookRun:
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
         assert res.error is None
+
+    def test_by_cell(self, testdir2: Never):
+        write_nb(bycell_nb, filename)
+        run = NotebookRun(filename, 300, cell_indices=[0, 1, 2, 3])
+        res: NotebookResult = run.execute()
+
+        assert res.error == None
+
+        run = NotebookRun(filename, 300, cell_indices=[0, 1, 6, 7])
+        res: NotebookResult = run.execute()
+
+        assert res.error == None

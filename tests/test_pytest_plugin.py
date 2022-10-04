@@ -184,3 +184,14 @@ def test_when_kernel_passed_then_override(pytester: Pytester, testdir2: Never):
     hook_recorder = pytester.inline_run("--nbmake", "--nbmake-kernel=python3")
 
     assert hook_recorder.ret == ExitCode.OK
+
+
+def test_by_cell(pytester: Pytester, testdir2: Never):
+    write_nb(bycell_nb, Path(pytester.path) / "a.ipynb")
+
+    items, hook_recorder = pytester.inline_genitems("--nbmake", "--nbmake-by-cell")
+
+    assert hook_recorder.ret == ExitCode.OK
+    assert len(items) == 2
+    assert items[0].cell_indices == [0, 1, 2, 3]
+    assert items[1].cell_indices == [0, 1, 5, 6, 7]

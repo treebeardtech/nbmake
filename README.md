@@ -26,6 +26,8 @@ pip install pytest nbmake
 pytest --nbmake **/*ipynb
 ```
 
+Files ending with `.ipct.py` and `.notebook.py` in percent format are also supported.
+
 ## Configure Cell Timeouts
 
 You can configure the cell timeout with the following pytest flag:
