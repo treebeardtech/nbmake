@@ -6,6 +6,7 @@ from typing import Any, Optional
 import pkg_resources
 
 from .pytest_items import NotebookFile
+from .pytest_items import NotebookFileByCell
 
 
 def pytest_addoption(parser: Any):
@@ -41,19 +42,27 @@ def pytest_addoption(parser: Any):
         help="Overrides the kernel used for all notebooks",
         type=str,
     )
+    group.addoption(
+        "--nbmake-by-cell",
+        action="store_true",
+        help="Break out each notebook section into its own individual unit tests",
+    )
 
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     opt = parent.config.option
     p = Path(path)
-    if (opt.nbmake and
-        (p.match("*ipynb") or p.match("*.py")) and
-        "_build" not in p.parts):
+    if (
+        opt.nbmake
+        and (p.match("*ipynb") or p.match("*.py"))
+        and "_build" not in p.parts
+    ):
+        cls = NotebookFileByCell if opt.nbmake_by_cell else NotebookFile
         ver: int = int(pkg_resources.get_distribution("pytest").version[0])
-
-        if ver < 7:
-            return NotebookFile.from_parent(parent, fspath=path)
-
-        return NotebookFile.from_parent(parent, path=p)
+        return (
+            cls.from_parent(parent, fspath=path)
+            if ver < 7
+            else cls.from_parent(parent, path=p)
+        )
 
     return None

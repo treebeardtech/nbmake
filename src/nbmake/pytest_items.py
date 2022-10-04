@@ -53,6 +53,15 @@ def find_sections(nb: nbformat.NotebookNode) -> Sections:
 
 
 class NotebookFile(pytest.File):
+    """Collection entire files as tests."""
+
+    def collect(self) -> Generator[Any, Any, Any]:
+        yield NotebookItem.from_parent(self, filename=str(Path(self.fspath)))
+
+
+class NotebookFileByCell(pytest.File):
+    """Break up notebook files into sections each of which a test."""
+
     def collect(self) -> Generator[Any, Any, Any]:
         """
         Initialization cell groups start with an '# init' markdown cell and
@@ -85,7 +94,8 @@ class NotebookFile(pytest.File):
                     self,
                     name=match.group(1).strip(),
                     filename=str(Path(self.fspath)),
-                    cell_indices=(init_cells + code_cells))
+                    cell_indices=(init_cells + code_cells),
+                )
 
     def tests_from_sections_explicit(self, sections: Sections):
         init_cells = []
@@ -104,7 +114,8 @@ class NotebookFile(pytest.File):
                     self,
                     name=match.group(1).strip(),
                     filename=str(Path(self.fspath)),
-                    cell_indices=(init_cells + code_cells))
+                    cell_indices=(init_cells + code_cells),
+                )
 
 
 class NotebookFailedException(Exception):
@@ -112,24 +123,37 @@ class NotebookFailedException(Exception):
 
 
 class NotebookItem(pytest.Item):
+    """A notebook item, either a complete file, or a subset of cells."""
+
     nbmake = True
 
-    def __init__(self, parent: Any, name: str, filename: str, cell_indices: List[int]):
+    def __init__(
+        self,
+        parent: Any,
+        name: str,
+        filename: str,
+        cell_indices: Optional[List[int]] = None,
+    ):
         super().__init__(name, parent)
         self.filename = filename
+
+        # Note: if 'cell_indices' is None, the entire notebook is executed as
+        # one. Otherwise the subset of given cell inidces is executed.
         self.cell_indices = cell_indices
 
     def runtest(self):
         option = self.parent.config.option
         source = Path(self.config.rootdir) / self.filename
+
         run = NotebookRun(
             source,
             option.nbmake_timeout,
             verbose=bool(option.verbose),
             kernel=option.nbmake_kernel,
+            cell_indices=self.cell_indices
         )
 
-        res: NotebookResult = run.execute(self.cell_indices)
+        res: NotebookResult = run.execute()
 
         if option.overwrite:
             nbformat.write(res.nb, str(source))

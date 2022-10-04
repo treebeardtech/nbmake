@@ -18,12 +18,13 @@ from .nb_result import NotebookError, NotebookResult
 NB_VERSION = 4
 
 
-def convert_and_read_notebook(filename: str):
-    """Potentially convert jupytext formats and read a notebook."""
+def convert_and_read_notebook(filename: str) -> NotebookNode:
+    """Read a notebook, potentially converting from various jupytext formats."""
     ext = Path(filename).suffix
     if ext == ".ipynb":
         nb = nbformat.read(filename, NB_VERSION)
     else:
+        # Attempt to convert the notebook using Jypytext.
         nb = jupytext.read(filename)
     return nb
 
@@ -38,15 +39,18 @@ class NotebookRun:
         default_timeout: int,
         verbose: bool = False,
         kernel: Optional[str] = None,
+        cell_indices: Optional[List[int]] = None,
     ) -> None:
         self.filename = filename
         self.verbose = verbose
         self.default_timeout = default_timeout
         self.kernel = kernel
 
-    def execute(
-        self, cell_indices: List[int]
-    ) -> NotebookResult:
+        # Note: if 'cell_indices' is None, the entire notebook is executed as
+        # one. Otherwise the subset of given cell inidces is executed.
+        self.cell_indices: Optional[List[int]] = cell_indices
+
+    def execute(self) -> NotebookResult:
         nb = convert_and_read_notebook(str(self.filename))
 
         for cell in nb.cells:
@@ -98,26 +102,34 @@ class NotebookRun:
 
             c.on_cell_executed = apply_mocks
 
-            # c.execute(cwd=self.filename.parent)
-            async def execute_cells():
-                async with c.async_setup_kernel(cwd=self.filename.parent):
-                    for cell_index in cell_indices:
-                        cell = nb.cells[cell_index]
-                        try:
-                            res = c.execute_cell(cell=cell, cell_index=cell_index)
-                        except Exception as exc:
-                            exc.cell_index = cell_index
-                            raise exc
+            if self.cell_indices is None:
+                # Run the entire notebook.
+                c.execute(cwd=self.filename.parent)
+            else:
+                # Run the given subset of cells in `self.cell_indices`.
+                async def execute_cells():
+                    async with c.async_setup_kernel(cwd=self.filename.parent):
+                        for cell_index in self.cell_indices:
+                            cell = nb.cells[cell_index]
+                            try:
+                                res = c.execute_cell(cell=cell, cell_index=cell_index)
+                            except Exception as exc:
+                                exc.cell_index = cell_index
+                                raise exc
 
-            run_sync(execute_cells)()
+                run_sync(execute_cells)()
         except CellExecutionError as exc:
-            error = self._get_error_for_cell(nb, exc.cell_index)
+            error = (
+                _get_error(nb)
+                if self.cell_indices is None
+                else _get_error_for_cell(nb, exc.cell_index)
+            )
         except CellTimeoutError as err:
             trace = err.args[0]
             error = NotebookError(
                 summary=trace.split("\n")[0],
                 trace=trace,
-                failing_cell_index=self._get_timeout_cell(nb),
+                failing_cell_index=_get_timeout_cell(nb),
             )
         except Exception as err:
             # if at top causes https://github.com/jupyter/nbclient/issues/128
@@ -136,41 +148,21 @@ class NotebookRun:
 
         return NotebookResult(nb=nb, error=error)
 
-    def _get_timeout_cell(self, nb: NotebookNode) -> int:
-        for i, cell in enumerate(nb.cells):
-            if cell.cell_type != "code":
-                continue
-            if "shell.execute_reply" not in cell.metadata.execution:
-                return i
 
-        return -1
+def _get_timeout_cell(nb: NotebookNode) -> int:
+    for i, cell in enumerate(nb.cells):
+        if cell.cell_type != "code":
+            continue
+        if "shell.execute_reply" not in cell.metadata.execution:
+            return i
 
-    def _get_error(self, nb: NotebookNode) -> Optional[NotebookError]:
-        for i, cell in reversed(list(enumerate(nb["cells"]))):  # get LAST error
-            if cell["cell_type"] != "code":
-                continue
-            errors = [
-                output
-                for output in cell["outputs"]
-                if output["output_type"] == "error" or "ename" in output
-            ]
+    return -1
 
-            if errors:
-                tb = "\n".join(errors[0].get("traceback", ""))
-                src = "".join(cell["source"])
-                last_trace = tb.split("\n")[-1]
-                line = 75 * "-"
-                trace = f"{line}\n{src}\n{tb}"
-                return NotebookError(
-                    summary=last_trace, trace=trace, failing_cell_index=i
-                )
 
-        return None
-
-    def _get_error_for_cell(self, nb: NotebookNode, cell_index: int) -> Optional[NotebookError]:
-        cell = nb.cells[cell_index]
-        assert cell["cell_type"] == "code"
-
+def _get_error(nb: NotebookNode) -> Optional[NotebookError]:
+    for i, cell in reversed(list(enumerate(nb["cells"]))):  # get LAST error
+        if cell["cell_type"] != "code":
+            continue
         errors = [
             output
             for output in cell["outputs"]
@@ -183,8 +175,29 @@ class NotebookRun:
             last_trace = tb.split("\n")[-1]
             line = 75 * "-"
             trace = f"{line}\n{src}\n{tb}"
-            return NotebookError(
-                summary=last_trace, trace=trace, failing_cell_index=cell_index
-            )
+            return NotebookError(summary=last_trace, trace=trace, failing_cell_index=i)
 
-        return None
+    return None
+
+
+def _get_error_for_cell(nb: NotebookNode, cell_index: int) -> Optional[NotebookError]:
+    cell = nb.cells[cell_index]
+    assert cell["cell_type"] == "code"
+
+    errors = [
+        output
+        for output in cell["outputs"]
+        if output["output_type"] == "error" or "ename" in output
+    ]
+
+    if errors:
+        tb = "\n".join(errors[0].get("traceback", ""))
+        src = "".join(cell["source"])
+        last_trace = tb.split("\n")[-1]
+        line = 75 * "-"
+        trace = f"{line}\n{src}\n{tb}"
+        return NotebookError(
+            summary=last_trace, trace=trace, failing_cell_index=cell_index
+        )
+
+    return None
