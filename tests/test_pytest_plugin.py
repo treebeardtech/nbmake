@@ -8,7 +8,7 @@ from nbformat import read
 from pytest import ExitCode, Pytester
 from typing_extensions import Never
 
-from .helper import failing_nb, passing_nb, testdir2, write_nb
+from .helper import failing_nb, passing_nb, bycell_nb, testdir2, write_nb
 
 pytest_plugins = "pytester"
 NB_VERSION = 4
@@ -86,7 +86,7 @@ def test_when_overwrite_then_overwritten(pytester: Pytester, testdir2: Never):
         Path(pytester.path) / Path("sub dir/b.ipynb"),
     ]
     pytester.mkdir("sub dir")
-    [write_nb(["1+1"], path) for path in nbs]
+    [write_nb([("co", "1+1")], path) for path in nbs]
 
     hook_recorder = pytester.inline_run("--nbmake", "--overwrite")
 
@@ -144,7 +144,7 @@ def test_when_init_then_passes(pytester: Pytester, testdir2: Never):
 def test_when_timeout_flag_then_uses_as_default(pytester: Pytester, testdir2: Never):
     example_dir = Path(pytester.path) / "example"
     example_dir.mkdir()
-    write_nb(["import time; time.sleep(2)"], example_dir / "a.ipynb")
+    write_nb([("co", "import time; time.sleep(2)")], example_dir / "a.ipynb")
 
     hook_recorder = pytester.inline_run("--nbmake", "--nbmake-timeout=3")
     assert hook_recorder.ret == ExitCode.OK
@@ -159,7 +159,7 @@ def test_when_explicit_metadata_then_ignore_timeout(
     example_dir = Path(pytester.path) / "example"
     example_dir.mkdir()
     write_nb(
-        ["import time; time.sleep(2)"],
+        [("co", "import time; time.sleep(2)")],
         example_dir / "a.ipynb",
         metadata={"execution": {"timeout": 10}},
     )

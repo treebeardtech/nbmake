@@ -30,7 +30,8 @@ class TestNotebookRun:
         subdir = Path("subdir")
         subdir.mkdir(exist_ok=True)
         write_nb(
-            ["import os; assert os.getcwd().endswith('subdir')"], subdir / filename
+            [("co", "import os; assert os.getcwd().endswith('subdir')")],
+            subdir / filename,
         )
 
         run = NotebookRun(subdir / filename, 300)
