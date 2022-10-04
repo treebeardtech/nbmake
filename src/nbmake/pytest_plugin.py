@@ -54,7 +54,7 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     p = Path(path)
     if (
         opt.nbmake
-        and (p.match("*ipynb") or p.match("*.py"))
+        and (p.match("*ipynb") or p.match("*.ipct.py") or p.match("*.notebook.py"))
         and "_build" not in p.parts
     ):
         cls = NotebookFileByCell if opt.nbmake_by_cell else NotebookFile

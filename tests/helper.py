@@ -24,7 +24,7 @@ passing_nb = [
 
 failing_nb = [
     # In [1]:
-    ("co", "raise Exception('something went wrong')")
+    ("co", "raise Exception('something went wrong')"),
 ]
 
 
@@ -60,7 +60,7 @@ def write_nb(
     nb.metadata = metadata
     nb.cells.append(new_markdown_cell(f"# {title}"))
     for celltype, src in sources:
-        new_cell = new_code_cell if celltype == "md" else new_markdown_cell
+        new_cell = new_code_cell if celltype == "co" else new_markdown_cell
         nb.cells.append(new_cell(src))
     write(nb, str(path))
 
