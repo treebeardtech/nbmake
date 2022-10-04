@@ -86,8 +86,8 @@ class NotebookFileByCell(pytest.File):
                 if code_cells:
                     yield NotebookItem.from_parent(
                         self,
-                        name=match.group(1).strip(),
                         filename=str(Path(self.fspath)),
+                        name=match.group(1).strip(),
                         cell_indices=(init_cells + code_cells),
                     )
 
@@ -104,8 +104,8 @@ class NotebookItem(pytest.Item):
     def __init__(
         self,
         parent: Any,
-        name: str,
         filename: str,
+        name: Optional[str] = "",
         cell_indices: Optional[List[int]] = None,
     ):
         super().__init__(name, parent)

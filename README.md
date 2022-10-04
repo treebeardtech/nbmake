@@ -210,8 +210,6 @@ The title of each heading will be used as the name of each test.
 An optional initial section without a heading serves as a common initialization
 block which will be prepended to all tests in the file.
 
-## Example
-
 For example, the following notebook structure would result in two unit tests
 (example in `percent` format):
 
