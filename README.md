@@ -199,16 +199,22 @@ pytest -p no:nbmake
 
 ## "By Cell" Mode
 
-With the `--nbmake-by-cell` flag, nbmake will carve up the notebook into
-multiple individual unit tests. Each section heading (of any level) will be
-split out as a separate test, as long as it contains at least one code cell.
-Sections without code cells will be ignored. All the cells within a section will
-be run consecutively, in order.
+In "by cell" mode, nbmake will carve up the notebook into multiple individual
+unit tests. Each section heading (of any level) will be split out as a separate
+test, as long as it contains at least one code cell. Sections without code cells
+will be ignored. All the cells within a section will be run consecutively, in
+order.
 
 The title of each heading will be used as the name of each test.
 
 An optional initial section without a heading serves as a common initialization
 block which will be prepended to all tests in the file.
+
+In order to turn on this mode, use the `--nbmake-by-cell` flag, like this:
+
+```sh
+pytest --nbmake --nbmake-by-cell ...
+```
 
 For example, the following notebook structure would result in two unit tests
 (example in `percent` format):
