@@ -97,26 +97,6 @@ class NotebookFileByCell(pytest.File):
                     cell_indices=(init_cells + code_cells),
                 )
 
-    def tests_from_sections_explicit(self, sections: Sections):
-        init_cells = []
-        for section in sections:
-            index, cell = next(iter(section))
-            assert cell["cell_type"] == "markdown"
-
-            if re.match(r"#+ init\b", cell["source"]):
-                # Cumulate the init cells based on the position.
-                init_cells.extend(index for index, _ in section)
-
-            elif re.match(r"#+ test\b", cell["source"]):
-                match = re.match(r"#+ test:(.*)", cell["source"])
-                code_cells = [index for index, _ in section]
-                yield NotebookItem.from_parent(
-                    self,
-                    name=match.group(1).strip(),
-                    filename=str(Path(self.fspath)),
-                    cell_indices=(init_cells + code_cells),
-                )
-
 
 class NotebookFailedException(Exception):
     pass
