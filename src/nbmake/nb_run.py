@@ -1,6 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-from contextlib import asynccontextmanager
+from typing import Any, Dict, List, Optional
 
 import nbformat
 from nbclient.client import (
@@ -22,6 +21,7 @@ def convert_and_read_notebook(filename: str) -> NotebookNode:
     """Read a notebook, potentially converting from various jupytext formats."""
     ext = Path(filename).suffix
     if ext == ".ipynb":
+        # Read the nbformat JSON notebook.
         nb = nbformat.read(filename, NB_VERSION)
     else:
         # Attempt to convert the notebook using Jypytext.
@@ -118,12 +118,14 @@ class NotebookRun:
                                 raise exc
 
                 run_sync(execute_cells)()
+
         except CellExecutionError as exc:
             error = (
                 _get_error(nb)
                 if self.cell_indices is None
                 else _get_error_for_cell(nb, exc.cell_index)
             )
+
         except CellTimeoutError as err:
             trace = err.args[0]
             error = NotebookError(
@@ -131,6 +133,7 @@ class NotebookRun:
                 trace=trace,
                 failing_cell_index=_get_timeout_cell(nb),
             )
+
         except Exception as err:
             # if at top causes https://github.com/jupyter/nbclient/issues/128
             # from jupyter_client.kernelspec import KernelSpecManager, NoSuchKernel
@@ -159,6 +162,9 @@ def _get_timeout_cell(nb: NotebookNode) -> int:
     return -1
 
 
+# Note: I wonder if there's a way to get the cell above for a whole notebook
+# run. If so, we could avoid the search for last error cell and merge the
+# following two codes.
 def _get_error(nb: NotebookNode) -> Optional[NotebookError]:
     for i, cell in reversed(list(enumerate(nb["cells"]))):  # get LAST error
         if cell["cell_type"] != "code":

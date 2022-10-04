@@ -63,15 +63,7 @@ class NotebookFileByCell(pytest.File):
     """Break up notebook files into sections each of which a test."""
 
     def collect(self) -> Generator[Any, Any, Any]:
-        """
-        Initialization cell groups start with an '# init' markdown cell and
-        those seen prior to a test cell are prepended to be run before it.
-
-        Test cell groups start with an '# test' markdown cell and we run the
-        initialization cells seen up to this point before running these cells
-        as an independent group.
-
-        Other cell groups are simply ignored.
+        """Break apart the notebook into groups of cells. See tests/bycell/README.md.
         """
         nb = convert_and_read_notebook(self.fspath)
 
@@ -89,13 +81,15 @@ class NotebookFileByCell(pytest.File):
                 # Cumulate the init cells based on the position.
                 init_cells.extend(index for index, _ in section)
             else:
-                code_cells = [index for index, _ in section]
-                yield NotebookItem.from_parent(
-                    self,
-                    name=match.group(1).strip(),
-                    filename=str(Path(self.fspath)),
-                    cell_indices=(init_cells + code_cells),
-                )
+                code_cells = [index for index, cell in section
+                              if cell["cell_type"] == "code"]
+                if code_cells:
+                    yield NotebookItem.from_parent(
+                        self,
+                        name=match.group(1).strip(),
+                        filename=str(Path(self.fspath)),
+                        cell_indices=(init_cells + code_cells),
+                    )
 
 
 class NotebookFailedException(Exception):
