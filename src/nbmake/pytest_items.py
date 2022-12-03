@@ -47,6 +47,7 @@ class NotebookItem(pytest.Item):
             option.nbmake_timeout,
             verbose=bool(option.verbose),
             kernel=option.nbmake_kernel,
+            find_import_errors=option.nbmake_find_import_errors,
         )
 
         res: NotebookResult = run.execute()

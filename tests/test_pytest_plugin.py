@@ -184,3 +184,14 @@ def test_when_kernel_passed_then_override(pytester: Pytester, testdir2: Never):
     hook_recorder = pytester.inline_run("--nbmake", "--nbmake-kernel=python3")
 
     assert hook_recorder.ret == ExitCode.OK
+
+
+def test_when_no_import_errs_then_pass(pytester: Pytester, testdir2: Never):
+    write_nb(
+        ["import itertools", "1/0", "import pickle"],
+        Path(pytester.path) / "a.ipynb",
+    )
+
+    hook_recorder = pytester.inline_run("--nbmake", "--nbmake-find-import-errors")
+
+    assert hook_recorder.ret == ExitCode.OK

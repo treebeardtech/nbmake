@@ -133,3 +133,10 @@ class TestNotebookRun:
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
         assert res.error is None
+
+    def test_when_import_error_then_fails(self, testdir2: Never):
+        nb = Path(__file__).parent / "resources" / "import_errs.ipynb"
+        run = NotebookRun(nb, 1, find_import_errors=True)
+        res: NotebookResult = run.execute()
+        assert res.error is not None
+        assert "ModuleNotFoundError" in res.error.summary
