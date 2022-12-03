@@ -14,6 +14,10 @@ from .nb_result import NotebookError, NotebookResult
 NB_VERSION = 4
 
 
+class CellImportError(Exception):
+    pass
+
+
 class NotebookRun:
     filename: Path
     verbose: bool
@@ -24,11 +28,13 @@ class NotebookRun:
         default_timeout: int,
         verbose: bool = False,
         kernel: Optional[str] = None,
+        find_import_errors: bool = False,
     ) -> None:
         self.filename = filename
         self.verbose = verbose
         self.default_timeout = default_timeout
         self.kernel = kernel
+        self.find_import_errors = find_import_errors
 
     def execute(
         self,
@@ -56,7 +62,8 @@ class NotebookRun:
             c = NotebookClient(
                 nb,
                 timeout=timeout,
-                allow_errors=allow_errors,
+                allow_errors=allow_errors or self.find_import_errors,
+                interrupt_on_timeout=self.find_import_errors,
                 record_timing=True,
                 **extra_kwargs,
             )
@@ -67,6 +74,11 @@ class NotebookRun:
                 # https://github.com/treebeardtech/nbmake/issues/77
                 if any(o["output_type"] == "error" for o in cell["outputs"]):
                     execute_reply["content"]["status"] = "error"
+
+                    if "ename" in execute_reply["content"]:
+                        if execute_reply["content"]["ename"] == "ModuleNotFoundError":
+                            if self.find_import_errors:
+                                raise CellImportError()
 
                 if c.kc is None:
                     raise Exception("there is no kernelclient")
@@ -85,6 +97,8 @@ class NotebookRun:
             c.on_cell_executed = apply_mocks
 
             c.execute(cwd=self.filename.parent)
+        except CellImportError:
+            error = self._get_error(nb)
         except CellExecutionError:
             error = self._get_error(nb)
         except CellTimeoutError as err:

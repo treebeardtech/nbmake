@@ -42,6 +42,13 @@ def pytest_addoption(parser: Any):
         type=str,
     )
 
+    group.addoption(
+        "--nbmake-find-import-errors",
+        action="store_true",
+        help="Runs all cells, only reports import errors",
+        default=False,
+    )
+
 
 def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     opt = parent.config.option
