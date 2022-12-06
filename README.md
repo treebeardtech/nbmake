@@ -128,6 +128,19 @@ pytest --nbmake --overwrite -n=auto examples
 jb build examples
 ```
 
+## Find missing imports in a directory of failing notebooks (new ✨)
+
+It's not always feasible to get notebooks running from top to bottom from the start.
+
+You can however, use nbmake to check that there are no `ModuleNotFoundError`s:
+
+```sh
+pytest \
+  --nbmake \
+  --nbmake-find-import-errors \ # Ignore all errors except ModuleNotFoundError
+  --nbmake-timeout=20 # Skip past cells longer than 20s
+```
+
 ## Mock out variables to simplify testing (experimental 🧪)
 
 If your notebook runs a training process that takes a long time to run, you can use nbmake's
