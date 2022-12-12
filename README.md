@@ -217,3 +217,13 @@ pytest -p no:nbmake
 * [jupyter book](https://github.com/executablebooks/jupyter-book)
 * [jupyter cache](https://github.com/executablebooks/jupyter-cache)
 * [MyST-NB](https://github.com/executablebooks/MyST-NB)
+
+---
+
+## ℹ️ Get help with machine learning infrastructure
+
+Beyond testing notebooks, the maintainers of nbmake help software and finance companies scale their machine learning products.
+
+[Find out more](https://www.treebeard.io/).
+
+---
