@@ -94,13 +94,13 @@ class NotebookRun:
                         if out["content"]["status"] != "ok":
                             raise Exception(f"Failed to apply mock {v}\n\n{str(out)}")
 
-                    post_command: List[str] = (
+                    post_cell_execute: List[str] = (
                         cell.get("metadata", {})
                         .get("nbmake", {})
-                        .get("post_command", [])
+                        .get("post_cell_execute", [])
                     )
-                    if post_command:
-                        pc = "\n".join(post_command)
+                    if post_cell_execute:
+                        pc = "\n".join(post_cell_execute)
                         out = await c.kc.execute_interactive(pc)
 
                         if out["content"]["status"] != "ok":

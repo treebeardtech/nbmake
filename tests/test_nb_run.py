@@ -122,14 +122,14 @@ class TestNotebookRun:
         res: NotebookResult = run.execute()
         assert res.error == None
 
-    def test_when_post_command_then_succeeds(self, testdir2: Never):
-        nb = Path(__file__).parent / "resources" / "post_command.ipynb"
+    def test_when_post_cell_execute_then_succeeds(self, testdir2: Never):
+        nb = Path(__file__).parent / "resources" / "post_cell_execute.ipynb"
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
         assert res.error == None
 
-    def test_when_post_command_then_command_fails(self, testdir2: Never):
-        nb = Path(__file__).parent / "resources" / "post_command_error.ipynb"
+    def test_when_post_cell_execute_then_command_fails(self, testdir2: Never):
+        nb = Path(__file__).parent / "resources" / "post_cell_execute_error.ipynb"
         run = NotebookRun(nb, 300)
         with pytest.raises(Exception) as exc_info:
             run.execute()
@@ -137,8 +137,10 @@ class TestNotebookRun:
         assert exc_info != None
         assert "boom!" in exc_info.value.args[0]
 
-    def test_when_post_command_then_cell_fails(self, testdir2: Never):
-        nb = Path(__file__).parent / "resources" / "post_command_masked_error.ipynb"
+    def test_when_post_cell_execute_then_cell_fails(self, testdir2: Never):
+        nb = (
+            Path(__file__).parent / "resources" / "post_cell_execute_masked_error.ipynb"
+        )
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
 
