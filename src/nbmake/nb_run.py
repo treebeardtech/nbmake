@@ -98,11 +98,12 @@ class NotebookRun:
                     cell.get("metadata", {}).get("nbmake", {}).get("post_command", [])
                 )
                 if post_command:
-                    out = await c.kc.execute_interactive("\n".join(post_command))
+                    pc = "\n".join(post_command)
+                    out = await c.kc.execute_interactive(pc)
 
                     if out["content"]["status"] != "ok":
                         raise Exception(
-                            f"Failed to run post command:\n{post_command}\n\n{str(out)}"
+                            f"Failed to run post command:\n{pc}\n\n{str(out)}"
                         )
 
             c.on_cell_executed = apply_mocks
