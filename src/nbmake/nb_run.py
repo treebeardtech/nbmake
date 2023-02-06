@@ -101,8 +101,9 @@ class NotebookRun:
                     out = await c.kc.execute_interactive("\n".join(post_command))
 
                     if out["content"]["status"] != "ok":
-                        raise Exception(f"Failed to run post command:\n{post_command}\n\n{str(out)}")
-
+                        raise Exception(
+                            f"Failed to run post command:\n{post_command}\n\n{str(out)}"
+                        )
 
             c.on_cell_executed = apply_mocks
 
