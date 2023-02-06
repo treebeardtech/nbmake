@@ -122,6 +122,12 @@ class TestNotebookRun:
         res: NotebookResult = run.execute()
         assert res.error == None
 
+    def test_when_post_command_then_succeeds(self, testdir2: Never):
+        nb = Path(__file__).parent / "resources" / "post_command.ipynb"
+        run = NotebookRun(nb, 300)
+        res: NotebookResult = run.execute()
+        assert res.error == None
+
     def test_when_magic_error_then_fails(self, testdir2: Never):
         nb = Path(__file__).parent / "resources" / "magic_error.ipynb"
         run = NotebookRun(nb, 300)

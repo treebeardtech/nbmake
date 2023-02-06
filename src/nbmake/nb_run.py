@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import nbformat
 from nbclient.client import (
@@ -93,6 +93,16 @@ class NotebookRun:
 
                     if out["content"]["status"] != "ok":
                         raise Exception(f"Failed to apply mock {v}\n\n{str(out)}")
+
+                post_command: List[str] = (
+                    cell.get("metadata", {}).get("nbmake", {}).get("post_command", [])
+                )
+                if post_command:
+                    out = await c.kc.execute_interactive("\n".join(post_command))
+
+                    if out["content"]["status"] != "ok":
+                        raise Exception(f"Failed to run post command:\n{post_command}\n\n{str(out)}")
+
 
             c.on_cell_executed = apply_mocks
 
