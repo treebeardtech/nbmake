@@ -145,7 +145,7 @@ class TestNotebookRun:
         res: NotebookResult = run.execute()
 
         # make sure the cell exception (bang!) is raised and not masked
-        # by the post command exception (boom!)
+        # by the post cell execution exception (boom!)
         assert res.error != None
         assert "bang!" in res.error.summary
 

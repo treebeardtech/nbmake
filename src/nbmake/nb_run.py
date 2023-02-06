@@ -100,12 +100,12 @@ class NotebookRun:
                         .get("post_cell_execute", [])
                     )
                     if post_cell_execute:
-                        pc = "\n".join(post_cell_execute)
-                        out = await c.kc.execute_interactive(pc)
+                        pce = "\n".join(post_cell_execute)
+                        out = await c.kc.execute_interactive(pce)
 
                         if out["content"]["status"] != "ok":
                             raise Exception(
-                                f"Failed to run post command:\n{pc}\n\n{str(out)}"
+                                f"Post cell execution failed:\n{pce}\n\n{str(out)}"
                             )
 
             c.on_cell_executed = apply_mocks
