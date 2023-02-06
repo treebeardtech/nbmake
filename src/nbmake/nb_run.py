@@ -79,32 +79,34 @@ class NotebookRun:
                         if execute_reply["content"]["ename"] == "ModuleNotFoundError":
                             if self.find_import_errors:
                                 raise CellImportError()
+                else:
+                    if c.kc is None:
+                        raise Exception("there is no kernelclient")
+                    mocks: Dict[str, Any] = (
+                        cell.get("metadata", {}).get("nbmake", {}).get("mock", {})
+                    )
+                    for v in mocks:
+                        if isinstance(mocks[v], str):
+                            out = await c.kc.execute_interactive(f"{v} = '{mocks[v]}'")
+                        else:
+                            out = await c.kc.execute_interactive(f"{v} = {mocks[v]}")
 
-                if c.kc is None:
-                    raise Exception("there is no kernelclient")
-                mocks: Dict[str, Any] = (
-                    cell.get("metadata", {}).get("nbmake", {}).get("mock", {})
-                )
-                for v in mocks:
-                    if isinstance(mocks[v], str):
-                        out = await c.kc.execute_interactive(f"{v} = '{mocks[v]}'")
-                    else:
-                        out = await c.kc.execute_interactive(f"{v} = {mocks[v]}")
+                        if out["content"]["status"] != "ok":
+                            raise Exception(f"Failed to apply mock {v}\n\n{str(out)}")
 
-                    if out["content"]["status"] != "ok":
-                        raise Exception(f"Failed to apply mock {v}\n\n{str(out)}")
+                    post_command: List[str] = (
+                        cell.get("metadata", {})
+                        .get("nbmake", {})
+                        .get("post_command", [])
+                    )
+                    if post_command:
+                        pc = "\n".join(post_command)
+                        out = await c.kc.execute_interactive(pc)
 
-                post_command: List[str] = (
-                    cell.get("metadata", {}).get("nbmake", {}).get("post_command", [])
-                )
-                if post_command:
-                    pc = "\n".join(post_command)
-                    out = await c.kc.execute_interactive(pc)
-
-                    if out["content"]["status"] != "ok":
-                        raise Exception(
-                            f"Failed to run post command:\n{pc}\n\n{str(out)}"
-                        )
+                        if out["content"]["status"] != "ok":
+                            raise Exception(
+                                f"Failed to run post command:\n{pc}\n\n{str(out)}"
+                            )
 
             c.on_cell_executed = apply_mocks
 
