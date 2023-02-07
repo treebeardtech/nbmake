@@ -11,7 +11,7 @@ from pygments.formatters import TerminalTrueColorFormatter
 from pygments.lexers import Python3TracebackLexer
 
 from .nb_result import NotebookError, NotebookResult
-from .nb_run import NotebookRun
+from .nb_run import NB_VERSION, NotebookRun
 
 
 class NbMakeFailureRepr(TerminalRepr):
@@ -27,7 +27,8 @@ class NotebookFile(pytest.File):
     def collect(self) -> Generator[Any, Any, Any]:
         item = NotebookItem.from_parent(self, filename=str(Path(self.fspath)))
 
-        nb = nbformat.read(self.fspath, 4)
+        with open(self.fspath, "rb") as fp:
+            nb = nbformat.read(fp, NB_VERSION)
 
         try:
             markers = nb.metadata.execution.markers
