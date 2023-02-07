@@ -1,6 +1,6 @@
-import os
 from pathlib import Path
 
+import pytest
 from nbformat import write
 from nbformat.v4 import new_code_cell, new_notebook, new_output
 from pytest import Pytester
@@ -121,6 +121,33 @@ class TestNotebookRun:
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
         assert res.error == None
+
+    def test_when_post_cell_execute_then_succeeds(self, testdir2: Never):
+        nb = Path(__file__).parent / "resources" / "post_cell_execute.ipynb"
+        run = NotebookRun(nb, 300)
+        res: NotebookResult = run.execute()
+        assert res.error == None
+
+    def test_when_post_cell_execute_then_command_fails(self, testdir2: Never):
+        nb = Path(__file__).parent / "resources" / "post_cell_execute_error.ipynb"
+        run = NotebookRun(nb, 300)
+        with pytest.raises(Exception) as exc_info:
+            run.execute()
+
+        assert exc_info != None
+        assert "boom!" in exc_info.value.args[0]
+
+    def test_when_post_cell_execute_then_cell_fails(self, testdir2: Never):
+        nb = (
+            Path(__file__).parent / "resources" / "post_cell_execute_masked_error.ipynb"
+        )
+        run = NotebookRun(nb, 300)
+        res: NotebookResult = run.execute()
+
+        # make sure the cell exception (bang!) is raised and not masked
+        # by the post cell execution exception (boom!)
+        assert res.error != None
+        assert "bang!" in res.error.summary
 
     def test_when_magic_error_then_fails(self, testdir2: Never):
         nb = Path(__file__).parent / "resources" / "magic_error.ipynb"
