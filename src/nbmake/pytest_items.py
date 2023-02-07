@@ -25,7 +25,22 @@ class NbMakeFailureRepr(TerminalRepr):
 
 class NotebookFile(pytest.File):
     def collect(self) -> Generator[Any, Any, Any]:
-        yield NotebookItem.from_parent(self, filename=str(Path(self.fspath)))
+        item = NotebookItem.from_parent(self, filename=str(Path(self.fspath)))
+
+        nb = nbformat.read(self.fspath, 4)
+
+        try:
+            markers = nb.metadata.execution.markers
+        except AttributeError:
+            markers = []
+
+        if isinstance(markers, str):
+            markers = markers.split(",")
+
+        for marker in markers:
+            item.add_marker(marker)
+
+        yield item
 
 
 class NotebookFailedException(Exception):
