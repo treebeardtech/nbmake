@@ -201,8 +201,10 @@ def test_when_not_json_then_correct_err_msg(pytester: Pytester, testdir2: Never)
 
     (Path(pytester.path) / "a.ipynb").write_text("invalid json")
 
-
     hook_recorder = pytester.inline_run("--nbmake")
 
-    assert "NBMAKE INTERNAL ERROR" not in hook_recorder.listoutcomes()[2][0].longrepr.term
+    assert hook_recorder.listoutcomes()[2][0].longrepr is not None
+    assert (
+        "NBMAKE INTERNAL ERROR" not in hook_recorder.listoutcomes()[2][0].longrepr.term
+    )
     assert "json" in hook_recorder.listoutcomes()[2][0].longrepr.term
