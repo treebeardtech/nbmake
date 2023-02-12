@@ -3,19 +3,8 @@ on:
   pull_request:
 
 jobs:
-  pytest:
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-        python-version:
-          - "3.8"
-          - "3.9"
-          - "3.10"
-          - "3.11"
-    runs-on: ${{ matrix.os }}
+  test-container:
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - run: npm install -g @devcontainers/cli@v0.30.0
@@ -25,3 +14,27 @@ jobs:
       - uses: codecov/codecov-action@v1
         with:
           file: coverage.xml
+  pytest:
+      strategy:
+        fail-fast: false
+        matrix:
+          os:
+            - ubuntu-latest
+            - macos-latest
+          python-version:
+            - "3.8"
+            - "3.9"
+            - "3.10"
+            - "3.11"
+      runs-on: ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-python@v2
+          with:
+            python-version: ${{ matrix.python-version }}
+        - run: pip install poetry
+        - run: poetry install
+        - run: poetry run pytest --cov-report=xml --cov=src
+        - uses: codecov/codecov-action@v1
+          with:
+            file: coverage.xml
