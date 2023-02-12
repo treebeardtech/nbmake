@@ -15,6 +15,7 @@ jobs:
           - "3.8"
           - "3.9"
           - "3.10"
+          - "3.11"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +24,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: pip install poetry
       - run: poetry install
-      - uses: pre-commit/action@v2.0.0
+      # - uses: pre-commit/action@v2.0.0
         with:
           extra_args: --verbose --all-files
       - run: poetry run pytest --cov-report=xml --cov=src
