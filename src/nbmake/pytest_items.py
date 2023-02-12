@@ -12,7 +12,7 @@ from pygments.lexers import Python3TracebackLexer
 
 from .nb_result import NotebookError, NotebookResult
 from .nb_run import NotebookRun
-
+from nbformat.reader import NotJSONError
 
 class NbMakeFailureRepr(TerminalRepr):
     def __init__(self, term: str, summary: str):
@@ -75,7 +75,12 @@ class NotebookItem(pytest.Item):
                 "NBMAKE INTERNAL ERROR",
             )
 
-        if type(excinfo.value) != NotebookFailedException:
+        exc_type = type(excinfo.value)
+        
+        if exc_type is NotJSONError:
+            return NbMakeFailureRepr("This file is not a valid json document", excinfo.value.args[0])
+
+        if exc_type != NotebookFailedException:
             return create_internal_err()
 
         res: NotebookResult = excinfo.value.args[0]
