@@ -203,8 +203,7 @@ def test_when_not_json_then_correct_err_msg(pytester: Pytester, testdir2: Never)
 
     hook_recorder = pytester.inline_run("--nbmake")
 
-    assert hook_recorder.listoutcomes()[2][0].longrepr is not None
-    assert (
-        "NBMAKE INTERNAL ERROR" not in hook_recorder.listoutcomes()[2][0].longrepr.term
-    )
-    assert "json" in hook_recorder.listoutcomes()[2][0].longrepr.term
+    longrepr = hook_recorder.listoutcomes()[2][0].longrepr
+    assert longrepr is not None
+    assert "NBMAKE INTERNAL ERROR" not in longrepr.term
+    assert "json" in longrepr.term
