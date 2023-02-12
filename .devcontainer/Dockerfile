@@ -24,3 +24,5 @@ RUN cd /tmp/pip-tmp/ && /home/vscode/.local/bin/poetry install --no-root
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
+
+RUN npm install -g @devcontainers/cli@v0.30.0
