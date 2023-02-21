@@ -141,7 +141,7 @@ pytest \
   --nbmake-timeout=20 # Skip past cells longer than 20s
 ```
 
-## Mock out variables to simplify testing (experimental 🧪)
+## Mock out variables to simplify testing
 
 If your notebook runs a training process that takes a long time to run, you can use nbmake's
 mocking feature to overwrite variables after a cell runs:
@@ -177,6 +177,33 @@ mocking feature to overwrite variables after a cell runs:
 }
 ```
 
+## Run test logic after a cell executes
+
+You can fetch CI secrets and run assertions after any cell by putting scripts in the cell metadata under `nbmake.post_cell_execute`:
+
+```json
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "nbmake": {
+     "post_cell_execute": [
+       "y = 3",
+       "z = x+y"
+     ]
+    }
+   },
+   "outputs": [],
+   "source": [
+    "x = 1\n",
+    "y = 2\n",
+    "z = 0\n",
+    "# this cell has a post_cell_execute that assigns y and z"
+   ]
+  },
+```
 
 ## Advice on Usage
 
