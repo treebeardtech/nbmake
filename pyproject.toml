@@ -14,7 +14,7 @@ version = "v1.4.1"
 nbmake = "nbmake.pytest_plugin"
 
 [tool.poetry.dependencies]
-pydantic = "^1.7.2"
+pydantic = "^2.0.0"
 pytest = ">=6.1.0"
 python = "^3.7.0"
 nbclient = "^0.6.6"

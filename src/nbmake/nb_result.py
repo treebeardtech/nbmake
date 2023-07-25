@@ -12,4 +12,4 @@ class NotebookError(BaseModel):
 
 class NotebookResult(BaseModel):
     nb: NotebookNode
-    error: Optional[NotebookError]
+    error: Optional[NotebookError] = None
