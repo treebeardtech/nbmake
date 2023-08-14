@@ -1,5 +1,7 @@
 name: Pytest
 on:
+  schedule:
+    - cron: 0 13 * * 1 # Every Monday at 1PM UTC (9AM EST)
   pull_request:
 
 jobs:
@@ -9,7 +11,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: npm install -g @devcontainers/cli@v0.30.0
       - run: devcontainer up --workspace-folder=.
-      - run: devcontainer exec --workspace-folder=. pre-commit run --verbose --all-files
+      - run: devcontainer exec --workspace-folder=. poetry run pre-commit run --verbose --all-files
       - run: devcontainer exec --workspace-folder=. poetry run pytest --cov-report=xml --cov=src
       - uses: codecov/codecov-action@v1
         with:
