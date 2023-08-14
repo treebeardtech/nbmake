@@ -6,7 +6,7 @@
     "args": {
       "VARIANT": "3.10",
       "INSTALL_NODE": "true",
-      "NODE_VERSION": "lts/*"
+      "NODE_VERSION": "18.7"
     }
   },
   "customizations": {
@@ -14,12 +14,12 @@
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
         "python.pythonPath": "/usr/local/bin/python"
-      }
+      },
+      "extensions": [
+        "ms-python.python"
+      ]
     }
   },
-  "extensions": [
-    "ms-python.python"
-  ],
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
