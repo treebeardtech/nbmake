@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: 0 13 * * 1 # Every Monday at 1PM UTC (9AM EST)
   pull_request:
-
+# test in containerised and OS environments
 jobs:
   test-container:
     runs-on: ubuntu-22.04
