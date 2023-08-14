@@ -1,15 +1,17 @@
+from dataclasses import dataclass
 from typing import Optional
 
 from nbformat import NotebookNode
-from pydantic import BaseModel
 
 
-class NotebookError(BaseModel):
+@dataclass
+class NotebookError:
     summary: str
     trace: str
     failing_cell_index: int
 
 
-class NotebookResult(BaseModel):
+@dataclass
+class NotebookResult:
     nb: NotebookNode
     error: Optional[NotebookError]
