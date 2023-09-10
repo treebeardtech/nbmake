@@ -57,16 +57,11 @@ Your notebook should look like this:
 A cell with the following metadata can throw an exception without failing the test:
 
 ```json
-{
-  "language": "python",
-  "custom": {
-    "metadata": {
-      "tags": [
-        "raises-exception"
-      ]
-    }
+  "metadata": {
+    "tags": [
+      "raises-exception"
+    ]
   }
-}
 ```
 
 ## Ignore a Code Cell
