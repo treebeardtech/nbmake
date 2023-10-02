@@ -219,11 +219,11 @@ repos:
 
 See https://pre-commit.com/ for more...
 
-## Opt out of anonymous metrics
+## Disable anonymous metrics
 
 We collect anonymous usage metrics to improve nbmake.
 
-You can opt out by setting the environment variable NBMAKE_METRICS=0
+You can disable them by setting the environment variable NBMAKE_METRICS=0
 
 ## Disable Nbmake
 

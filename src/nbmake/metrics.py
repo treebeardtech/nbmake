@@ -9,7 +9,7 @@ import urllib.request
 def submit_event():
     """We collect anonymous usage metrics to improve nbmake.
 
-    You can opt out by setting the environment variable NBMAKE_METRICS=0.
+    You can disable them by setting the environment variable NBMAKE_METRICS=0.
     """
     mixpanel_token = "8440a5d8fa0ec1d43b6bcaf76037fae7"
     url = "https://api-eu.mixpanel.com/track"
