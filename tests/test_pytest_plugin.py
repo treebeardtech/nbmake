@@ -222,12 +222,15 @@ def test_when_testing_nbs_then_submit_metrics(pytester: Pytester):
 
 def test_when_metrics_disabled_dont_log_metrics(pytester: Pytester):
     write_nb(failing_nb, Path(pytester.path) / "a.ipynb")
+    # not thread-safe
     os.environ["NBMAKE_METRICS"] = "0"
 
     with patch("nbmake.metrics.submit_event", return_value="1") as mock_method:
         hook_recorder = pytester.inline_run("--nbmake", "-v")
         assert hook_recorder.ret == ExitCode.TESTS_FAILED
         mock_method.assert_not_called()
+
+    del os.environ["NBMAKE_METRICS"]
 
 
 def test_when_no_nbmake_flag_then_no_metrics(pytester: Pytester):
