@@ -1,12 +1,15 @@
 import asyncio
+import os
 import sys
 from pathlib import Path
 from typing import Any, Optional
 
+import nbmake.metrics
+
 try:
     from importlib.metadata import version
 except ImportError:
-    from importlib_metadata import version
+    from importlib_metadata import version  # type: ignore
 
 from .pytest_items import NotebookFile
 
@@ -65,3 +68,16 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
         return NotebookFile.from_parent(parent, path=p)
 
     return None
+
+
+def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Any):
+    if not config.option.nbmake:
+        return
+
+    if os.getenv("NBMAKE_METRICS", "1") != "1":
+        return
+
+    try:
+        nbmake.metrics.submit_event()
+    except:
+        pass

@@ -1,8 +1,9 @@
 from __future__ import print_function
 
 import os
-from importlib import import_module, reload
+from importlib import import_module, invalidate_caches, reload
 from pathlib import Path
+from unittest.mock import patch
 
 from nbformat import read
 from pytest import ExitCode, Pytester
@@ -207,3 +208,47 @@ def test_when_not_json_then_correct_err_msg(pytester: Pytester, testdir2: Never)
     assert longrepr is not None
     assert "NBMAKE INTERNAL ERROR" not in longrepr.term
     assert "json" in longrepr.term
+
+
+def test_when_testing_nbs_then_submit_metrics(pytester: Pytester):
+    write_nb(failing_nb, Path(pytester.path) / "a.ipynb")
+
+    with patch("nbmake.metrics.submit_event", return_value="1") as mock_method:
+        hook_recorder = pytester.inline_run("--nbmake", "-v")
+        assert hook_recorder.ret == ExitCode.TESTS_FAILED
+        mock_method.assert_called_once()
+
+
+def test_when_metrics_fail_then_ignore(pytester: Pytester):
+    write_nb(failing_nb, Path(pytester.path) / "a.ipynb")
+
+    with patch("nbmake.metrics.submit_event", return_value="1") as mock_method:
+        mock_method.side_effect = Exception("test")
+        write_nb(passing_nb, Path(pytester.path) / "a.ipynb")
+
+        items, hook_recorder = pytester.inline_genitems("--nbmake")
+
+        assert hook_recorder.ret == ExitCode.OK
+        assert len(items) == 1
+        mock_method.assert_called_once()
+
+
+def test_when_metrics_disabled_dont_log_metrics(pytester: Pytester):
+    write_nb(failing_nb, Path(pytester.path) / "a.ipynb")
+    # not thread-safe
+    os.environ["NBMAKE_METRICS"] = "0"
+
+    with patch("nbmake.metrics.submit_event", return_value="1") as mock_method:
+        hook_recorder = pytester.inline_run("--nbmake", "-v")
+        assert hook_recorder.ret == ExitCode.TESTS_FAILED
+        mock_method.assert_not_called()
+
+    del os.environ["NBMAKE_METRICS"]
+
+
+def test_when_no_nbmake_flag_then_no_metrics(pytester: Pytester):
+    write_nb(failing_nb, Path(pytester.path) / "a.ipynb")
+    with patch("nbmake.metrics.submit_event", return_value="1") as mock_method:
+        hook_recorder = pytester.inline_run("-v")
+        assert hook_recorder.ret == ExitCode.NO_TESTS_COLLECTED
+        mock_method.assert_not_called()
