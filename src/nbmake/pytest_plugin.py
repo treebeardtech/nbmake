@@ -3,7 +3,10 @@ import sys
 from pathlib import Path
 from typing import Any, Optional
 
-import pkg_resources
+try:
+    from importlib.metadata import version
+except ImportError:
+    from importlib_metadata import version
 
 from .pytest_items import NotebookFile
 
@@ -54,7 +57,7 @@ def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
     opt = parent.config.option
     p = Path(path)
     if opt.nbmake and p.match("*ipynb") and "_build" not in p.parts:
-        ver: int = int(pkg_resources.get_distribution("pytest").version[0])
+        ver: int = int(version("pytest")[0])
 
         if ver < 7:
             return NotebookFile.from_parent(parent, fspath=path)
