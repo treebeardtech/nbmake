@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 from typing import Any, Optional
 
+import nbmake.metrics
+
 try:
     from importlib.metadata import version
 except ImportError:
@@ -76,8 +78,6 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Any)
         return
 
     try:
-        from .metrics import submit_event
-
-        submit_event()
+        nbmake.metrics.submit_event()
     except:
         pass
