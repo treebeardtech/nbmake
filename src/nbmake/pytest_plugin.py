@@ -74,7 +74,7 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Any)
     if not config.option.nbmake:
         return
 
-    if os.getenv("NBMAKE_METRICS", "1") != "1":
+    if os.getenv("NBMAKE_METRICS", "0") != "1":
         return
 
     try:
