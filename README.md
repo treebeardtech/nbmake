@@ -11,7 +11,7 @@
 **Who is this for?** Research/Machine Learning Software Engineers who maintain packages/teaching materials with documentation written in notebooks.
 
 ---
-**🛠️ Help shape nbmake and best practices in the industry. Please fill in our [survey](https://survey.typeform.com/to/uccVbSmO?utm_source=readme).**
+**✨ New: Automate the generation of notebook-based tutorials with [nbwrite](https://github.com/treebeardtech/nbwrite)**
 
 ---
 
@@ -128,7 +128,7 @@ pytest --nbmake --overwrite -n=auto examples
 jb build examples
 ```
 
-## Find missing imports in a directory of failing notebooks (new ✨)
+## Find missing imports in a directory of failing notebooks
 
 It's not always feasible to get notebooks running from top to bottom from the start.
 
