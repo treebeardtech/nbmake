@@ -1,13 +1,9 @@
 import asyncio
 import os
 import sys
+from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Optional
-
-try:
-    from importlib.metadata import version
-except ImportError:
-    from importlib_metadata import version  # type: ignore
 
 from .pytest_items import NotebookFile
 

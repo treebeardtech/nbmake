@@ -15,12 +15,11 @@ nbmake = "nbmake.pytest_plugin"
 
 [tool.poetry.dependencies]
 pytest = ">=6.1.0"
-python = "^3.7.0"
+python = "^3.8.0"
 nbclient = "^0.6.6"
 nbformat = "^5.0.8"
 Pygments = "^2.7.3"
 ipykernel = ">=5.4.0"
-importlib-metadata =  { version = "^6.8.0", python = "<3.8" }
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.0"
