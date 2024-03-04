@@ -50,19 +50,28 @@ def pytest_addoption(parser: Any):
     )
 
 
-def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
-    opt = parent.config.option
-    p = Path(path)
-    if opt.nbmake and p.match("*ipynb") and "_build" not in p.parts:
-        ver: int = int(version("pytest")[0])
+def _should_collect(p: Path, nbmake_enabled: bool):
+    return nbmake_enabled and p.match("*ipynb") and "_build" not in p.parts
 
-        if ver < 7:
+
+ver: int = int(version("pytest")[0])
+if ver < 7:
+
+    def pytest_collect_file(path: str, parent: Any) -> Optional[Any]:
+        if _should_collect(Path(path), parent.config.option.nbmake):
             return NotebookFile.from_parent(parent, fspath=path)
 
-        return NotebookFile.from_parent(parent, path=p)
+else:
 
-    return None
+    def pytest_collect_file(file_path: Path, parent: Any) -> Optional[Any]:
+        if _should_collect(file_path, parent.config.option.nbmake):
+            return NotebookFile.from_parent(parent, path=file_path)
 
 
 def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Any):
-    pass
+    if config.option.nbmake:
+        # this message can be disabled with pytest --no-summary
+        # but let us know if it is annoying you
+        # ...we can also print diagnostics/stats here -- requests welcome
+        discord = "https://discord.gg/QFjCpMjqRY"
+        print(f"\n📝 nbmake support is available in discord: {discord}\n")

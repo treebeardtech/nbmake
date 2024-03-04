@@ -7,7 +7,7 @@ For non-vscode users, here are some install steps:
 
 ### Install local package
 ```
-poetry install # warning, by default this will install without a venv unless you modify poetry.toml
+poetry install
 ```
 
 ### Activate shell
