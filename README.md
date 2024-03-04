@@ -250,8 +250,6 @@ pytest -p no:nbmake
 
 ## ℹ️ Get help with machine learning infrastructure
 
-Beyond testing notebooks, the maintainers of nbmake help software and finance companies scale their machine learning products.
-
-[Find out more](https://www.treebeard.io/).
+Join our [Discord](https://discord.gg/QFjCpMjqRY) for support and learning through the community.
 
 ---
