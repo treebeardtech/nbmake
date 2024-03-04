@@ -74,4 +74,4 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Any)
         # but let us know if it is annoying you
         # ...we can also print diagnostics/stats here -- requests welcome
         discord = "https://discord.gg/QFjCpMjqRY"
-        print(f"\n📝 nbmake support is available in discord: {discord}\n")
+        print(f"\nnbmake support is available in discord: {discord}\n")
