@@ -1,4 +1,5 @@
 # nbmake
+[![codecov](https://img.shields.io/badge/chat-discord-blue?logo=discord&logoColor=white)](https://discord.gg/QFjCpMjqRY)
 [![codecov](https://codecov.io/gh/treebeardtech/nbmake/branch/main/graph/badge.svg?token=9GuDM35FuO)](https://codecov.io/gh/treebeardtech/nbmake)
 [![PyPI versions](https://img.shields.io/pypi/pyversions/nbmake?logo=python&logoColor=white)](https://pypi.org/project/nbmake)
 [![PyPI versions](https://img.shields.io/pypi/v/nbmake?logo=python&logoColor=white)](https://pypi.org/project/nbmake)
