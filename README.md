@@ -12,7 +12,7 @@
 **Who is this for?** Research/Machine Learning Software Engineers who maintain packages/teaching materials with documentation written in notebooks.
 
 ---
-**✨ New: Scale Jupyter in Kubernetes with [Treebeard Kubeflow](https://github.com/treebeardtech/treebeard-kubeflow)**
+**✨ New: try out Kubeflow locally with our new [helm chart](https://github.com/treebeardtech/kubeflow-helm)**
 
 ---
 
