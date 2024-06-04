@@ -5,6 +5,8 @@
 [![PyPI versions](https://img.shields.io/pypi/v/nbmake?logo=python&logoColor=white)](https://pypi.org/project/nbmake)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/nbmake)](https://pypi.org/project/nbmake)
 
+test
+
 **What?** Pytest plugin for testing and releasing notebook documentation
 
 **Why?** To raise the quality of scientific material through better automation
