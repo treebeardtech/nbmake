@@ -79,7 +79,7 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Any)
             if os.environ.get("GITHUB_ACTIONS", False):
                 if exitstatus == ExitCode.TESTS_FAILED:
                     print(
-                        f"\n* Automate reading GitHub Actions logs with our bot: https://github.com/marketplace/treebeard-build\n"
+                        f"\n* nbmake: Automate reading GitHub Actions logs with our bot: https://github.com/marketplace/treebeard-build\n"
                     )
             else:
                 print(
