@@ -10,13 +10,13 @@
 **Why?** To raise the quality of scientific material through better automation
 
 **Who is this for?** Research/Machine Learning Software Engineers who maintain packages/teaching materials with documentation written in notebooks.
-
+s
 ---
 **✨ New: save your energy when investigating GitHub actions failures with our [Pull Request Bot](https://github.com/marketplace/treebeard-build)**
 
 ---
 
-## Functionality
+## Functionalitytest
 
 1. Executes notebooks using pytest and nbclient, allowing parallel notebook testing
 2. Optionally writes back to the repo, allowing faster building of [nbsphinx](https://github.com/spatialaudio/nbsphinx) or [jupyter book](https://github.com/executablebooks/jupyter-book) docs
@@ -31,7 +31,7 @@ pip install pytest nbmake
 pytest --nbmake **/*ipynb
 ```
 
-## Configure Cell Timeouts
+## Configure Cell Tsddfdsimeouts
 
 You can configure the cell timeout with the following pytest flag:
 
