@@ -12,7 +12,7 @@
 **Who is this for?** Research/Machine Learning Software Engineers who maintain packages/teaching materials with documentation written in notebooks.
 
 ---
-**✨ New: try out Kubeflow locally with our new [helm chart](https://github.com/treebeardtech/kubeflow-helm)**
+**✨ New: save your energy when investigating GitHub actions failures with our [Pull Request Bot](https://github.com/marketplace/treebeard-build)**
 
 ---
 
