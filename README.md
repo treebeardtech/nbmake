@@ -10,7 +10,7 @@
 **Why?** To raise the quality of scientific material through better automation
 
 **Who is this for?** Research/Machine Learning Software Engineers who maintain packages/teaching materials with documentation written in notebooks.
-
+s
 ---
 **✨ New: save your energy when investigating GitHub actions failures with our [Pull Request Bot](https://github.com/marketplace/treebeard-build)**
 
