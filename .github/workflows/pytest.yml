@@ -36,7 +36,7 @@ jobs:
             python-version: ${{ matrix.python-version }}
         - run: pip install poetry
         - run: poetry install
-        - run: pytest --nbmake tests/resources/magic_error.ipynb
+        - run: poetry run pytest --nbmake tests/resources/magic_error.ipynb
         - run: poetry run pytest --cov-report=xml --cov=src
         - uses: codecov/codecov-action@v1
           with:
