@@ -16,7 +16,7 @@
 
 ---
 
-## Functionality
+## Functionalitytest
 
 1. Executes notebooks using pytest and nbclient, allowing parallel notebook testing
 2. Optionally writes back to the repo, allowing faster building of [nbsphinx](https://github.com/spatialaudio/nbsphinx) or [jupyter book](https://github.com/executablebooks/jupyter-book) docs
