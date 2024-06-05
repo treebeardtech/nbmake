@@ -5,6 +5,8 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Optional
 
+from pytest import ExitCode
+
 from .pytest_items import NotebookFile
 
 
@@ -73,4 +75,15 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Any)
         # this message can be disabled with pytest --no-summary
         # but let us know if it is annoying you
         # ...we can also print diagnostics/stats here -- requests welcome
-        print(f"\nLearn more about nbmake at https://github.com/treebeardtech/nbmake\n")
+        try:
+            if os.environ.get("GITHUB_ACTIONS", False):
+                if exitstatus == ExitCode.TESTS_FAILED:
+                    print(
+                        f"\n* nbmake: Automate reading GitHub Actions logs with our bot: https://github.com/marketplace/treebeard-build\n"
+                    )
+            else:
+                print(
+                    f"\nLearn more about nbmake at https://github.com/treebeardtech/nbmake\n"
+                )
+        except:
+            pass
