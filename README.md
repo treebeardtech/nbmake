@@ -31,7 +31,7 @@ pip install pytest nbmake
 pytest --nbmake **/*ipynb
 ```
 
-## Configure Cell Timeouts
+## Configure Cell Tsddfdsimeouts
 
 You can configure the cell timeout with the following pytest flag:
 
