@@ -7,6 +7,11 @@ assignees: ''
 
 ---
 
+> [!Note]
+> It may be quicker to check in with us on [Discord](https://discord.gg/QFjCpMjqRY) before logging your issue
+
+
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 

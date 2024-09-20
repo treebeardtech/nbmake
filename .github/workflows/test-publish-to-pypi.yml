@@ -1,8 +1,11 @@
 name: Test Publish to PYPI
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
 jobs:
   build-n-publish:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v2

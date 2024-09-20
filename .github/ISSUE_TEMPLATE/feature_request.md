@@ -7,6 +7,9 @@ assignees: ''
 
 ---
 
+> [!Note]
+> It may be quicker to check in with us on [Discord](https://discord.gg/QFjCpMjqRY) before logging your issue
+
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 

@@ -1,4 +1,5 @@
 # nbmake
+[![codecov](https://img.shields.io/badge/chat-discord-blue?logo=discord&logoColor=white)](https://discord.gg/QFjCpMjqRY)
 [![codecov](https://codecov.io/gh/treebeardtech/nbmake/branch/main/graph/badge.svg?token=9GuDM35FuO)](https://codecov.io/gh/treebeardtech/nbmake)
 [![PyPI versions](https://img.shields.io/pypi/pyversions/nbmake?logo=python&logoColor=white)](https://pypi.org/project/nbmake)
 [![PyPI versions](https://img.shields.io/pypi/v/nbmake?logo=python&logoColor=white)](https://pypi.org/project/nbmake)
@@ -9,6 +10,11 @@
 **Why?** To raise the quality of scientific material through better automation
 
 **Who is this for?** Research/Machine Learning Software Engineers who maintain packages/teaching materials with documentation written in notebooks.
+
+---
+**✨ New: save your energy when investigating GitHub actions failures with our [Pull Request Bot](https://github.com/marketplace/treebeard-build)**
+
+---
 
 ## Functionality
 
@@ -57,16 +63,11 @@ Your notebook should look like this:
 A cell with the following metadata can throw an exception without failing the test:
 
 ```json
-{
-  "language": "python",
-  "custom": {
-    "metadata": {
-      "tags": [
-        "raises-exception"
-      ]
-    }
+  "metadata": {
+    "tags": [
+      "raises-exception"
+    ]
   }
-}
 ```
 
 ## Ignore a Code Cell
@@ -128,7 +129,7 @@ pytest --nbmake --overwrite -n=auto examples
 jb build examples
 ```
 
-## Find missing imports in a directory of failing notebooks (new ✨)
+## Find missing imports in a directory of failing notebooks
 
 It's not always feasible to get notebooks running from top to bottom from the start.
 
@@ -141,7 +142,7 @@ pytest \
   --nbmake-timeout=20 # Skip past cells longer than 20s
 ```
 
-## Mock out variables to simplify testing (experimental 🧪)
+## Mock out variables to simplify testing
 
 If your notebook runs a training process that takes a long time to run, you can use nbmake's
 mocking feature to overwrite variables after a cell runs:
@@ -177,6 +178,33 @@ mocking feature to overwrite variables after a cell runs:
 }
 ```
 
+## Run test logic after a cell executes
+
+You can fetch CI secrets and run assertions after any cell by putting scripts in the cell metadata under `nbmake.post_cell_execute`:
+
+```json
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "nbmake": {
+     "post_cell_execute": [
+       "y = 3",
+       "z = x+y"
+     ]
+    }
+   },
+   "outputs": [],
+   "source": [
+    "x = 1\n",
+    "y = 2\n",
+    "z = 0\n",
+    "# this cell has a post_cell_execute that assigns y and z"
+   ]
+  },
+```
 
 ## Advice on Usage
 
@@ -222,8 +250,6 @@ pytest -p no:nbmake
 
 ## ℹ️ Get help with machine learning infrastructure
 
-Beyond testing notebooks, the maintainers of nbmake help software and finance companies scale their machine learning products.
-
-[Find out more](https://www.treebeard.io/).
+Join our [Discord](https://discord.gg/QFjCpMjqRY) for support and learning through the community.
 
 ---

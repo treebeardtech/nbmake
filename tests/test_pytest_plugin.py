@@ -1,8 +1,9 @@
 from __future__ import print_function
 
 import os
-from importlib import import_module, reload
+from importlib import import_module, invalidate_caches, reload
 from pathlib import Path
+from unittest.mock import patch
 
 from nbformat import read
 from pytest import ExitCode, Pytester
@@ -195,3 +196,15 @@ def test_when_no_import_errs_then_pass(pytester: Pytester, testdir2: Never):
     hook_recorder = pytester.inline_run("--nbmake", "--nbmake-find-import-errors")
 
     assert hook_recorder.ret == ExitCode.OK
+
+
+def test_when_not_json_then_correct_err_msg(pytester: Pytester, testdir2: Never):
+
+    (Path(pytester.path) / "a.ipynb").write_text("invalid json")
+
+    hook_recorder = pytester.inline_run("--nbmake")
+
+    longrepr = hook_recorder.listoutcomes()[2][0].longrepr
+    assert longrepr is not None
+    assert "NBMAKE INTERNAL ERROR" not in longrepr.term
+    assert "json" in longrepr.term

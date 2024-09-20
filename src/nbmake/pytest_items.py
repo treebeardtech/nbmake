@@ -6,6 +6,7 @@ from typing import Any, Generator, Optional
 import nbformat
 import pytest
 from _pytest._code.code import ReprFileLocation, TerminalRepr, TerminalWriter
+from nbformat.reader import NotJSONError
 from pygments import highlight
 from pygments.formatters import TerminalTrueColorFormatter
 from pygments.lexers import Python3TracebackLexer
@@ -91,7 +92,14 @@ class NotebookItem(pytest.Item):
                 "NBMAKE INTERNAL ERROR",
             )
 
-        if type(excinfo.value) != NotebookFailedException:
+        exc_type = type(excinfo.value)
+
+        if exc_type is NotJSONError:
+            return NbMakeFailureRepr(
+                "This file is not a valid json document", excinfo.value.args[0]
+            )
+
+        if exc_type != NotebookFailedException:
             return create_internal_err()
 
         res: NotebookResult = excinfo.value.args[0]
