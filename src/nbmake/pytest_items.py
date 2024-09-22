@@ -31,10 +31,7 @@ class NotebookFile(pytest.File):
         with open(self.fspath, "rb") as fp:
             nb = nbformat.read(fp, NB_VERSION)
 
-        try:
-            markers = nb.metadata.execution.markers
-        except AttributeError:
-            markers = []
+        markers = nb.metadata.get("execution", {}).get("nbmake", {}).get("markers", [])
 
         if isinstance(markers, str):
             markers = markers.split(",")
