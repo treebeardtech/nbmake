@@ -34,7 +34,7 @@ class NotebookFile(pytest.File):
         markers = nb.metadata.get("execution", {}).get("nbmake", {}).get("markers", [])
 
         if isinstance(markers, str):
-            markers = markers.split(",")
+            markers = [marker.strip() for marker in markers.split(",")]
 
         for marker in markers:
             item.add_marker(marker)
