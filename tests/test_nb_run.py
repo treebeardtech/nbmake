@@ -8,7 +8,9 @@ from typing_extensions import Never
 from nbmake.nb_result import NotebookResult
 from nbmake.nb_run import NotebookRun
 
-from .helper import failing_nb, passing_nb, write_nb
+from .helper import failing_nb, passing_nb, testdir2, write_nb
+
+assert testdir2  # ensure testdir is not removed by linter
 
 pytest_plugins = "pytester"
 

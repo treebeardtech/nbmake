@@ -8,7 +8,9 @@ from nbformat import read
 from pytest import ExitCode, Pytester
 from typing_extensions import Never
 
-from .helper import failing_nb, passing_nb, write_nb
+from .helper import failing_nb, passing_nb, testdir2, write_nb
+
+assert testdir2  # ensure testdir is not removed by linter
 
 pytest_plugins = "pytester"
 NB_VERSION = 4
