@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 from typing import Any, Dict, List
 
-import yaml
 from nbformat import write
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
 from pytest import Pytester, fixture
@@ -40,11 +39,6 @@ def write_nb(
     for src in sources:
         nb.cells.append(new_code_cell(src))
     write(nb, str(path))
-
-
-def write_config(conf: Dict[Any, Any], filename: Path = Path("_config.yml")) -> Path:
-    Path(filename).write_text(yaml.dump(conf))
-    return filename
 
 
 @fixture
