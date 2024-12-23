@@ -17,4 +17,4 @@ jobs:
       - run: pip install dist/*whl --force-reinstall
       - run: pytest --nbmake tests/resources/mock.ipynb
       - run: pip install twine==4.0.1
-      - run: twine upload -r testpypi dist/* -u __token__ -p ${{ secrets.TEST_PYPI_API_TOKEN }}
+      - run: uv publish --check-url https://test.pypi.org/project/nbmake/ --publish-url "https://test.pypi.org/legacy/" -t ${{ secrets.TEST_PYPI_API_TOKEN }}
