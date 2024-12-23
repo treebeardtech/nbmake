@@ -37,7 +37,7 @@ class NotebookItem(pytest.Item):
     nbmake = True
 
     def __init__(self, parent: Any, filename: str):
-        super().__init__("", parent)
+        super().__init__(parent.name, parent)
         self.filename = filename
 
     def runtest(self):
