@@ -9,8 +9,7 @@ jobs:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v2
       - run: pip install uv
-      - run: uv pip install build
-      - run: python -m build
+      - run: uv build
       - run: pip install twine==4.0.1
       - run: twine upload dist/* -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
       - uses: EndBug/add-and-commit@v7.0.0
