@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 jobs:
   build-n-publish:
     runs-on: ubuntu-24.04
@@ -16,5 +17,4 @@ jobs:
       - run: pytest --nbmake tests/resources/mock.ipynb
       - run: pip install dist/*whl --force-reinstall
       - run: pytest --nbmake tests/resources/mock.ipynb
-      - run: pip install twine==4.0.1
       - run: uv publish --check-url https://test.pypi.org/project/nbmake/ --publish-url "https://test.pypi.org/legacy/" -t ${{ secrets.TEST_PYPI_API_TOKEN }}
