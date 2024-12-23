@@ -3,14 +3,12 @@ from pathlib import Path
 import pytest
 from nbformat import write
 from nbformat.v4 import new_code_cell, new_notebook, new_output
-from pytest import Pytester
 from typing_extensions import Never
 
-NB_VERSION = 4
 from nbmake.nb_result import NotebookResult
 from nbmake.nb_run import NotebookRun
 
-from .helper import failing_nb, passing_nb, testdir2, write_nb
+from .helper import failing_nb, passing_nb, write_nb
 
 pytest_plugins = "pytester"
 
@@ -24,7 +22,7 @@ class TestNotebookRun:
         run = NotebookRun(filename, 300)
         res: NotebookResult = run.execute()
 
-        assert res.error == None
+        assert res.error is None
 
     def test_when_runs_then_cwd_is_nb_location(self, testdir2: Never):
         subdir = Path("subdir")
@@ -36,7 +34,7 @@ class TestNotebookRun:
         run = NotebookRun(subdir / filename, 300)
         res: NotebookResult = run.execute()
 
-        assert res.error == None
+        assert res.error is None
 
     def test_failing(self, testdir2: Never):
         write_nb(failing_nb, filename)
@@ -108,25 +106,25 @@ class TestNotebookRun:
         nb = Path(__file__).parent / "resources" / "ignore_tag.ipynb"
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
-        assert res.error == None
+        assert res.error is None
 
     def test_when_raises_exc_tag_then_succeeds(self, testdir2: Never):
         nb = Path(__file__).parent / "resources" / "raises_tag.ipynb"
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
-        assert res.error == None
+        assert res.error is None
 
     def test_when_mock_then_succeeds(self, testdir2: Never):
         nb = Path(__file__).parent / "resources" / "mock.ipynb"
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
-        assert res.error == None
+        assert res.error is None
 
     def test_when_post_cell_execute_then_succeeds(self, testdir2: Never):
         nb = Path(__file__).parent / "resources" / "post_cell_execute.ipynb"
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
-        assert res.error == None
+        assert res.error is None
 
     def test_when_post_cell_execute_then_command_fails(self, testdir2: Never):
         nb = Path(__file__).parent / "resources" / "post_cell_execute_error.ipynb"
@@ -134,7 +132,7 @@ class TestNotebookRun:
         with pytest.raises(Exception) as exc_info:
             run.execute()
 
-        assert exc_info != None
+        assert exc_info is not None
         assert "boom!" in exc_info.value.args[0]
 
     def test_when_post_cell_execute_then_cell_fails(self, testdir2: Never):
@@ -146,14 +144,14 @@ class TestNotebookRun:
 
         # make sure the cell exception (bang!) is raised and not masked
         # by the post cell execution exception (boom!)
-        assert res.error != None
+        assert res.error is not None
         assert "bang!" in res.error.summary
 
     def test_when_magic_error_then_fails(self, testdir2: Never):
         nb = Path(__file__).parent / "resources" / "magic_error.ipynb"
         run = NotebookRun(nb, 300)
         res: NotebookResult = run.execute()
-        assert res.error != None
+        assert res.error is not None
 
     def test_when_empty_then_succeeds(self, testdir2: Never):
         nb = Path(__file__).parent / "resources" / "empty.ipynb"

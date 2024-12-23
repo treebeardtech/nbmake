@@ -56,7 +56,7 @@ class NotebookItem(pytest.Item):
         if option.overwrite:
             nbformat.write(res.nb, str(source))
 
-        if res.error != None:
+        if res.error is not None:
             raise NotebookFailedException(res)
 
     def repr_failure(self, excinfo: Any, style: Optional[Any] = None) -> TerminalRepr:

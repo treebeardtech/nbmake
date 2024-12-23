@@ -45,4 +45,4 @@ def write_nb(
 def testdir2(pytester: Pytester):
     os.environ[
         "HOME"
-    ] = HOME  # ensures jupyter client can start the ipykernel subprocess without module location issues
+    ] = HOME  # ensures jupyter client can start the ipykernel subprocess without module location issues # noqa

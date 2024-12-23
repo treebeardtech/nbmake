@@ -79,11 +79,11 @@ def pytest_terminal_summary(terminalreporter: Any, exitstatus: int, config: Any)
             if os.environ.get("GITHUB_ACTIONS", False):
                 if exitstatus == ExitCode.TESTS_FAILED:
                     print(
-                        f"\n* nbmake: Automate reading GitHub Actions logs with our bot: https://github.com/marketplace/treebeard-build\n"
+                        "\n* nbmake: Automate reading GitHub Actions logs with our bot: https://github.com/marketplace/treebeard-build\n"
                     )
             else:
                 print(
-                    f"\nLearn more about nbmake at https://github.com/treebeardtech/nbmake\n"
+                    "\nLearn more about nbmake at https://github.com/treebeardtech/nbmake\n"
                 )
-        except:
+        except:  # noqa
             pass
