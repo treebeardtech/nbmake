@@ -9,6 +9,7 @@ jobs:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v2
       - run: pip install uv
+      - run: uvx --from toml-cli toml set --toml-path=pyproject.toml project.version ${GITHUB_REF:10}
       - run: uv build
       - run: uv publish -t ${{ secrets.PYPI_API_TOKEN }}
       - uses: EndBug/add-and-commit@v7.0.0
