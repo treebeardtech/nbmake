@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   build-n-publish:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v2
