@@ -11,11 +11,6 @@
 
 **Who is this for?** Research/Machine Learning Software Engineers who maintain packages/teaching materials with documentation written in notebooks.
 
----
-**✨ New: save your energy when investigating GitHub actions failures with our [Pull Request Bot](https://github.com/marketplace/treebeard-build)**
-
----
-
 ## Functionality
 
 1. Executes notebooks using pytest and nbclient, allowing parallel notebook testing
@@ -245,11 +240,3 @@ pytest -p no:nbmake
 * [jupyter book](https://github.com/executablebooks/jupyter-book)
 * [jupyter cache](https://github.com/executablebooks/jupyter-cache)
 * [MyST-NB](https://github.com/executablebooks/MyST-NB)
-
----
-
-## ℹ️ Get help with machine learning infrastructure
-
-Join our [Discord](https://discord.gg/QFjCpMjqRY) for support and learning through the community.
-
----
