@@ -13,9 +13,6 @@ jobs:
       - run: devcontainer up --workspace-folder=.
       - run: devcontainer exec --workspace-folder=. poetry run pre-commit run --verbose --all-files
       - run: devcontainer exec --workspace-folder=. poetry run pytest --cov-report=xml --cov=src
-      - uses: codecov/codecov-action@v1
-        with:
-          file: coverage.xml
   pytest:
       strategy:
         fail-fast: false
@@ -37,6 +34,3 @@ jobs:
         - run: pip install poetry
         - run: poetry install
         - run: poetry run pytest --cov-report=xml --cov=src
-        - uses: codecov/codecov-action@v1
-          with:
-            file: coverage.xml
