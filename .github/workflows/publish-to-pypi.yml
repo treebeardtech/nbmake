@@ -4,13 +4,12 @@ on:
     types: [published]
 jobs:
   build-n-publish:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v2
-      - run: pip install poetry
-      - run: poetry version ${GITHUB_REF:10}
-      - run: poetry build
+      - run: pip install uv
+      - run: uv build
       - run: pip install twine==4.0.1
       - run: twine upload dist/* -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
       - uses: EndBug/add-and-commit@v7.0.0

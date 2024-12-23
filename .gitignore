@@ -133,3 +133,4 @@ typeshed
 
 trash
 **/_build
+.aider*

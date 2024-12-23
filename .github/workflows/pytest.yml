@@ -9,34 +9,31 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
-      - run: npm install -g @devcontainers/cli@v0.30.0
+      - run: npm install -g @devcontainers/cli@v0.72.0
       - run: devcontainer up --workspace-folder=.
-      - run: devcontainer exec --workspace-folder=. poetry run pre-commit run --verbose --all-files
-      - run: devcontainer exec --workspace-folder=. poetry run pytest --cov-report=xml --cov=src
-      - uses: codecov/codecov-action@v1
-        with:
-          file: coverage.xml
+      - run: devcontainer exec --workspace-folder=. uv venv
+      - run: devcontainer exec --workspace-folder=. uv pip install pre-commit pytest
+      - run: devcontainer exec --workspace-folder=. uv run pre-commit run --verbose --all-files
+      - run: devcontainer exec --workspace-folder=. uv run pytest
   pytest:
       strategy:
         fail-fast: false
         matrix:
           os:
-            - ubuntu-latest
-            - macos-latest
+            - ubuntu-24.04
+            - macos-14
           python-version:
-            - "3.8"
             - "3.9"
             - "3.10"
             - "3.11"
+            - "3.12"
       runs-on: ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v2
         - uses: actions/setup-python@v2
           with:
             python-version: ${{ matrix.python-version }}
-        - run: pip install poetry
-        - run: poetry install
-        - run: poetry run pytest --cov-report=xml --cov=src
-        - uses: codecov/codecov-action@v1
-          with:
-            file: coverage.xml
+        - run: pipx install uv
+        - run: uv venv
+        - run: uv pip install -e .
+        - run: uv run pytest

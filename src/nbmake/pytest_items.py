@@ -37,7 +37,7 @@ class NotebookItem(pytest.Item):
     nbmake = True
 
     def __init__(self, parent: Any, filename: str):
-        super().__init__("", parent)
+        super().__init__(parent.name, parent)
         self.filename = filename
 
     def runtest(self):
@@ -56,7 +56,7 @@ class NotebookItem(pytest.Item):
         if option.overwrite:
             nbformat.write(res.nb, str(source))
 
-        if res.error != None:
+        if res.error is not None:
             raise NotebookFailedException(res)
 
     def repr_failure(self, excinfo: Any, style: Optional[Any] = None) -> TerminalRepr:

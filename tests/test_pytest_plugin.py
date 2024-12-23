@@ -1,15 +1,16 @@
 from __future__ import print_function
 
 import os
-from importlib import import_module, invalidate_caches, reload
+from importlib import import_module, reload
 from pathlib import Path
-from unittest.mock import patch
 
 from nbformat import read
 from pytest import ExitCode, Pytester
 from typing_extensions import Never
 
 from .helper import failing_nb, passing_nb, testdir2, write_nb
+
+assert testdir2  # ensure testdir is not removed by linter
 
 pytest_plugins = "pytester"
 NB_VERSION = 4
@@ -172,7 +173,7 @@ def test_when_explicit_metadata_then_ignore_timeout(
 def test_when_kernel_passed_then_override(pytester: Pytester, testdir2: Never):
     write_nb(
         passing_nb,
-        Path(f"x.ipynb"),
+        Path("x.ipynb"),
         metadata={
             "kernelspec": {
                 "display_name": "Python 3",
@@ -199,7 +200,6 @@ def test_when_no_import_errs_then_pass(pytester: Pytester, testdir2: Never):
 
 
 def test_when_not_json_then_correct_err_msg(pytester: Pytester, testdir2: Never):
-
     (Path(pytester.path) / "a.ipynb").write_text("invalid json")
 
     hook_recorder = pytester.inline_run("--nbmake")

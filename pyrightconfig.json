@@ -1,7 +1,6 @@
 {
   "include": ["src", "tests"],
   "typeCheckingMode": "strict",
-  "reportUnusedImport": true,
   "pythonVersion": "3.7",
   "enableTypeIgnoreComments": true,
   "reportUnknownMemberType": "warning",
@@ -9,8 +8,13 @@
   "reportUnknownVariableType": "warning",
   "reportUnknownArgumentType": "warning",
   "reportPrivateUsage": "warning",
+  "reportPrivateImportUsage": "warning",
   "reportUntypedFunctionDecorator": "warning",
   "reportMissingTypeStubs": false,
   "reportGeneralTypeIssues": "warning",
-  "reportUnusedImport": "warning"
+  "reportUnusedImport": "warning",
+  "reportArgumentType": "warning",
+  "reportAttributeAccessIssue": "warning",
+  "reportOptionalMemberAccess": "warning",
+  "reportRedeclaration": "warning",
 }

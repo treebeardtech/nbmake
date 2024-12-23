@@ -125,7 +125,7 @@ class NotebookRun:
         except Exception as err:
             # if at top causes https://github.com/jupyter/nbclient/issues/128
             # from jupyter_client.kernelspec import KernelSpecManager, NoSuchKernel
-            # trace=f"{summary}\n\nInstalled Kernels: {str(KernelSpecManager().find_kernel_specs())}",
+            # trace=f"{summary}\n\nInstalled Kernels: {str(KernelSpecManager().find_kernel_specs())}", # noqa
             # https://github.com/treebeardtech/nbmake/runs/1536896858?check_suite_focus=true
             if str(type(err)) != "<class 'jupyter_client.kernelspec.NoSuchKernel'>":
                 raise err
