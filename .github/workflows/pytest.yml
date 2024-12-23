@@ -12,7 +12,7 @@ jobs:
       - run: npm install -g @devcontainers/cli@v0.72.0
       - run: devcontainer up --workspace-folder=.
       - run: devcontainer exec --workspace-folder=. uv venv
-      - run: devcontainer exec --workspace-folder=. uv pip install pre-commit pytest pytest-cov
+      - run: devcontainer exec --workspace-folder=. uv pip install pre-commit pytest
       - run: devcontainer exec --workspace-folder=. uv run pre-commit run --verbose --all-files
       - run: devcontainer exec --workspace-folder=. uv run pytest
   pytest:
