@@ -9,12 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v2
-      - run: pip install poetry
-      - name: Set poetry version to dev
-        run: |
-          build_version="$(poetry version -s).dev$(date +%s)"
-          poetry version $build_version
-      - run: poetry build
+      - run: pip install uv
+      - run: uv pip install build
+      - run: python -m build
       - run: pip install 'pytest==7.1'
       - run: pip install dist/*gz --force-reinstall
       - run: pytest --nbmake tests/resources/mock.ipynb

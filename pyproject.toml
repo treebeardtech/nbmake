@@ -1,38 +1,27 @@
-[tool.poetry]
-authors = ["alex-treebeard <alex@treebeard.io>"]
-description = "Pytest plugin for testing notebooks"
-homepage = "https://github.com/treebeardtech/nbmake"
-license = "Apache-2.0"
+[project]
 name = "nbmake"
-packages = [
-  {include = "nbmake", from = "src"},
+version = "1.5.4"
+description = "Pytest plugin for testing notebooks"
+authors = [
+    {name = "alex-treebeard", email = "alex@treebeard.io"},
 ]
+license = {text = "Apache-2.0"}
 readme = "README.md"
-version = "v1.5.4"
+requires-python = ">=3.8.0"
+dependencies = [
+    "pytest>=6.1.0",
+    "nbclient>=0.6.6",
+    "nbformat>=5.0.8",
+    "Pygments>=2.7.3",
+    "ipykernel>=5.4.0",
+]
 
-[tool.poetry.plugins."pytest11"]
+[project.entry-points.pytest11]
 nbmake = "nbmake.pytest_plugin"
 
-[tool.poetry.dependencies]
-pytest = ">=6.1.0"
-python = "^3.8.0"
-nbclient = "^0.6.6"
-nbformat = "^5.0.8"
-Pygments = "^2.7.3"
-ipykernel = ">=5.4.0"
-
-[tool.poetry.dev-dependencies]
-pytest = "^8.1.0"
-pre-commit = "^2.8.2"
-pytest-cov = "^2.10.1"
-pytest-xdist = "^2.1.0"
-virtualenv = "^20.1.0"
-setuptools = ">65.0.0"
-typing-extensions = "^4.7.1"
-
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.8.4"
+[project.urls]
+Homepage = "https://github.com/treebeardtech/nbmake"
 
 [build-system]
-build-backend = "poetry.core.masonry.api"
-requires = ["setuptools", "poetry-core>=1.0.0"]
+requires = ["setuptools>=65.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
