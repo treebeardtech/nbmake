@@ -13,8 +13,8 @@ jobs:
       - run: devcontainer up --workspace-folder=.
       - run: devcontainer exec --workspace-folder=. uv venv
       - run: devcontainer exec --workspace-folder=. uv pip install pre-commit pytest pytest-cov
-      - run: devcontainer exec --workspace-folder=. pre-commit run --verbose --all-files
-      - run: devcontainer exec --workspace-folder=. pytest --cov-report=xml --cov=src
+      - run: devcontainer exec --workspace-folder=. uv run pre-commit run --verbose --all-files
+      - run: devcontainer exec --workspace-folder=. uv run pytest --cov-report=xml --cov=src
   pytest:
       strategy:
         fail-fast: false
@@ -36,4 +36,4 @@ jobs:
         - run: pipx install uv
         - run: uv venv
         - run: uv pip install -e .
-        - run: pytest --cov-report=xml --cov=src
+        - run: uv run pytest --cov-report=xml --cov=src
