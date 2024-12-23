@@ -1,6 +1,6 @@
 [project]
 name = "nbmake"
-version = "1.5.4"
+version = "v1.5.5"
 description = "Pytest plugin for testing notebooks"
 authors = [
     {name = "alex-treebeard", email = "alex@treebeard.io"},
