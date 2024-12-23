@@ -25,3 +25,9 @@ Homepage = "https://github.com/treebeardtech/nbmake"
 [build-system]
 requires = ["setuptools>=65.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=3.5.0",
+    "ruff>=0.8.4",
+]

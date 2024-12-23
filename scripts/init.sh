@@ -5,8 +5,9 @@ set +x
 
 export PIP_USER=no
 
-pip install poetry
+pipx install uv
 
-poetry install
-poetry run pre-commit run -a
-poetry run pre-commit install
+uv venv --python 3.11.6
+uv pip install -e .
+uv run pre-commit run -a
+uv run pre-commit install

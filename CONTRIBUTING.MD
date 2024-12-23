@@ -5,16 +5,6 @@ nbmake uses devcontainers to pre-configure a dev environment. We recommend you o
 
 For non-vscode users, here are some install steps:
 
-### Install local package
-```
-poetry install
-```
-
-### Activate shell
-```
-poetry shell
-```
-
 ### Run static checks
 ```
 pre-commit run --all-files

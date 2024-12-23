@@ -24,15 +24,8 @@ repos:
     hooks:
       - id: pyright
         name: pyright
-        entry: poetry run pyright
+        entry: uv run pyright
         language: node
         pass_filenames: false
         types: [python]
         additional_dependencies: ["pyright@1.1.91"]
-  # - repo: local
-  #   hooks:
-  #     - id: smoketest
-  #       name: smoketest
-  #       entry: poetry run pytest -k test_when_nb_present_then_collected
-  #       language: system
-  #       pass_filenames: false

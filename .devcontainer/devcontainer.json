@@ -23,6 +23,5 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
-  "postCreateCommand": "poetry install",
   "remoteUser": "vscode"
 }
