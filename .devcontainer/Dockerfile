@@ -8,4 +8,4 @@ USER vscode
 RUN pip3 --disable-pip-version-check --no-cache-dir install -U \
   'poetry==1.8.3' \
   'pip==22.1.2'
-RUN npm install -g @devcontainers/cli@v0.30.0
+RUN npm install -g @devcontainers/cli@v0.72.0
