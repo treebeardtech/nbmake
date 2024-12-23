@@ -6,5 +6,6 @@ ARG NODE_VERSION="lts/*"
 RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "source /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 USER vscode
 RUN pip3 --disable-pip-version-check --no-cache-dir install -U \
-  'pip==22.1.2'
-RUN npm install -g @devcontainers/cli@v0.72.0
+  'pip==22.1.2' \
+  'uv==0.5.11'
+  RUN npm install -g @devcontainers/cli@v0.72.0
