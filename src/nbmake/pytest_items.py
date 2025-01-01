@@ -12,7 +12,7 @@ from pygments.formatters import TerminalTrueColorFormatter
 from pygments.lexers import Python3TracebackLexer
 
 from .nb_result import NotebookError, NotebookResult
-from .nb_run import NotebookRun
+from .nb_run import NB_VERSION, NotebookRun
 
 
 class NbMakeFailureRepr(TerminalRepr):
@@ -26,7 +26,20 @@ class NbMakeFailureRepr(TerminalRepr):
 
 class NotebookFile(pytest.File):
     def collect(self) -> Generator[Any, Any, Any]:
-        yield NotebookItem.from_parent(self, filename=str(Path(self.fspath)))
+        item = NotebookItem.from_parent(self, filename=str(Path(self.fspath)))
+
+        with open(self.fspath, "rb") as fp:
+            nb = nbformat.read(fp, NB_VERSION)
+
+        markers = nb.metadata.get("execution", {}).get("nbmake", {}).get("markers", [])
+
+        if isinstance(markers, str):
+            markers = [marker.strip() for marker in markers.split(",")]
+
+        for marker in markers:
+            item.add_marker(marker)
+
+        yield item
 
 
 class NotebookFailedException(Exception):
