@@ -12,10 +12,11 @@ jobs:
       - run: uvx --from toml-cli toml set --toml-path=pyproject.toml project.version ${GITHUB_REF:10}
       - run: uv build
       - run: uv publish -t ${{ secrets.PYPI_API_TOKEN }}
+      - run: uv lock
       - uses: EndBug/add-and-commit@v7.0.0
         with:
             author_name: github-actions
             author_email: 41898282+github-actions[bot]@users.noreply.github.com
-            add: pyproject.toml
+            add: pyproject.toml uv.lock
             branch: main
             message: Published new version
